@@ -27,3 +27,7 @@ def read_product():
 @app.get("/adios")
 def say_bye():
     return {"bye": "World"}
+  
+@app.get("/transfer")
+def read_product():
+    return {"Medio de pago": "efectivo"}
