@@ -23,3 +23,7 @@ def say_hello():
 @app.get("/product")
 def read_product():
     return {"producto": "planta"}
+
+@app.get("/transfer")
+def read_product():
+    return {"Medio de pago": "efectivo"}
