@@ -12,6 +12,10 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+
+@app.get("/Insult")
+def read_insult():
+    return {"Fuck": "World"}
 @app.get("/saludo")
 def say_hello():
     return {"Hello": "World"}
