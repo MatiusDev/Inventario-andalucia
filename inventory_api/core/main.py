@@ -20,6 +20,10 @@ def read_insult():
 def say_hello():
     return {"Hello": "World"}
 
+@app.get("/product")
+def read_product():
+    return {"producto": "planta"}
+
 @app.get("/adios")
 def say_bye():
     return {"bye": "World"}
