@@ -19,3 +19,7 @@ def read_insult():
 @app.get("/saludo")
 def say_hello():
     return {"Hello": "World"}
+
+@app.get("/product")
+def read_product():
+    return {"producto": "planta"}
