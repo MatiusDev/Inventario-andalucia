@@ -16,3 +16,6 @@ def read_item(item_id: int, q: Union[str, None] = None):
 @app.get("/Insult")
 def read_insult():
     return {"Fuck": "World"}
+@app.get("/saludo")
+def say_hello():
+    return {"Hello": "World"}
