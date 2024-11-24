@@ -20,6 +20,7 @@ config = config_environment()
 
 app = FastAPI()
 
+<<<<<<< HEAD
 app.add_middleware(
   CORSMiddleware,
   allow_origins=config["origins"],
@@ -32,3 +33,32 @@ app.add_middleware(CheckOriginMiddleware, allowed_origins=config["origins"])
 app.include_router(routes, prefix="/api")
 
 
+=======
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
+
+
+@app.get("/Insult")
+def read_insult():
+    return {"Fuck": "World"}
+@app.get("/saludo")
+def say_hello():
+    return {"Hello": "World"}
+
+@app.get("/product")
+def read_product():
+    return {"producto": "planta"}
+
+@app.get("/adios")
+def say_bye():
+    return {"bye": "World"}
+  
+@app.get("/transfer")
+def read_product():
+    return {"Medio de pago": "efectivo"}
+>>>>>>> 9954187ed3c1fca89062d6c6f069883449470e9c
