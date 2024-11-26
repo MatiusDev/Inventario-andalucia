@@ -6,9 +6,13 @@ from services.product_service import ProductService
 
 route = APIRouter()
 
+@route.get("/")
+def get_all_products(product_service: ProductService = Depends(ProductService)):
+  return product_service.get_all_products()
+
 @route.get("/{id}")
 def get_product(id: int, product_service: ProductService = Depends(ProductService)):
-  return product_service.get_user_by_id(id)
+  return product_service.get_product_by_id(id)
   
 @route.post("/")
 def create_product(product: ProductCreate, product_service: ProductService = Depends(ProductService)):

@@ -5,7 +5,6 @@ from fastapi import Depends
 class DBAdapter:
   _instance = None
   _engine = None
-  _session = None
   
   # Método para crear una nueva instancia de la clase
   # Debido a que es una BD, quiero usar el patrón singleton para devolver una única instancia de la clase que esta conectada al motor de la BD.
