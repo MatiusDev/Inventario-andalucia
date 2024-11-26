@@ -1,27 +1,23 @@
-from fastapi import Depends
-from sqlmodel import Session
+from fastapi import APIRouter, Depends
 
-from routers.product_router import product_router as route
-from views.product_view import ProductView
-from models.product import Product
-from config.db_adapter import DBAdapter
+from models.schemas.product import ProductCreate
 
-@route.get("/",)
-def get_product(db = Depends(DBAdapter.get_session)):
-    product = {}
-    return ProductView.get_product(product)
+from services.product_service import ProductService
+
+route = APIRouter()
+
+@route.get("/{id}")
+def get_product(id: int, product_service: ProductService = Depends(ProductService)):
+  return product_service.get_user_by_id(id)
   
 @route.post("/")
-def create_product(product: Product, db: Session = Depends(DBAdapter.get_session)):
-  db.add(product)
-  db.commit()
-  return ProductView.create_product(product)
+def create_product(product: ProductCreate, product_service: ProductService = Depends(ProductService)):
+  return product_service.new_product(product)
 
+@route.put("/{id}")
+def update_product(id: int, product: ProductCreate, product_service: ProductService = Depends(ProductService)):
+  return product_service.update_product(id, product)
 
-@route.put("/")
-def update_product():
-  pass
-
-@route.delete("/")
-def delete_product():
-  pass
+@route.delete("/{id}")
+def delete_product(id: int, product_service: ProductService = Depends(ProductService)):
+  return product_service.delete_product(id)
