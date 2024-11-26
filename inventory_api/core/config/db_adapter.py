@@ -1,4 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session
+from typing import Annotated
+from fastapi import Depends
 
 class DBAdapter:
   _instance = None
@@ -33,4 +35,6 @@ class DBAdapter:
   # Este with me permite manejar las sesiones con un ciclo de vida, cuando se ha usado el generador yield, es decir, me trae la sesión para interactuar con la bd, y si termina el bloque de código donde se está usando la sesión, esta se cierra automáticamente.  
     with Session(cls._engine) as session:
       yield session
-      
+
+# Esta variable permite exportar la sesión de la base de datos para integrar como dependencia en las consultas de los endpoints
+SessionDep = Annotated[Session, Depends(DBAdapter.get_session)]
