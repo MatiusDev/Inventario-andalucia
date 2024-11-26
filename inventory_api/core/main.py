@@ -27,7 +27,7 @@ app.add_middleware(
   allow_methods=["*"],
   allow_headers=["*"]
 )
-app.add_middleware(CheckOriginMiddleware, allowed_origins=config["origins"])
+#app.add_middleware(CheckOriginMiddleware, allowed_origins=config["origins"])
 
 app.include_router(routes, prefix="/api")
 
