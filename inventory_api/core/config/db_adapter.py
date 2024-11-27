@@ -37,4 +37,4 @@ class DBAdapter:
       yield session
 
 # Esta variable permite exportar la sesión de la base de datos para integrar como dependencia en las consultas de los endpoints
-SessionDep = Annotated[Session, Depends(DBAdapter.get_session)]
+DBSession = Annotated[Session, Depends(DBAdapter.get_session)]

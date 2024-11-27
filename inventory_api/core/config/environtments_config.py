@@ -2,7 +2,7 @@ import os
 
 from .db_adapter import DBAdapter
 
-def config_environment():
+def environment_config():
   '''Esta función realiza la configuración general del ambiente que se está ejecutando.
   '''
   try:
@@ -12,14 +12,14 @@ def config_environment():
     ]
     env = os.getenv("ENVIRONMENT")
         
-    if env not in environments:
+    if env not in environments or env is None:
       raise Exception(f"El ambiente de trabajo {env} de la variable de entorno ENVIRONMENT no es soportado.")
     
-    config_database(env)
+    db_config(env)
     
     return {
       "environment": env,
-      "origins": config_cors_origins(env)
+      "origins": cors_origins_config(env)
     }
   except Exception as err:
     print(f"Ha ocurrido un error inesperado: {err}")
@@ -28,7 +28,7 @@ def config_environment():
       "origins": []
     }
           
-def config_database(env: str):
+def db_config(env: str):
   echo = False
   if env == 'development':
     echo = True
@@ -49,7 +49,7 @@ def config_database(env: str):
   db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
   db_adapter.create_initial_tables()
 
-def config_cors_origins(env: str):
+def cors_origins_config(env: str):
   origins = ["http://localhost:5173"]
 
   if env == 'production':
