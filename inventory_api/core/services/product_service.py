@@ -1,4 +1,5 @@
-from fastapi import HTTPException
+from typing import Annotated
+from fastapi import Depends, HTTPException
 
 from config.db_adapter import DBSession
 
@@ -21,7 +22,7 @@ class ProductService:
     if product == None:
       raise HTTPException(status_code=404, detail="Product not found")
     return ProductRead(id=product.id, name=product.name, price=product.price)
-  
+
   def new_product(self, product: ProductCreate):
     new_product = Product(name=product.name, price=product.price)
     # Agrega un nuevo producto a la base de datos
@@ -54,4 +55,6 @@ class ProductService:
     self.db.delete(product)
     self.db.commit()
     return {"message": "Product deleted", "status": "success"}
+  
+SProductDependency = Annotated[ProductService, Depends(ProductService)]
     

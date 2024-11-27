@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 
 # Configuraciones
 from config.environtments_config import environment_config
-# from services.auth_service import AuthService as AuthBackend
+# from config.auth_token import AuthBackend
+# from config.auth_token import auth_backend
 
 # Middlewares
 # from fastapi_auth_jwt import JWTAuthenticationMiddleware
@@ -28,7 +29,7 @@ app.add_middleware(
 )
 # app.add_middleware(
 #   JWTAuthenticationMiddleware,
-#   backend=AuthBackend(),
+#   backend=auth_backend,
 #   exclude_urls=["/auth/sign-up", "/auth/login"]
 # )
 

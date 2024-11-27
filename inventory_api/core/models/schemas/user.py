@@ -1,6 +1,10 @@
-from sqlmodel import SQLModel, Field
+# from sqlmodel import SQLModel
+from pydantic import BaseModel
 
-class User(SQLModel):
+class LoginUser(BaseModel):
   username: str
   password: str
-  token: str = Field(None)
+  
+# class RegisterUser(User):
+#   token: str = Field(None)
+#   pass
