@@ -1,54 +1,46 @@
-import styles from "./Login.module.css";
+import "./Login.css";
+import image from "@/assets/fondo4.png";
 
-const {
-  container_form,
-  information,
-  info_childs,
-  form_information,
-  form_information_childs,
-  button_container,
-  button: styleButton,
-  check: styleCheck,
-  enlaces_autenticacion,
-  button_login,
-} = styles;
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
+
 
 const Login = () => {
   return (
     <>
-      <div className={container_form}>
-        <div className={information}>
-          <div className={info_childs}>
+      <div className="container-form">
+        <img className="image-form" src={image} />
+        <div className="information">
+          <div className="info-childs">
             <img src="" alt="" />
             <h2>Vivero Andalucia</h2>
           </div>
         </div>
-        <div className={form_information}>
-          <div className={form_information_childs}>
+        <div className="form-information">
+          <div className="form-information-childs">
             <h2>Inicia Sesión</h2>
-            <form id="loginForm">
-              <div className={button_container}>
-                <div className={styleButton}>
-                  <span className={styles.icon}></span>
-                  <i className={[styles.faSolid, styles.faUser]}></i>
+            <form id="login-form">
+              <div className="button-container">
+                <div className="button">
+                  <FontAwesomeIcon className="icon" icon={faUser} />
                   <input type="text" placeholder="Usuario" />
                 </div>
-                <div className={styleButton}>
-                  <span className={styles.icon}></span>
-                  <i className={[styles.faSolid, styles.faLock]}></i>
+                <div className="button">
+                  <FontAwesomeIcon className="icon" icon={faLock} />
                   <input type="password" placeholder="Contraseña" />
                 </div>
-                <div className={styleCheck}>
-                  <input type="checkbox" id="remember-me" />
-                  <label for="remember-me">Recordarme</label>
+                <div className="form-check form-switch">
+                  <input type="checkbox" className="form-check-input" role="switch" id="remember-me" />
+                  <label className="form-check-label" htmlFor="remember-me">Recordarme</label>
                 </div>
                 <div>
-                  <span className={styles.icon}></span>
-                  <button className={button_login} type="submit">
+                  <span className="icon"></span>
+                  <button className="button-login" type="submit">
                     Iniciar Sesión
                   </button>
                 </div>
-                <div className={enlaces_autenticacion}>
+                <div className="enlaces-autenticacion">
                   <a href="">Recuperar Contraseña</a>
                   <a href="">Registrarse</a>
                 </div>

@@ -1,11 +1,3 @@
-html, body {
-  height: 100vh;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 body {
   background-image: url('../../assets/fondo2.jpg');
   background-size: cover;
@@ -13,12 +5,27 @@ body {
   background-repeat: no-repeat;
 }
 
-.container_form {
+.container-form {
+  min-width: 900px;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.image-form {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+  opacity: 0.1;
+  pointer-events: none
+}
+
+.container-form {
   display: flex;
-  background-image: url('../../assets/fondo4.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   box-shadow: 0 5px 7px rgba(0, 0, 0, .1);
   height: 550px;
   max-width: 900px;
@@ -34,7 +41,7 @@ body {
   background: linear-gradient(#e8efd8, #d1e1b5, #b3cd89, #97b964);
 }
 
-.info_childs {
+.info-childs {
   width: 100%;
   padding: 0 30px;
   display: flex;
@@ -42,22 +49,22 @@ body {
   align-items: center;
 }
 
-.info_childs img {
+.info-childs img {
   width: 250px;
   margin-bottom: 20px;
 }
 
-.info_childs h2 {
+.info-childs h2 {
   font-size: 2.5rem;
   color: black;
 }
 
-.info_childs p {
+.info-childs p {
   margin: 15px 0;
   color: black;
 }
 
-.info_childs a {
+.info-childs a {
   margin: 20px;
   background-color: #789d45;
   outline: none;
@@ -69,13 +76,13 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.info_childs a:hover {
+.info-childs a:hover {
   background-color: #789d45;
   border: none;
   color: white;
 }
 
-.form_information {
+.form-information {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,21 +91,21 @@ body {
   background-color: #f5f8ed;
 }
 
-.form_information_childs {
+.form-information-childs {
   padding: 0 30px;
 }
 
-.form_information_childs h2 {
+.form-information-childs h2 {
   color: black;
   font-size: 2rem;
   margin-bottom: 20px;
 }
 
-.form_information_childs p {
+.form-information-childs p {
   color: black;
 }
 
-.button_container {
+.button-container {
   display: flex;
   flex-direction: column;
 }
@@ -111,7 +118,7 @@ body {
 }
 
 .icon {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 input[type="text"],
@@ -121,10 +128,19 @@ input[type="password"] {
   background: none;
   outline: none;
   padding: 5px;
+  font-size: 18px;
 }
 
-input[type="checkbox"] {
-  margin-right: 5px;
+.form-check {
+  text-align: start;
+}
+
+.form-check input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.form-check label {
+  text-align: start;
 }
 
 .check {
@@ -133,21 +149,47 @@ input[type="checkbox"] {
   padding: 10px;
 }
 
-.button_login {
+.button-login {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 5px;
   background-color: #789d45;
   border: none;
+  border-radius: 5px;
   padding: 10px 20px;
   color: white;
   cursor: pointer;
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
 }
 
-.enlaces_autenticacion{
+.button-login:hover {
+  background-color: #4e524a;
+}
+
+.enlaces-autenticacion{
   display: flex;
-  flex-direction: column;
-  padding-top: 30px;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.enlaces-autenticacion a {
+  text-decoration: none;
+  color: #789d45;
+  font-weight: 500;
+}
+
+.enlaces-autenticacion a:hover {
+  color: #4e524a;
+}
+
+.form-check-input:checked {
+  background-color: #789d45;
+  border-color: #789d45;
+}
+
+.form-check-input:focus {
+  border-color: #6fa22978;
+  box-shadow: 0 0 0 .25rem #6fa22978;
 }
