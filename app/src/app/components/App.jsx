@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import styles from './App.module.css';
+import style from './App.module.css';
+
+import Login from '@/auth/components/Login.jsx';
 
 import { apiFetch } from '@utils/api.js';
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
   const [data, setData] = useState(null);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +26,10 @@ function App() {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={style.appContainer}>
+        <Login />
+      </div>
+      {/* <div className={styles.container}>
         <h1>Vite + React</h1>
         <div className={styles.card}>
           <button onClick={() => setCount((count) => count + 1)}>
@@ -34,7 +39,7 @@ function App() {
         <p className={styles.readTheDocs}>
           Click on the Vite and React logos to learn more
         </p>
-      </div>
+      </div> */}
     </>
   )
 };
