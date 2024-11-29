@@ -1,6 +1,8 @@
 from fastapi import HTTPException
 
-from config.db_adapter import DBAdapter, DBSession
+from config.db_adapter import DBSession
+
+from sqlmodel import select
 
 from models.entities.product import Product
 from models.schemas.product import ProductCreate, ProductRead
@@ -9,7 +11,11 @@ class ProductService:
   def __init__(self, db: DBSession) -> None:
     self.db = db
   
-  def get_user_by_id(self, id: int):
+  def get_all_products(self):
+    products = self.db.exec(select(Product)).all() or []
+    return products
+  
+  def get_product_by_id(self, id: int):
     product = self.db.get(Product, id)
     
     if product == None:
