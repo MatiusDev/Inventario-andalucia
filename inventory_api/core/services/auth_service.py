@@ -1,11 +1,10 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException
 import bcrypt
-
-from models.schemas.user import UserAuth, UserRegister, UserToken, UserCreate
-
+# Modelos y Esquemas
+from models.schemas.user import UserCreate, UserAuth, UserToken 
+# Dependencias
 from config.auth_token import AuthDependency
-
 from services.user_service import SUserDependency
 
 class AuthService:
@@ -13,58 +12,34 @@ class AuthService:
     self.auth = auth
     self.user = user
   
-  async def sign_up(self, user: UserRegister):
+  async def sign_up(self, user: UserCreate):
     hashed_password = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
-    
-    user_create = UserCreate(
-      username=user.username,
-      password=hashed_password,
-      full_name=user.full_name,
-      email=user.email
-    )
-    user_read = self.user.create(user_create)
-    
-    user_token = UserToken(
-      id=user_read.id,
-      username=user_read.username,
-      full_name=user_read.full_name,
-      email=user_read.email,
-      role=user_read.role,
-      active=user_read.active,
-      created_at=user_read.created_at,
-      updated_at=user_read.updated_at,
-      last_session=user_read.last_session
-    )
+    user.password = hashed_password.decode("utf-8")
+    user_info = self.user.create(user)
+
+    user_token = UserToken.model_validate(user_info)
     token = await self.auth.create_token(user_token)
-        
+    
     return { "token": token, "status": "success" }
   
   async def login(self, user: UserAuth):
-    user_read = self.user.get_by_username(user.username)
+    user_data = self.user.get_by_username(user.username)
     
-    if user_read == None:
-      raise HTTPException(status_code=404, detail="No se ha encontrado el usuario")
+    if user_data["status"] != "success":
+      return user_data
     
-    if not bcrypt.checkpw(user.password.encode("utf-8"), user_read.password.encode("utf-8")):
-      raise HTTPException(status_code=401, detail="Credenciales invalidas")
+    user_info, user_password = user_data["data"]
     
-    user_token = UserToken(
-      id=user_read.id,
-      username=user_read.username,
-      full_name=user_read.full_name,
-      email=user_read.email,
-      role=user_read.role,
-      active=user_read.active,
-      created_at=user_read.created_at,
-      updated_at=user_read.updated_at,
-      last_session=user_read.last_session
-    )
+    if not bcrypt.checkpw(user.password.encode("utf-8"), user_password.encode("utf-8")):
+      return { "status_code": 401, "detail": "Credenciales invalidas", "status": "fail" }
+    
+    user_token = UserToken.model_validate(user_info)
     token = await self.auth.create_token(user_token)
-        
+    
     return { "token": token, "status": "success" }
   
-  async def logout(self, user: UserToken):
-    self.auth.invalidate_token(user)
+  async def logout(self, token: str):
+    await self.auth.invalidate_token(token)
     return { "status": "success" }
     
 SAuthDependency = Annotated[AuthService, Depends(AuthService)]

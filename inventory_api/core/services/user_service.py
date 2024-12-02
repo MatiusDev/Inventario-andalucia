@@ -6,7 +6,7 @@ from config.db_adapter import DBSession
 from sqlmodel import select
 
 from models.entities.user import User
-from models.schemas.user import UserCreate, UserRead, UserAuthRead
+from models.schemas.user import UserCreate, UserRead
 from models.enums.role import Role as ROLES
 
 class UserService:
@@ -16,60 +16,27 @@ class UserService:
   def get_all(self):
     pass
   
-  def get_by_username(self, username: str) -> UserAuthRead | None:
+  def get_by_username(self, username: str):
     user = self.db.exec(select(User).where(User.username == username)).first()
     
     if user == None:
-      return None
+      return { "status_code": 404, "detail": "No se ha encontrado el usuario", "status": "fail" }
     
-    user_read = UserAuthRead(
-      id=user.id,
-      username=user.username,
-      password=user.password,
-      role="common",
-      full_name=user.full_name,
-      email=user.email,
-      active=user.active,
-      created_at=user.created_at,
-      updated_at=user.updated_at,
-      last_session=user.last_session
-    )
-    
-    return user_read
+    user_read = UserRead.from_user(user)
+    return { "status_code": 200, "data": (user_read, user.password), "status": "success" }
   
   def get_by_id(self, id: int):
     pass
 
-  def create(self, user: UserCreate):
-    default_role = ROLES.ADMIN.value # Administrador --> Cambiar estructura por enum
+  def create(self, user: UserCreate) -> UserRead:
+    new_user = User.model_validate(user.model_dump())
     
-    new_user = User(
-      username=user.username,
-      password=user.password,
-      full_name=user.full_name,
-      email=user.email,
-      role_id=default_role
-    )
-    
-    try:
-      self.db.add(new_user)
-      self.db.commit()
-      self.db.refresh(new_user)
-    except Exception as e:
-      raise HTTPException(status_code=500, detail=str(e))
-    
-    user_read = UserRead(
-      id=new_user.id,
-      username=new_user.username,
-      full_name=new_user.full_name,
-      email=new_user.email,
-      role=ROLES.ADMIN.name,
-      active=new_user.active,
-      created_at=new_user.created_at,
-      updated_at=new_user.updated_at,
-      last_session=new_user.last_session
-    )
-        
+    self.db.add(new_user)
+    self.db.commit()
+    print("antes", new_user)
+    self.db.refresh(new_user)
+    print("despues", new_user)
+    user_read = UserRead.from_user(new_user)
     return user_read
 
   def update(self, id: int, user: UserCreate):
@@ -79,4 +46,3 @@ class UserService:
     pass
   
 SUserDependency = Annotated[UserService, Depends(UserService)]
-    

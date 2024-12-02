@@ -57,17 +57,13 @@ class RoleService:
       raise HTTPException(status_code=404, detail="Rol no encontrado")
     
     role_db.name = role.name
-    role_db.price = role.price
+    role_db.description = role.description
+    role_db.permissions = role.permissions
     self.db.add(role_db)
     self.db.commit()
     self.db.refresh(role_db)
     
-    read_role = RoleRead(
-      id=role_db.id,
-      name=role_db.name,
-      permissions=role_db.permissions,
-      description=role_db.description
-    )
+    read_role = RoleRead.model_validate(role_db.model_dump())
     
     return read_role
 
