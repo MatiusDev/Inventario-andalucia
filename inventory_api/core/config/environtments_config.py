@@ -1,6 +1,13 @@
 import os
 
-from .db_adapter import DBAdapter
+from config.db_adapter import DBAdapter
+from config.auth_token import AuthBackend
+
+config = {
+  "environment": None,
+  "origins": [],
+  "auth": None
+}
 
 def environment_config():
   '''Esta función realiza la configuración general del ambiente que se está ejecutando.
@@ -17,16 +24,14 @@ def environment_config():
     
     db_config(env)
     
-    return {
-      "environment": env,
-      "origins": cors_origins_config(env)
-    }
+    config["environment"] = env
+    config["origins"] = cors_origins_config(env)
+    config["auth"] = AuthBackend()
+    
+    return config
   except Exception as err:
     print(f"Ha ocurrido un error inesperado: {err}")
-    return {
-      "environment": None,
-      "origins": []
-    }
+    return config
           
 def db_config(env: str):
   echo = False
@@ -56,7 +61,3 @@ def cors_origins_config(env: str):
     FRONTEND_URL = os.getenv("FRONTEND_URL")
     origins = [FRONTEND_URL]
   return origins
-    
-  
-  
-  
