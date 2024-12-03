@@ -23,7 +23,7 @@ class ProductService:
     if product == None:
       raise HTTPException(status_code=404, detail="Product not found")
     return ProductRead(id=product.id, name=product.name, price=product.price)
-  
+
   def new_product(self, product: ProductCreate):
     product_db = Product.model_validate(product.model_dump()) 
 
@@ -53,5 +53,6 @@ class ProductService:
     self.db.delete(product)
     self.db.commit()
     return {"message": "Product deleted", "status": "success"}
-    
+  
 SProductDependency = Annotated[ProductService, Depends(ProductService)]
+    
