@@ -5,6 +5,7 @@ from config.db_adapter import DBSession
 
 from sqlmodel import select
 
+from models.schemas.plant import PlantCreate
 from models.entities.product import Product
 from models.schemas.product import ProductCreate, ProductRead
 
@@ -24,14 +25,11 @@ class ProductService:
     return ProductRead(id=product.id, name=product.name, price=product.price)
   
   def new_product(self, product: ProductCreate):
-    new_product = Product(name=product.name, price=product.price)
-    # Agrega un nuevo producto a la base de datos
-    self.db.add(new_product)
-    # Realiza los cambios en la base de datos
-    self.db.commit()
-    # Realiza los cambios en el objeto (Referencia al producto de la BD, así obtiene el nuevo ID)
-    self.db.refresh(new_product)
-    return ProductRead(id=new_product.id, name=new_product.name, price=new_product.price)
+    product_db = Product.model_validate(product.model_dump()) 
+
+    if product.type_product == "Plantas":
+      plant_data = PlantCreate()
+
 
   def update_product(self, id: int, product: ProductCreate):
     product_db = self.db.get(Product, id)
