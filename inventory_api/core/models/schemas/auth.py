@@ -2,9 +2,9 @@ from sqlmodel import SQLModel
 
 import os
 
-TOKEN_SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("TOKEN_SECRET_KEY", "DEFAULT_SECRET_KEY")
 
 class AuthenticationSettings(SQLModel):
-  secret: str = TOKEN_SECRET_KEY
+  secret: str = SECRET_KEY
   jwt_algorithm: str = "HS256"
   expiration_seconds: int = 3600
