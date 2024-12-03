@@ -1,8 +1,9 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 
 from config.db_adapter import DBSession
 
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 
 from models.entities.user import User
@@ -29,15 +30,20 @@ class UserService:
     pass
 
   def create(self, user: UserCreate) -> UserRead:
-    new_user = User.model_validate(user.model_dump())
-    
-    self.db.add(new_user)
-    self.db.commit()
-    print("antes", new_user)
-    self.db.refresh(new_user)
-    print("despues", new_user)
-    user_read = UserRead.from_user(new_user)
-    return user_read
+    try:
+      new_user = User.model_validate(user.model_dump())
+      self.db.add(new_user)
+      self.db.commit()
+      self.db.refresh(new_user)
+      
+      user_read = UserRead.from_user(new_user)
+      return { "data": user_read, "status": "success" }
+    except IntegrityError as err:
+      self.db.rollback()
+      if "unique_username" in str(err.orig) or "unique_email" in str(err.orig):
+        return { "status_code": 400, "detail": "El usuario o correo ya existe", "status": "fail" }
+      return { "status_code": 500, "detail": str(err.orig.args[1]), "status": "error" }
+
 
   def update(self, id: int, user: UserCreate):
     pass

@@ -17,6 +17,10 @@ class AuthService:
     user.password = hashed_password.decode("utf-8")
     user_info = self.user.create(user)
 
+    if user_info["status"] != "success":
+      return user_info
+    
+    user_info = user_info["data"]
     user_token = UserToken.model_validate(user_info)
     token = await self.auth.create_token(user_token)
     

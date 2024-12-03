@@ -1,10 +1,14 @@
-from sqlmodel import SQLModel, Field, TIMESTAMP, Column, text
-from pydantic import field_validator
+from sqlmodel import SQLModel, Field, TIMESTAMP, Column, text, UniqueConstraint
 from datetime import datetime
 
 from models.enums.role import Role as ROLES
 
 class User(SQLModel, table=True):
+  __table_args__ = (
+    UniqueConstraint("username", name="unique_username"),
+    UniqueConstraint("email", name="unique_email"),
+  )
+  
   id: int | None = Field(default=None, primary_key=True)
   username: str = Field(unique=True)
   password: str

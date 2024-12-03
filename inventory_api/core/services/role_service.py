@@ -1,35 +1,46 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Request
 
 from config.db_adapter import DBSession
+from config.auth_token import AuthDependency
 
 from sqlmodel import select
 
 from models.entities.role import Role
 from models.schemas.role import RoleCreate, RoleRead
+from models.enums.role import Role as ROLES
+
 
 class RoleService:
-  def __init__(self, db: DBSession) -> None:
+  def __init__(self, db: DBSession, auth: AuthDependency, request: Request) -> None:
     self.db = db
+    self.auth = auth
+    self.request = request
   
-  def get_all(self):
-    roles = self.db.exec(select(Role)).all() or []
-    return roles
+  async def get_all(self):
+    try:
+      user = await self.auth.get_user(self.request)
+      
+      if user.role == ROLES.USER.name:
+        return { "status_code": 401, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
+                 
+      roles = self.db.exec(select(Role)).all() or []
+      return { "data" : roles, "status": "success" }
+    except Exception as err:
+      return { "status_code": 500, "detail": str(err), "status": "error"}
   
-  def get_by_id(self, id: int):
+  async def get_by_id(self, id: int):
     role = self.db.get(Role, id)
+    user = await self.auth.get_user(self.request)
+    
+    if user.role == ROLES.USER.name:
+        return { "status_code": 401, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
     
     if role == None:
-      raise HTTPException(status_code=404, detail="Rol no encontrado")
+      return { "status_code": 404, "detail": "Rol no encontrado", "status": "fail" }
     
-    read_role = RoleRead(
-      id=role.id,
-      name=role.name,
-      permissions=role.permissions,
-      description=role.description
-    )
-    
-    return read_role
+    read_role = RoleRead.model_validate(role.model_dump())
+    return { "data": read_role, "status": "success" }
 
   def create(self, role: RoleCreate):
     new_role = Role(

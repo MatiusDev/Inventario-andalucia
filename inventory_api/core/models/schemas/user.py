@@ -25,14 +25,17 @@ class UserRead(SQLModel):
   
   @staticmethod
   def from_user(user: User):
-    # model_dump convierte todos los datos del usuarioDB a un diccionario
-    user_dump = user.model_dump()
-    # Se agrega el campo rol al diccionario
-    user_dump["role"] = ROLES(user.role_id).name if user.role_id else None
-    # Se elimina el campo role_id del diccionario
-    user_dump.pop("role_id", None)
-    # Se retorna el usuario validado con los campos que necesita el esquema
-    return UserRead.model_validate(user_dump)
+    return UserRead(
+      id = user.id,
+      username = user.username,
+      full_name = user.full_name,
+      email = user.email,
+      role = ROLES(user.role_id).name if user.role_id else None,
+      active = user.active,
+      created_at = user.created_at.isoformat(),
+      updated_at = user.updated_at.isoformat(),
+      last_session = user.last_session.isoformat()
+    )
 
 # Usuario para login desde Front
 class UserAuth(SQLModel):
