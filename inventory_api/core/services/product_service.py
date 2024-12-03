@@ -1,4 +1,5 @@
-from fastapi import HTTPException
+from typing import Annotated
+from fastapi import Depends, HTTPException
 
 from config.db_adapter import DBSession
 
@@ -55,3 +56,4 @@ class ProductService:
     self.db.commit()
     return {"message": "Product deleted", "status": "success"}
     
+SProductDependency = Annotated[ProductService, Depends(ProductService)]
