@@ -1,5 +1,5 @@
 from enum import Enum
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel
 
 class CategoryEnum(str, Enum):
     APERO = "Aperos"
@@ -15,12 +15,16 @@ class TypeMaintenance_Enum(str, Enum):
     PREVENTIVO = "Preventivo"
     PREDICTIVO = "Predictivo"
 
+# DTO
 class ToolBase(SQLModel):
-    id_product: int = Field(foreign_key="product.id")
-    category: CategoryEnum = Field(default=CategoryEnum.APERO)
-    material: MaterialEnum = Field(default=MaterialEnum.METAL)
-    brand: str = Field(default=None)
-    type_maintenance: TypeMaintenance_Enum = Field(default=TypeMaintenance_Enum.CORRECTIVO)
+    category: str
+    material: str
+    brand: str
+    type_maintenance: str
+    id_product: int
+
+class ToolRead(ToolBase):
+    id: int | None
 
 class ToolCreate(ToolBase):
     pass

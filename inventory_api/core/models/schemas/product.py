@@ -1,7 +1,7 @@
 from datetime import date
 from enum import Enum
 from typing import Any
-from sqlmodel import Field, SQLModel
+from sqlmodel import SQLModel
 
 
 class typeProduct_Enum(str, Enum):
@@ -15,15 +15,15 @@ class state_Enum(str, Enum):
   SPENT = "Agotado"
 
 class ProductBase(SQLModel):
-  name: str = Field(default=None)
-  price: float = Field(default=None)
-  stock: int = Field(default=None)
-  stock_minimum: int = Field(default=None)
-  location: str = Field(default=None)
-  date_entry: date = Field(default=None)
-  date_upate: date = Field(default=None)
-  state: state_Enum = Field(default=state_Enum.AVAILABLE)
-  type_product: typeProduct_Enum = Field(default="---Selecciona un tipo---")
+  name: str
+  price: float
+  # stock: int
+  # stock_minimum: int
+  # location: str
+  # date_entry: date
+  # date_upate: date
+  # state: str
+  # type_product: str
 
 # Esquemas de validación in/out de datos de producto
 # class ProductCreate(SQLModel):
