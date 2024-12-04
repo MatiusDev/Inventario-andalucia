@@ -24,3 +24,6 @@ async def list_tool(tool_service: SToolDependency):
 @route.delete("/tool/{tool_id}")
 async def delete_tool(tool_id: int, tool_service: SToolDependency):
     return tool_service.delete_tool(tool_id)
+
+
+# Comentarios cambios
