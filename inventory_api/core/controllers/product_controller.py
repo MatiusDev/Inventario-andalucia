@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from models.schemas.product import ProductCreate, ProductRead
+from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
 
 from services.product_service import SProductDependency
 
@@ -22,10 +22,10 @@ def get_product(id: int, product_service: SProductDependency):
 def create_product(product: ProductCreate, product_service: SProductDependency):
   return product_service.create(product)
 
-# @route.put("/{id}")
-# def update_product(id: int, product: ProductCreate, product_service: SProductDependency):
-#   return product_service.update_product(id, product)
+@route.put("/{id}")
+def update_product(id: int, product: ProductUpdate, product_service: SProductDependency):
+  return product_service.update(id, product)
 
-# @route.delete("/product/{id}")
-# def delete_product(id: int, product_service: SProductDependency):
-#   return product_service.delete_product(id)
+@route.delete("/{id}")
+def delete_product(id: int, product_service: SProductDependency):
+  return product_service.delete_product(id)

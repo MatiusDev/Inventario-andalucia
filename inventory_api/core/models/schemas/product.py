@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 from typing import Any
 from sqlmodel import SQLModel
@@ -20,12 +20,13 @@ class state_Enum(str, Enum):
 class ProductBase(SQLModel):
   name: str
   price: float
-  # stock: int
-  # stock_minimum: int
-  # location: str
-  # date_entry: date
-  # date_upate: date
-  # state: str
+  description: str
+  stock: int
+  stock_minimum: int
+  location: str
+  date_entry: datetime
+  date_update: datetime
+  state: str
   # type_product: str
 
 # Esquemas de validación in/out de datos de producto
@@ -35,12 +36,21 @@ class ProductBase(SQLModel):
   
 class ProductCreate(ProductBase):
   pass
-  
 
+class ProductUpdate(ProductBase):
+  pass
+  
 class ProductRead(SQLModel):
   id: Any | None
   name: str
   price: float
+  description: str
+  stock: int
+  stock_minimum: int
+  location: str
+  date_entry: datetime
+  date_update: datetime
+  state: str
   
   @staticmethod
   def supply_and_product(product: Product, supply: Supply):

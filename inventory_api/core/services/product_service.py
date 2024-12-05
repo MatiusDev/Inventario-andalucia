@@ -8,7 +8,7 @@ from sqlmodel import select
 from models.schemas.plant import PlantCreate
 from models.entities.product import Product
 from models.entities.supply import Supply
-from models.schemas.product import ProductCreate, ProductRead
+from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
 
 class ProductService:
   def __init__(self, db: DBSession) -> None:
@@ -33,9 +33,9 @@ class ProductService:
   def get_by_id(self, id: int):
     product = self.db.get(Product, id)
     
-    if product == None:
+    if product is None:
       raise HTTPException(status_code=404, detail="Product not found")
-    return ProductRead(id=product.id, name=product.name, price=product.price)
+    return ProductRead(**vars(product))
 
   def create(self, product: ProductCreate):
     product_db = Product.model_validate(product.model_dump())
@@ -50,28 +50,42 @@ class ProductService:
     #   plant_data = PlantCreate()
 
 
-  # def update_product(self, id: int, product: ProductCreate):
-  #   product_db = self.db.get(Product, id)
+  def update(self, id: int, product: ProductUpdate):
+    product_db = self.db.get(Product, id)
 
-  #   if product_db == None:
-  #     raise HTTPException(status_code=404, detail="Product not found")
+    if product_db is None:
+      raise HTTPException(status_code=404, detail="Product not found")
     
-  #   product_db.name = product.name
-  #   product_db.price = product.price
-  #   self.db.add(product_db)
-  #   self.db.commit()
-  #   self.db.refresh(product_db)
-  #   return ProductRead(id=product_db.id, name=product_db.name, price=product_db.price)
+    # product_db.name = product.name
+    # product_db.price = product.price
+    # product_db.description = product.description
+    # product_db.stock = product.stock
+    # product_db.stock_minimum = product.stock_minimum
+    # product_db.location = product.location
+    # product_db.date_entry = product.date_entry
+    # product_db.date_update = product.date_update
+    # product_db.state = product.state
+    
+    for attr, value in product.model_dump(exclude_unset=True).items():
+      setattr(product_db, attr, value)
 
-  # def delete_product(self, id: int):
-  #   product = self.db.get(Product, id)
+    self.db.add(product_db)
+    self.db.commit()
+    self.db.refresh(product_db)
+    return ProductRead(
+                        id=product_db.id,
+                        **product.model_dump(exclude_unset=True)
+                       )
+
+  def delete_product(self, id: int):
+    product = self.db.get(Product, id)
     
-  #   if product == None:
-  #     raise HTTPException(status_code=404, detail="Product not found")
+    if product is None:
+      raise HTTPException(status_code=404, detail="Product not found")
     
-  #   self.db.delete(product)
-  #   self.db.commit()
-  #   return {"message": "Product deleted", "status": "success"}
+    self.db.delete(product)
+    self.db.commit()
+    return {"message": "Product deleted", "status": "success"}
   
 SProductDependency = Annotated[ProductService, Depends(ProductService)]
     
