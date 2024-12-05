@@ -12,6 +12,7 @@ const AppRoutes = () => {
       <Route element={
           <AuthRoute isAuthenticated={true}>
             <Route path="/inventory" element={<Inventory />} />
+            
           </AuthRoute>
         }
       />
