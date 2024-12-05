@@ -2,9 +2,9 @@ import "./Login.css";
 
 import { useNavigate } from 'react-router';
 
-import LoginForm from "./LoginForm.jsx";
+import RegisterForm from "./RegisterForm.jsx";
 
-const Login = ({ title, handleClick }) => {
+const Register = ({ title, handleClick }) => {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -16,10 +16,10 @@ const Login = ({ title, handleClick }) => {
     <div className="form-information">
       <div className="form-information-childs">
         <h2>{title}</h2>
-        <LoginForm handleSubmit={handleSubmit} handleClick={handleClick} />
+        <RegisterForm handleSubmit={handleSubmit} handleClick={handleClick} />
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;
