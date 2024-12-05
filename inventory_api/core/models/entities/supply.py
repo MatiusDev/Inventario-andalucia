@@ -1,13 +1,13 @@
-from datetime import date
+from datetime import datetime
+from sqlalchemy import TIMESTAMP, Column, text
 from sqlmodel import SQLModel, Field, Relationship
-
-from models.entities.product import Product
 
 class Supply(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    type: str = Field(default="Semillas")
+    unit_measure: str | None = Field(default=None)
+    supplier: str | None = Field(default=None)
+    expiration_date: datetime | None = Field(default=None)
+    
     id_product: int = Field(foreign_key="product.id")
-    type_input: str = Field(default="Semillas")
-    expiration_date: date = Field(default=None)
-    unit_measure: str = Field(default=None)
-    supplier: str = Field(default=None)
-    product_data: Product = Relationship(back_populates="supplies")
+    products: list["Product"] = Relationship(back_populates="supply") # type: ignore

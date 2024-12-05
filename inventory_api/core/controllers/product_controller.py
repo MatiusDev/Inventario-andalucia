@@ -6,15 +6,19 @@ from services.product_service import SProductDependency
 
 route = APIRouter()
 
-@route.get("/")
+@route.get("/", status_code=200)
 def get_all_products(product_service: SProductDependency):
   return product_service.get_all()
 
-@route.get("/{id}")
+@route.get("/supplies/", status_code=200)
+async def get_all_supplies(product_service: SProductDependency):
+    return await product_service.get_all_supplies()
+
+@route.get("/{id}", status_code=200)
 def get_product(id: int, product_service: SProductDependency):
   return product_service.get_by_id(id)
   
-@route.post("/", response_model=ProductRead)
+@route.post("/", status_code=201)
 def create_product(product: ProductCreate, product_service: SProductDependency):
   return product_service.create(product)
 

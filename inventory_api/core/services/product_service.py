@@ -7,6 +7,7 @@ from sqlmodel import select
 
 from models.schemas.plant import PlantCreate
 from models.entities.product import Product
+from models.entities.supply import Supply
 from models.schemas.product import ProductCreate, ProductRead
 
 class ProductService:
@@ -14,8 +15,20 @@ class ProductService:
     self.db = db
   
   def get_all(self):
-    products = self.db.exec(select(Product)).all() or []
-    return products
+    products_db = self.db.exec(select(Product)).all() or []
+    return products_db
+  
+  async def get_all_supplies(self):
+    products_db = self.db.exec(select(Product, Supply).join(Supply)).all()
+    
+    # List Comprehesion
+    products = [ProductRead.supply_and_product(product, supply) for product, supply in products_db]
+    
+    products_sup = []
+    for product, supply in products_db:
+      products_sup.append(ProductRead.supply_and_product(product, supply))
+    # products = [{"product": product, "supply": supply } for product, supply in products_db]
+    return products_sup
   
   def get_by_id(self, id: int):
     product = self.db.get(Product, id)

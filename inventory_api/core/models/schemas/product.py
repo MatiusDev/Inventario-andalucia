@@ -3,6 +3,9 @@ from enum import Enum
 from typing import Any
 from sqlmodel import SQLModel
 
+from models.entities.product import Product
+from models.entities.supply import Supply
+
 
 class typeProduct_Enum(str, Enum):
   PLANT = "Plantas"
@@ -38,4 +41,16 @@ class ProductRead(SQLModel):
   id: Any | None
   name: str
   price: float
+  
+  @staticmethod
+  def supply_and_product(product: Product, supply: Supply):
+    return {
+      "id": product.id,
+      "Name": product.name,
+      "Type": supply.type,
+      "Price": product.price,
+      "Unit_meausure": supply.unit_measure,
+      "Supplier": supply.supplier,
+      "Expiration_date": supply.expiration_date,
+    }
   
