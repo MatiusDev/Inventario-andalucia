@@ -14,6 +14,10 @@ def get_all_products(product_service: SProductDependency):
 async def get_all_supplies(product_service: SProductDependency):
     return await product_service.get_all_supplies()
 
+@route.get("/plants/", status_code=200)
+async def get_all_supplies(product_service: SProductDependency):
+    return await product_service.get_all_plants()
+
 @route.get("/{id}", status_code=200)
 def get_product(id: int, product_service: SProductDependency):
   return product_service.get_by_id(id)

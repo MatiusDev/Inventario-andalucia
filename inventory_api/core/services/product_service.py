@@ -5,7 +5,8 @@ from config.db_adapter import DBSession
 
 from sqlmodel import select
 
-from models.schemas.plant import PlantCreate
+from models.entities.plant import Plant
+from models.schemas.plant import PlantCreate, PlantRead
 from models.entities.product import Product
 from models.entities.supply import Supply
 from models.schemas.product import ProductCreate, ProductRead
@@ -30,6 +31,15 @@ class ProductService:
     # products = [{"product": product, "supply": supply } for product, supply in products_db]
     return products_sup
   
+  async def get_all_plants(self):
+    products_db = self.db.exec(select(Product, Plant).join(Plant)).all()
+    
+    # List Comprehesion
+    products = [PlantRead.ProductPlant(product, plant) for product, plant in products_db]
+        
+    return products
+
+
   def get_by_id(self, id: int):
     product = self.db.get(Product, id)
     
