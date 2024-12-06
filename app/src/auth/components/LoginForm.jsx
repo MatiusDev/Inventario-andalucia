@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 
-const LoginForm = ({ handleSubmit, handleClick }) => {
+const LoginForm = ({ handleClick,handleSubmit  }) => {
   return (
     <form id="login-form" onSubmit={handleSubmit}>
       <div className="button-container">
