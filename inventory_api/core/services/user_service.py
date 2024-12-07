@@ -4,6 +4,7 @@ from fastapi import Depends
 from config.db_adapter import DBSession
 from config.auth_token import UserDependency
 
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from datetime import datetime
 # Entidades y esquemas

@@ -23,7 +23,7 @@ class AuthService:
 
     if user_info["status"] != "success":
       return user_info
-       
+
     return { "message": "Usuario registrado correctamente", "status": "success" }
   
   async def login(self, user: UserAuth):   
