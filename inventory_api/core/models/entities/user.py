@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, Field, TIMESTAMP, Column, text, UniqueConstraint, Relationship
 from datetime import datetime
 
+from models.entities.order_user import OrderUser
 from models.enums.role import RoleID, RoleType
 
 class User(SQLModel, table=True):
@@ -37,6 +38,7 @@ class User(SQLModel, table=True):
     server_default=text("CURRENT_TIMESTAMP"),
     default=text("CURRENT_TIMESTAMP")
   ), default_factory=datetime.now)
-  
   role_id: int = Field(default=RoleID.USER.value, foreign_key="role.id")
+  
   role: "Role" = Relationship(back_populates="users") # type: ignore
+  orders: list["Order"] = Relationship(back_populates="users", link_model=OrderUser) # type: ignore
