@@ -5,8 +5,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 
+import { useNavigate } from 'react-router';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/inventory');
+  };
+
   return (
     <>
       <div className="container-form">
@@ -20,7 +28,7 @@ const Login = () => {
         <div className="form-information">
           <div className="form-information-childs">
             <h2>Inicia Sesión</h2>
-            <form id="login-form">
+            <form id="login-form" onSubmit={handleSubmit}>
               <div className="button-container">
                 <div className="button">
                   <FontAwesomeIcon className="icon" icon={faUser} />
@@ -41,7 +49,7 @@ const Login = () => {
                   </button>
                 </div>
                 <div className="enlaces-autenticacion">
-                  <a href="">Recuperar Contraseña</a>
+                  <a href="">Recuperar contraseña</a>
                   <a href="">Registrarse</a>
                 </div>
               </div>

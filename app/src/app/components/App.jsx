@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router';
 
-import style from './App.module.css';
+import './App.css';
 
-import Login from '@/auth/components/Login.jsx';
+import AppRoutes from '../routes/AppRoutes';
 
 import { apiFetch } from '@utils/api.js';
 
@@ -26,8 +27,10 @@ function App() {
 
   return (
     <>
-      <div className={style.appContainer}>
-        <Login />
+      <div className="app-container">
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       </div>
       {/* <div className={styles.container}>
         <h1>Vite + React</h1>
