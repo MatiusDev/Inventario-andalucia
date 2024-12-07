@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-// import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router';
 
 import './App.css';
 
-// import AppRoutes from '../routes/AppRoutes';
+import AppRoutes from '../routes/AppRoutes';
 
 import { apiFetch } from '@utils/api.js';
 
@@ -33,11 +33,9 @@ function App() {
   return (
     <>
       <div className="app-container">
-        <BarraLateral/>
-        {
-        /* <BrowserRouter>
+        <BrowserRouter>
           <AppRoutes />
-        </BrowserRouter> */}
+        </BrowserRouter>
       </div>
       {/* <div className={styles.container}>
         <h1>Vite + React</h1>

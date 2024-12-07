@@ -17,5 +17,5 @@ async def login(user: UserAuth, auth_service: SAuthDependency):
 
 # Pendiente por modificar
 @route.post("/logout", status_code=200)
-async def logout(token: str, auth_service: SAuthDependency):
-  return await response_handler(auth_service.logout(token))
+async def logout(auth_service: SAuthDependency):
+  return await response_handler(auth_service.logout())
