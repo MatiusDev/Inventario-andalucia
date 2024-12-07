@@ -32,17 +32,6 @@ function App() {
           <AppRoutes />
         </BrowserRouter>
       </div>
-      {/* <div className={styles.container}>
-        <h1>Vite + React</h1>
-        <div className={styles.card}>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-        </div>
-        <p className={styles.readTheDocs}>
-          Click on the Vite and React logos to learn more
-        </p>
-      </div> */}
     </>
   )
 };
