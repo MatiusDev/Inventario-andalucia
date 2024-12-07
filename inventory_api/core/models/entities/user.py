@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, TIMESTAMP, Column, text, UniqueConstraint, Relationship
 from datetime import datetime
 
-from models.enums.role import RoleID
+from models.enums.role import RoleID, RoleType
 
 class User(SQLModel, table=True):
   __table_args__ = (
@@ -14,9 +14,11 @@ class User(SQLModel, table=True):
   password: str
   full_name: str
   email: str = Field(unique=True)
+  type: str = Field(default=RoleType.USER.value)
   active: bool = Field(default=True)
   is_logged_in: bool = Field(default=False)
   login_attempts: int = Field(default=0)
+  blocked_at: datetime | None = Field(default=None)
   created_at: datetime = Field(sa_column=Column(
     TIMESTAMP(timezone=True),
     nullable=False,

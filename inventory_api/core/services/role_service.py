@@ -1,8 +1,8 @@
 from typing import Annotated
-from fastapi import Depends, Request
+from fastapi import Depends
 
 from config.db_adapter import DBSession
-from config.auth_token import AuthDependency
+from config.auth_token import UserDependency
 
 from sqlmodel import select
 
@@ -11,17 +11,17 @@ from models.schemas.role import RoleCreate, RoleRead
 from models.enums.role import RoleType, Permissions
 
 class RoleService:
-  def __init__(self, db: DBSession, auth: AuthDependency, request: Request) -> None:
+  def __init__(self, db: DBSession, user: UserDependency) -> None:
     self.db = db
-    self.auth = auth
-    self.request = request
+    self.user = user
+  
+  async def get_all_roles_and_users(self):
+    pass
   
   async def get_all(self):
     try:
-      user = await self.auth.get_user(self.request)
-      
-      if (user.role == RoleType.USER
-          or Permissions.READ not in user.permissions):
+      if (self.user.type == RoleType.USER
+          or Permissions.READ not in self.user.permissions):
         return { "status_code": 403, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
                  
       roles = self.db.exec(select(Role)).all() or []
@@ -29,11 +29,9 @@ class RoleService:
     except Exception as err:
       return { "status_code": 500, "detail": str(err), "status": "error"}
   
-  async def get_by_id(self, id: int):
-    user = await self.auth.get_user(self.request)
-    
-    if (user.role == RoleType.USER
-        or Permissions.READ not in user.permissions):
+  async def get_by_id(self, id: int):   
+    if (self.user.type == RoleType.USER
+        or Permissions.READ not in self.user.permissions):
       return { "status_code": 403, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
       
     role = self.db.get(Role, id)
@@ -46,10 +44,8 @@ class RoleService:
 
   async def create(self, role: RoleCreate):
     try:
-      user = await self.auth.get_user(self.request)
-      
-      if (user.role == RoleType.USER
-          or Permissions.EDIT not in user.permissions):
+      if (self.user.type == RoleType.USER
+          or Permissions.EDIT not in self.user.permissions):
         return { "status_code": 403, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
       
       new_role = Role.model_validate(role)
@@ -64,20 +60,20 @@ class RoleService:
 
   async def update(self, id: int, role: RoleCreate):
     try:
-      user = await self.auth.get_user(self.request)
-      
-      if (user.role == RoleType.USER
-          or Permissions.EDIT not in user.permissions):
-        return { "status_code": 403, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
+      if (self.user.type == RoleType.USER
+          or Permissions.EDIT not in self.user.permissions):
+        return {
+          "status_code": 403, 
+          "detail": "No tienes permisos para acceder a este recurso", 
+          "status": "fail"
+        }
       
       role_db = self.db.get(Role, id)
 
       if role_db == None:
         return { "status_code": 404, "detail": "Rol no encontrado", "status": "fail" }
       
-      role_db.name = role.name
-      role_db.description = role.description
-      role_db.permissions = role.permissions
+      role_db.sqlmodel_update(role.model_dump(exclude_none=True))
       self.db.add(role_db)
       self.db.commit()
       self.db.refresh(role_db)
@@ -89,10 +85,8 @@ class RoleService:
 
   async def delete(self, id: int):
     try:
-      user = await self.auth.get_user(self.request)
-      
-      if (user.role == RoleType.USER
-          or Permissions.DELETE not in user.permissions):
+      if (self.user.type == RoleType.USER
+          or Permissions.DELETE not in self.user.permissions):
         return { "status_code": 403, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
       
       role = self.db.get(Role, id)
@@ -102,7 +96,7 @@ class RoleService:
       
       self.db.delete(role)
       self.db.commit()
-      return { "message": "Rol eliminado", "status": "success" }
+      return { "message": "Rol eliminado correctamente", "status": "success" }
     except Exception as err:
       return { "status_code": 500, "detail": str(err), "status": "error" }
   
