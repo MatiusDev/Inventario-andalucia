@@ -1,4 +1,3 @@
-from typing import Any
 from sqlmodel import SQLModel
 # Esquemas de validación in/out de datos de rol
 class RoleCreate(SQLModel):
@@ -7,7 +6,7 @@ class RoleCreate(SQLModel):
   permissions: str
 
 class RoleRead(SQLModel):
-  id: Any | None
+  id: int | None
   name: str
   description: str
   permissions: str
