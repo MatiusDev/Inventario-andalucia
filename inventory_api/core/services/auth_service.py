@@ -19,11 +19,11 @@ class AuthService:
   async def sign_up(self, user: UserCreate):
     hashed_password = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
     user.password = hashed_password.decode("utf-8")
-    user_info = await self.user_service.create_user(user)
+    user_info = self.user_service.create_user(user)
 
     if user_info["status"] != "success":
       return user_info
-
+       
     return { "message": "Usuario registrado correctamente", "status": "success" }
   
   async def login(self, user: UserAuth):   
@@ -41,6 +41,7 @@ class AuthService:
     if (user_session.blocked_at != None):
       blocked_at = datetime.fromisoformat(user_session.blocked_at)
       elapsed_time = datetime.now() - blocked_at
+      print(elapsed_time, timedelta(minutes=1))
     
       if elapsed_time <= timedelta(minutes=1):
         return { "status_code": 401, "detail": "Usuario bloqueado. Intenta de nuevo en 15 minutos", "status": "fail" }
