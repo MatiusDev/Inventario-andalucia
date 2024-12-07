@@ -41,7 +41,6 @@ class AuthService:
     if (user_session.blocked_at != None):
       blocked_at = datetime.fromisoformat(user_session.blocked_at)
       elapsed_time = datetime.now() - blocked_at
-      print(elapsed_time, timedelta(minutes=1))
     
       if elapsed_time <= timedelta(minutes=1):
         return { "status_code": 401, "detail": "Usuario bloqueado. Intenta de nuevo en 15 minutos", "status": "fail" }

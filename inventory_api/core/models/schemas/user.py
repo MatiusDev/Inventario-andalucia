@@ -181,7 +181,6 @@ class UserUpdate(UserBase):
     
     if values.get("blocked_at") == None:
       values["blocked_at"] = None
-    print("HEEEEEEEEEEEEEEREEEEEEEEEEEEEE", values)
     
     for key, value in values.items():
       setattr(user, key, value)

@@ -29,7 +29,7 @@ class RoleService:
     except Exception as err:
       return { "status_code": 500, "detail": str(err), "status": "error"}
   
-  async def get_by_id(self, id: int):   
+  async def get(self, id: int):   
     if (self.user.type == RoleType.USER
         or Permissions.READ not in self.user.permissions):
       return { "status_code": 403, "detail": "No tienes permisos para acceder a este recurso", "status": "fail" }
