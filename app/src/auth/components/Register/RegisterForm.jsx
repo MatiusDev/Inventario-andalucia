@@ -1,4 +1,4 @@
-import "./LoginForm.css";
+import "../Login/LoginForm.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
