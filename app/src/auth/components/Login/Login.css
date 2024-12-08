@@ -1,0 +1,22 @@
+.form-information {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  text-align: center;
+  background-color: #f5f8ed;
+}
+
+.form-information-childs {
+  min-width: 60%;
+}
+
+.form-information-childs h2 {
+  color: black;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.form-information-childs p {
+  color: black;
+}

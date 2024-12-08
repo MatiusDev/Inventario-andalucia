@@ -1,6 +1,4 @@
-# from datetime import date
 from sqlmodel import Field, SQLModel, Relationship
-
 
 # Entidad DB Producto
 class Product(SQLModel, table=True):
@@ -19,4 +17,8 @@ class Product(SQLModel, table=True):
   plant: "Plant" = Relationship(back_populates="products")
   notify: "Notify" = Relationship(back_populates="products")
   
+  
+  orders: list["OrderProduct"] = Relationship(back_populates="product") # type: ignore
+  
+
   

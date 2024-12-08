@@ -42,6 +42,10 @@ class ProductRead(SQLModel):
   name: str
   price: float
   
+class ProductBase(SQLModel):
+  id: int
+  quantity: int
+  
   @staticmethod
   def supply_and_product(product: Product, supply: Supply):
     return {

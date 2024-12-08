@@ -25,7 +25,8 @@ def custom_openapi(app):
   
   for path, methods in openapi_schema["paths"].items():
     for method in methods:
-      if not path.startswith("/api/auth"):
+      if (not path.startswith("/api/auth/login") 
+        and not path.startswith("/api/auth/sign-up")):
         methods[method]["security"] = [{"BearerAuth": []}]
       else:
         methods[method].pop("security", None)        

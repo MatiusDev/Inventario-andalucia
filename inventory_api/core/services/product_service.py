@@ -92,9 +92,34 @@ class ProductService:
   #   if product == None:
   #     raise HTTPException(status_code=404, detail="Product not found")
     
-  #   self.db.delete(product)
-  #   self.db.commit()
-  #   return {"message": "Product deleted", "status": "success"}
+    self.db.delete(product)
+    self.db.commit()
+    return {"message": "Product deleted", "status": "success"}
+
+  def get_products(self, products: list[ProductCreate]):
+    product_ids = [product.id for product in products]
+    products_db = self.db.exec(select(Product).where(Product.id.in_(product_ids))).all()
+    
+    # Validando que la consulta si tenga la misma cantidad de productos id
+    product_db_ids = [product.id for product in products_db]
+    response = self.validate_products(product_ids, product_db_ids)
+    
+    if response["status"] != "success":
+      return response
+    return { "data": products_db, "status": "success" }
   
+  def validate_products(self, product_ids: list, product_db_ids: list):
+    product_ids_set = set(product_ids)
+    product_db_ids_set = set(product_db_ids)
+    if len(product_ids) != len(product_db_ids):
+      products_not_found = product_ids_set - product_db_ids_set
+      return { 
+        "status_code": 404,
+        "detail": f"Los siguientes ids de producto no se encontraron: {products_not_found}", 
+        "status": "fail"
+      }
+    return { "status": "success" }
+
+
 SProductDependency = Annotated[ProductService, Depends(ProductService)]
     

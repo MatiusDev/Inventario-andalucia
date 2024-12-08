@@ -12,10 +12,14 @@ class AuthBackend(JWTAuthBackend):
       authentication_config=AuthenticationSettings(), 
       user_schema=UserToken
     )
+  
+  @staticmethod    
+  def get_user(request: Request) -> UserToken | None:
+    if not hasattr(request, "state") or not hasattr(request.state, "user"):
+      return None
     
-  async def get_user(self, request: Request) -> UserToken:
-    auth = request.headers.get("Authorization")
-    token = auth.split(" ")[1]
-    return await super().get_current_user(token)
+    return request.state.user
+  
     
 AuthDependency = Annotated[AuthBackend, Depends(AuthBackend)]
+UserDependency = Annotated[UserToken, Depends(AuthBackend.get_user)]
