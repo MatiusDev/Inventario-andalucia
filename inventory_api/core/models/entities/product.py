@@ -17,5 +17,6 @@ class Product(SQLModel, table=True):
   
   supply: "Supply" = Relationship(back_populates="products") # type: ignore
   plant: "Plant" = Relationship(back_populates="products")
+  notify: "Notify" = Relationship(back_populates="products")
   
   

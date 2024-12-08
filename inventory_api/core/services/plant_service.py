@@ -20,7 +20,7 @@ class PlantService:
         return plant_db
     
     def list_plant(self):
-        plants = self.db.exec(select(Plant)).all() or []
+        plants = self.db.exec(select(Plant)).all()
         return plants
     
     def update_plant(self, id: int, plant_data: PlantUpdate):

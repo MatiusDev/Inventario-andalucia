@@ -7,6 +7,7 @@ from controllers.product_controller import route as product_route
 from controllers.tool_controller import route as tool_route
 from controllers.plant_controller import route as plant_route
 from controllers.supply_controller import route as supply_route
+from controllers.notify_controller import route as notify_route
 
 routes = APIRouter()
 
@@ -16,3 +17,4 @@ routes.include_router(tool_route, tags=["Tools"], prefix="/tools")
 routes.include_router(plant_route, tags=["Plants"], prefix="/plants")
 routes.include_router(supply_route, tags=["Supplies"], prefix="/supplies")
 routes.include_router(role_route, tags=["Roles"], prefix="/roles")
+routes.include_router(notify_route, tags=["Notifications"], prefix="/notifications")

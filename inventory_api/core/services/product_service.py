@@ -10,10 +10,12 @@ from models.schemas.plant import PlantCreate, PlantRead
 from models.entities.product import Product
 from models.entities.supply import Supply
 from models.schemas.product import ProductCreate, ProductRead
+from services.notify_service import NotifyDependency
 
 class ProductService:
-  def __init__(self, db: DBSession) -> None:
+  def __init__(self, db: DBSession, NotifyService: NotifyDependency) -> None:
     self.db = db
+    self.notification = NotifyService
   
   def get_all(self):
     products_db = self.db.exec(select(Product)).all() or []
@@ -33,10 +35,11 @@ class ProductService:
   
   async def get_all_plants(self):
     products_db = self.db.exec(select(Product, Plant).join(Plant)).all()
-    
+    print(products_db)
     # List Comprehesion
     products = [PlantRead.ProductPlant(product, plant) for product, plant in products_db]
-        
+      
+    print(products)
     return products
 
 
@@ -54,6 +57,16 @@ class ProductService:
     self.db.refresh(product_db)
     
     product_read = ProductRead.model_validate(product_db)
+
+    '''En esta sección integro el servicio para agregar la notificación del producto personalizada en la base de datos
+    Si es el caso, se hacen las validaciones de cambio de la variable de interes para ver si cambió con respecto al estado anterior
+    '''
+    id_product = product_read.id
+    message = f"El producto con id {id_product} ha sido creado con precio {product_read.price}"
+    
+    '''Uso el metodo noticar cambio que me almacena en base de datos la información necesaria'''
+    self.notification.notifyChange(id_product,message)
+
     return product_read
 
     # if product.type_product == "Plantas":

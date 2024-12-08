@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status
 
+from utils import response_handler
 from models.entities.plant import Plant
 from models.schemas.plant import PlantCreate, PlantUpdate, PlantRead
 from services.plant_service import SPlantDependency
@@ -14,10 +15,10 @@ async def create_plant(plant_data: PlantCreate, plant_service: SPlantDependency)
 async def update_plant(plant_id: int, plant: PlantUpdate, plant_service: SPlantDependency):
     return plant_service.update_plant(plant_id, plant)
 
-@route.get("/", response_model= list[Plant])
+@route.get("/", response_model= list[PlantRead])
 async def list_plant(plant_service: SPlantDependency):
     return plant_service.list_plant()
 
 @route.delete("/plant/{plant_id}")
 async def delete_plant(plant_id: int, plant_service: SPlantDependency):
-    return plant_service.delete_plant(plant_id)
+    return response_handler.response_handler(plant_service.delete_plant(plant_id))
