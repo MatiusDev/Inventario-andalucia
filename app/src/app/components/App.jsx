@@ -7,11 +7,6 @@ import AppRoutes from '../routes/AppRoutes';
 
 import { apiFetch } from '@utils/api.js';
 
-// import Auth from '@/auth/components/Auth/Auth';
-
-import BarraLateral from '@/dashboard/components/BarraLateral/BarraLateral';
-
-
 function App() {
   // const [count, setCount] = useState(0);
   const [data, setData] = useState(null);
@@ -24,7 +19,8 @@ function App() {
         const data = await apiFetch(URL);
         setData(data);
       } catch (error) {
-        setError(error.message);
+        // setError(error.message);
+        console.log(error)
       }
     }
     fetchData();

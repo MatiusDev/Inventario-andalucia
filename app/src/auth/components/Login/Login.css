@@ -8,7 +8,7 @@
 }
 
 .form-information-childs {
-  padding: 0 30px;
+  min-width: 60%;
 }
 
 .form-information-childs h2 {
@@ -20,4 +20,3 @@
 .form-information-childs p {
   color: black;
 }
-
