@@ -9,7 +9,7 @@ const Register = ({ title, handleClick }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/inventory');
+    navigate('/dashboard');
   };
 
   return (
