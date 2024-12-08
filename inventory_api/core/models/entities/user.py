@@ -37,6 +37,7 @@ class User(SQLModel, table=True):
     server_default=text("CURRENT_TIMESTAMP"),
     default=text("CURRENT_TIMESTAMP")
   ), default_factory=datetime.now)
-  
   role_id: int = Field(default=RoleID.USER.value, foreign_key="role.id")
+  
   role: "Role" = Relationship(back_populates="users") # type: ignore
+  orders: list["Order"] = Relationship(back_populates="user") # type: ignore

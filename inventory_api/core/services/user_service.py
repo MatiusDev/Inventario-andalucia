@@ -153,6 +153,8 @@ class UserService:
       return { "data": user_read, "status": "success" }
     except Exception as err:
       self.db.rollback()
+      if not hasattr(err, "orig"):
+        return {  "status_code": 500, "detail": str(err), "status": "error" }  
       err_id, err_msg = err.orig.args
       
       if "unique_username" in str(err.orig) or "unique_email" in str(err.orig):
