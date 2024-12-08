@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router';
 
 import './App.css';
 
-import AppRoutes from '../routes/AppRoutes';
+import AppRoutes from '@routes/AppRoutes';
 
 import { apiFetch } from '@utils/api.js';
 
@@ -19,7 +19,8 @@ function App() {
         const data = await apiFetch(URL);
         setData(data);
       } catch (error) {
-        setError(error.message);
+        // setError(error.message);
+        console.log(error);
       }
     }
     fetchData();

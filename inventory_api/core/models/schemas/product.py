@@ -10,3 +10,7 @@ class ProductRead(SQLModel):
   name: str
   price: float
   
+class ProductBase(SQLModel):
+  id: int
+  quantity: int
+  

@@ -35,19 +35,21 @@ class AuthService:
     user_session = user_data["data"]
     
     if (user_session.is_logged_in):
-      return { "status_code": 400, "detail": "Ya estás logueado", "status": "fail" }
-    
-    
+      logged_at = datetime.fromisoformat(user_session.last_session)
+      elapsed_time = datetime.now() - logged_at
+      
+      if elapsed_time <= timedelta(minutes=1):
+        return { "status_code": 400, "detail": "Ya estás logueado", "status": "fail" }
+      user_session.is_logged_in = False
+      
     if (user_session.blocked_at != None):
       blocked_at = datetime.fromisoformat(user_session.blocked_at)
       elapsed_time = datetime.now() - blocked_at
-      print(elapsed_time, timedelta(minutes=1))
     
       if elapsed_time <= timedelta(minutes=1):
         return { "status_code": 401, "detail": "Usuario bloqueado. Intenta de nuevo en 15 minutos", "status": "fail" }
-      else:
-        user_session.blocked_at = None
-        user_session.login_attempts = 0
+      user_session.blocked_at = None
+      user_session.login_attempts = 0
     
     if (user_session.login_attempts >= 3):
       return { "status_code": 401, "detail": "Demasiados intentos fallidos al iniciar sesión", "status": "fail" }
