@@ -20,6 +20,10 @@ async def get_order(id: int, order_service: SOrderDependency):
 async def create_order(order: OrderCreate, order_service: SOrderDependency):
   return await response_handler(order_service.create(order))
 
+@route.post("/{id}", status_code=200)
+async def process_order(order_service: SOrderDependency):
+  return await response_handler(order_service.process())
+
 @route.put("/{id}", status_code=200)
 async def update_order(id: int, order: OrderCreate, order_service: SOrderDependency):
   return await response_handler(order_service.update(id, order))

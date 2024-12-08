@@ -9,6 +9,7 @@ class SupplierBase(SQLModel):
   city: str
 
 class SupplierCreate(SupplierBase):
+  phone: str | None = None
   pass
 
 class SupplierRead(SupplierBase):

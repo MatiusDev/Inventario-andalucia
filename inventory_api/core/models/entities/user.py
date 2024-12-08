@@ -41,4 +41,4 @@ class User(SQLModel, table=True):
   role_id: int = Field(default=RoleID.USER.value, foreign_key="role.id")
   
   role: "Role" = Relationship(back_populates="users") # type: ignore
-  orders: list["Order"] = Relationship(back_populates="users", link_model=OrderUser) # type: ignore
+  orders: list["Order"] = Relationship(back_populates="user") # type: ignore

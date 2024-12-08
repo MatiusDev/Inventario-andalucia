@@ -3,13 +3,11 @@ from datetime import datetime
 
 from models.enums.order import Status
 from models.entities.order_supplier import OrderSupplier
-from models.entities.order_product import OrderProduct
-from models.entities.order_user import OrderUser
 
 class Order(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
-  quantity: int
-  description: str = Field(default=None, nullable=True)
+  quantity: int | None = Field(default=None, nullable=True)
+  description: str
   type: str
   status: str = Field(default=Status.PENDING.value)
   created_at: datetime = Field(sa_column=Column(
@@ -24,7 +22,8 @@ class Order(SQLModel, table=True):
     server_default=text("CURRENT_TIMESTAMP"),
     default=text("CURRENT_TIMESTAMP")
   ), default_factory=datetime.now)
+  id_user: int | None = Field(default=None, foreign_key="user.id", nullable=False)  
   
+  user: "User" = Relationship(back_populates="orders") # type: ignore
   suppliers: list["Supplier"] = Relationship(back_populates="orders", link_model=OrderSupplier) # type: ignore
-  users: list["User"] = Relationship(back_populates="orders", link_model=OrderUser) # type: ignore
-  products: list["Product"] = Relationship(back_populates="orders", link_model=OrderProduct) # type: ignore
+  products: list["OrderProduct"] = Relationship(back_populates="order") # type: ignore
