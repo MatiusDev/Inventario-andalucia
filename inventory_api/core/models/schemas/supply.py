@@ -3,8 +3,9 @@ from enum import Enum
 # from pydantic import field_validator
 from sqlmodel import SQLModel, Field
 
-from models.enums.type_Supply import Type_Supply
 from models.entities.supply import Supply
+from models.enums.supplies import TypeSupply
+from datetime import datetime
 
 class SupplyBase(SQLModel):
     type_supply: str

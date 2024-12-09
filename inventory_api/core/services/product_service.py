@@ -43,7 +43,7 @@ class ProductService:
     self.db.commit()
     self.db.refresh(product_db)
     
-    product_read = ProductRead.model_validate(product_db)
+    product_read = ProductRead.from_db(product_db)
     return product_read
 
   def update(self, id: int, product: ProductUpdate):

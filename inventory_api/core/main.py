@@ -8,7 +8,7 @@ from config.environtments_config import environment_config
 from config.openapi_config import custom_openapi
 
 # Middlewares
-# from fastapi_auth_jwt import JWTAuthenticationMiddleware
+from fastapi_auth_jwt import JWTAuthenticationMiddleware
 
 # Rutas de API
 from router.routes import routes
@@ -27,12 +27,12 @@ app.add_middleware(
   allow_headers=["*"]
 )
 
-# app.add_middleware(
-#   JWTAuthenticationMiddleware,
-#   backend=config["auth"],
-#   exclude_urls=["/api/auth/login", "/api/auth/sign-up"]
-# )
+app.add_middleware(
+  JWTAuthenticationMiddleware,
+  backend=config["auth"],
+  exclude_urls=["/api/auth/login", "/api/auth/sign-up"]
+)
 
 app.include_router(routes, prefix="/api")
 
-# app.openapi_schema = custom_openapi(app)
+app.openapi_schema = custom_openapi(app)

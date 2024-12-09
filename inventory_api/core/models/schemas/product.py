@@ -1,47 +1,63 @@
-from datetime import date, datetime
-from enum import Enum
-from typing import Any
 from sqlmodel import Field, SQLModel
 
-from models.enums.type_Product import TYPE_PRODUCT_BY_ID, Type_Product
+from models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
 from models.entities.product import Product
 from models.entities.supply import Supply
 
-class ProductCreate(SQLModel):
+class ProductBase(SQLModel):
   name: str
-  price: float
   description: str
-  stock: int
-  stock_minimum: int
-  location: str
-  type_id: int
+  price: float = 0.0
+  stock: int = 0
+  stock_minimum: int = 0
+
+class ProductCreate(ProductBase):
+  type_id: int = Field(default=1, description="Tipo de producto: 1. Planta 2. Insumo 3. Herramienta")
+  location: str | None = Field(default=None, description="Debes ingresar el bloqueo o pasillo donde se guardó el stock")
+  
   def create_dump(self):
     product = self.model_dump(exclude_none=True)
-    if product.get("type_product") is None:
-      product["type_product"] = TYPE_PRODUCT_BY_ID.get(self.type_id)
+    if product.get("type") == None:
+      product["type"] = PRODUCT_TYPE_BY_ID.get(self.type_id)
       product.pop("type_id")
     return product
-
-class ProductUpdate(SQLModel):
-  name: str
-  price: float
-  description: str
-  stock: int
-  stock_minimum: int
-  location: str
-  state: bool
-  type_product: str
+    
+class ProductUpdate(ProductBase):
+  id: int | None
+  name: str | None
+  description: str | None
+  price: float | None = 0.0
+  stock: int | None = 0
+  stock_minimum: int | None = 10
+  location: str | None
+  active: bool | None
+  type_id: int | None
+  created_at: str | None
+  updated_at: str | None
   
-class ProductRead(SQLModel):
-  id: Any | None
-  name: str
-  price: float
-  description: str
-  stock: int
-  stock_minimum: int
-  location: str
-  state: bool
-  type_product: str
+class ProductRead(ProductBase):
+  id: int | None
+  active: bool
+  type: str
+  created_at: str
+  updated_at: str
+  location: str | None
+  
+  @staticmethod
+  def from_db(product: Product):
+    return ProductRead(
+      id=product.id,
+      name=product.name,
+      description=product.description,
+      price=product.price,
+      stock=product.stock,
+      stock_minimum=product.stock_minimum,
+      location=product.location,
+      active=product.active,
+      type=product.type,
+      created_at=product.created_at.isoformat(),
+      updated_at=product.updated_at.isoformat()
+    ) 
   
   @staticmethod
   def supply_and_product(product: Product, supply: Supply):
@@ -55,7 +71,7 @@ class ProductRead(SQLModel):
       "Expiration_date": supply.expiration_date,
     }
   
-class ProductBase(SQLModel):
+class ProductOrder(SQLModel):
   id: int
   quantity: int
   

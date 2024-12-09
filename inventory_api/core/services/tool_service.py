@@ -6,7 +6,7 @@ from sqlmodel import select
 from models.entities.product import Product
 from models.entities.tool import Tool
 from models.schemas.tool import ToolCreate, ToolUpdate, ToolRead
-from models.enums.type_Product import Type_Product
+from models.enums.product import ProductType
 
 class ToolService:
     def __init__(self, db: DBSession) -> None:
@@ -18,7 +18,7 @@ class ToolService:
         if product_db is None:
             raise HTTPException(status_code=404, detail="El producto no existe")
     
-        if product_db.type_product != Type_Product.TOOL.value:
+        if product_db.type_product != ProductType.TOOL.value:
             raise HTTPException(status_code=400, detail="No puedes agregar este tipo de producto en herramientas")
 
         self.db.add(tool_db)
