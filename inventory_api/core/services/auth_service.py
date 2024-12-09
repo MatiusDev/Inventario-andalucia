@@ -3,6 +3,7 @@ from fastapi import Depends, Request
 from datetime import datetime, timedelta
 
 import bcrypt
+from fastapi.responses import JSONResponse
 # Modelos y Esquemas
 from models.schemas.user import UserCreate, UserAuth, UserToken, UserRead, UserUpdate
 # Dependencias
@@ -81,12 +82,12 @@ class AuthService:
       "key": "session",
       "value": token,
       "httponly": True,
-      "secure": True,
+      "secure": False,
       "samesite": "strict",
       "max_age": self.auth.config.expiration_seconds
     }
     
-    return { "message:": "Incio de sesión exitoso", "status": "success", "cookie": cookie }
+    return { "message": "Incio de sesión exitoso", "status": "success", "cookie": cookie }
   
   async def logout(self):   
     token = self.user.token
