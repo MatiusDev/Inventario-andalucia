@@ -1,0 +1,64 @@
+/*------------> Usuario*/
+
+.sidebar .user {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar .user img{
+    width: 50px;
+    min-width: 50px;
+    border-radius: 10px;
+}
+
+.sidebar .user .info-user{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-texto);
+    overflow: hidden;
+}
+
+.sidebar .user .name-rol{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.sidebar .user .name{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.sidebar .user .rol{
+    font-size: 12px;
+
+}
+
+.sidebar .menu-user .icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    background: none;
+    transition: 0.2s ease;
+}
+
+.sidebar .menu-user:hover{
+    border-radius: 3px 1px;
+    background: var(--color-menu-hover);
+    border-radius: 10px;
+}
+
+.sidebar .user .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+}
