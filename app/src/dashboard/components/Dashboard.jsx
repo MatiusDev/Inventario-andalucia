@@ -1,3 +1,5 @@
-const Dashboard = () => (<h1>Hello World!</h1>);
+import Sidebar from "./Sidebar/Sidebar";
+
+const Dashboard = () => (<Sidebar/>);
 
 export default Dashboard;
