@@ -18,7 +18,7 @@ class ToolService:
         if product_db is None:
             raise HTTPException(status_code=404, detail="El producto no existe")
     
-        if product_db.type_product != Type_Product.HERRAMIENTA.value:
+        if product_db.type_product != Type_Product.TOOL.value:
             raise HTTPException(status_code=400, detail="No puedes agregar este tipo de producto en herramientas")
 
         self.db.add(tool_db)

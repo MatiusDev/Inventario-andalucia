@@ -5,33 +5,31 @@ from sqlmodel import SQLModel, Field
 
 from models.enums.type_Supply import Type_Supply
 from models.entities.supply import Supply
-from datetime import datetime
 
 class SupplyBase(SQLModel):
-    type_supply : Type_Supply = Field(default=Type_Supply.SEMILLAS)
+    type_supply: str
     unit_measure: str
-    expiry_date: date
+    expiry_date: str
     
 class SupplyRead(SupplyBase):
     id: int | None
     type_supply: str
     unit_measure: str
-    expiry_date: date
+    expiry_date: str
     
 class SupplyCreate(SupplyBase):
     id_product: int
     
     @staticmethod
     def supply_dump(self):
-        print(self.expiration_date)
+        # print(self.expiration_date)
         return {
             "id_product": self.id_product,
-            "type": self.type,
-            "expiration_date": datetime.strptime(self.expiration_date, "%d/%m/%Y"),
+            "type_supply": self.type_supply,
+            "expiry_date": datetime.strptime(self.expiry_date, "%d/%m/%Y"),
             "unit_measure": self.unit_measure,
             "supplier": self.supplier
         }
         
-
 class SupplyUpdate(SupplyBase):
     pass

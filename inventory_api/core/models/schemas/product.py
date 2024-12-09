@@ -3,25 +3,34 @@ from enum import Enum
 from typing import Any
 from sqlmodel import Field, SQLModel
 
-from models.enums.type_Product import Type_Product
+from models.enums.type_Product import TYPE_PRODUCT_BY_ID, Type_Product
 from models.entities.product import Product
 from models.entities.supply import Supply
 
-class ProductBase(SQLModel):
+class ProductCreate(SQLModel):
   name: str
   price: float
   description: str
   stock: int
   stock_minimum: int
   location: str
-  state: str
+  type_id: int
+  def create_dump(self):
+    product = self.model_dump(exclude_none=True)
+    if product.get("type_product") is None:
+      product["type_product"] = TYPE_PRODUCT_BY_ID.get(self.type_id)
+      product.pop("type_id")
+    return product
+
+class ProductUpdate(SQLModel):
+  name: str
+  price: float
+  description: str
+  stock: int
+  stock_minimum: int
+  location: str
+  state: bool
   type_product: str
-
-class ProductCreate(ProductBase):
-  pass
-
-class ProductUpdate(ProductBase):
-  pass
   
 class ProductRead(SQLModel):
   id: Any | None
@@ -31,7 +40,7 @@ class ProductRead(SQLModel):
   stock: int
   stock_minimum: int
   location: str
-  state: str
+  state: bool
   type_product: str
   
   @staticmethod

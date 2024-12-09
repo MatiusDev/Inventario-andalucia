@@ -38,7 +38,7 @@ class ProductService:
     return ProductRead(**vars(product))
 
   def create(self, product: ProductCreate):
-    product_db = Product.model_validate(product.model_dump())
+    product_db = Product.model_validate(product.create_dump())
     self.db.add(product_db)
     self.db.commit()
     self.db.refresh(product_db)

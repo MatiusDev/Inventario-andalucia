@@ -7,7 +7,7 @@ class Product(SQLModel, table=True):
   name: str
   price: float
   description: str
-  stock: int
+  stock: int 
   stock_minimum: int
   location: str
   created_at: datetime | None = Field(sa_column=Column(
@@ -22,7 +22,7 @@ class Product(SQLModel, table=True):
     server_default=text("CURRENT_TIMESTAMP"),
     default=text("CURRENT_TIMESTAMP")
   ), default_factory=datetime.now)
-  state: str
+  state: bool = Field(default=True)
   type_product: str
   
   supply: "Supply" = Relationship(back_populates="products") # type: ignore

@@ -6,6 +6,5 @@ class Type_Product(Enum):
     TOOL = "Herramienta"
 
 class State_Enum(Enum):
-    AVAILABLE = "Disponible"
-    PENDING = "Pendiente"
-    SPENT = "Agotado"
+    ACTIVE = "Activo"
+    INACTIVE = "Inactivo"
