@@ -3,9 +3,9 @@ from fastapi import Depends, HTTPException
 from config.db_adapter import DBSession
 from sqlmodel import select
 
-from models.enums.product import Type_Product
 from models.entities.product import Product
 from models.entities.supply import Supply
+from models.enums.product import ProductType
 from models.schemas.supply import SupplyCreate, SupplyRead, SupplyUpdate
 
 class SupplyService:
@@ -20,7 +20,7 @@ class SupplyService:
             if product_db is None:
                 raise HTTPException(status_code=404, detail="El producto no existe")
             
-            if product_db.type_product != Type_Product.INSUMO.value:
+            if product_db.type_product != ProductType.SUPPLY.value:
                 raise HTTPException(status_code=400, detail="No puedes agregar este tipo de producto en herramientas")
 
             self.db.add(supply_db)

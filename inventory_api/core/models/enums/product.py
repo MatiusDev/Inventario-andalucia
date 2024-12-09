@@ -1,11 +1,12 @@
 from enum import Enum
 
-class Type_Product(Enum):
+class ProductType(str, Enum):
     PLANT = "Planta"
     SUPPLY = "Insumo"
     TOOL = "Herramienta"
-
-class State_Enum(Enum):
-    AVAILABLE = "Disponible"
-    PENDING = "Pendiente"
-    SPENT = "Agotado"
+    
+PRODUCT_TYPE_BY_ID = {
+  1: ProductType.PLANT,
+  2: ProductType.SUPPLY,
+  3: ProductType.TOOL
+}

@@ -38,7 +38,7 @@ class AuthService:
       logged_at = datetime.fromisoformat(user_session.last_session)
       elapsed_time = datetime.now() - logged_at
       
-      if elapsed_time <= timedelta(minutes=1):
+      if elapsed_time <= timedelta(seconds=30):
         return { "status_code": 400, "detail": "Ya estás logueado", "status": "fail" }
       user_session.is_logged_in = False
       
