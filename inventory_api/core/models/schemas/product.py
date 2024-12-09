@@ -46,3 +46,7 @@ class ProductRead(SQLModel):
       "Expiration_date": supply.expiration_date,
     }
   
+class ProductBase(SQLModel):
+  id: int
+  quantity: int
+  

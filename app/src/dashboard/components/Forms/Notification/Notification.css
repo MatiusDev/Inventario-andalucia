@@ -1,0 +1,58 @@
+/*------------> Formulario notificaciones*/
+
+.notification {
+    width: 100vh;
+    max-width: 36rem;
+}
+
+.list-notifications {
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+button {
+    background: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+}
+
+.mark-read {
+    border-radius: 10px;
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.mark-read:hover {
+    background-color: #dbeafe;
+}
+
+.delete-all {
+    border-radius: 10px;
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.delete-all:hover {
+    background-color: #fecaca;
+}
+
+button .icon {
+    font-size: 0.875rem;
+}
+
+.actions{
+    padding: 1.25rem;
+    border-radius: 0px 0px 30px 30px;
+    background-color: var(--color-barra-lateral);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

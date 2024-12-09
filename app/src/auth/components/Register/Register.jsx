@@ -1,4 +1,4 @@
-import "./Login.css";
+import "../Login/Login.css";
 
 import { useNavigate } from 'react-router';
 
@@ -9,7 +9,7 @@ const Register = ({ title, handleClick }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/inventory');
+    navigate('/dashboard');
   };
 
   return (
