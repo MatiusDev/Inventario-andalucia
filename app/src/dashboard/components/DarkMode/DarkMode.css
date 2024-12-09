@@ -1,0 +1,25 @@
+/*------------> Modo oscuro*/
+
+.sidebar .dark-mode{
+    width: 100%;
+    margin-bottom: 80px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar .dark-mode .info{
+    width: 150px;
+    height: 45px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    color: var(--color-texto-menu);
+}
+
+.sidebar .dark-mode .icon{
+    display: flex;
+    justify-content: center;
+    width: 50px;
+    font-size: 20px;
+}
