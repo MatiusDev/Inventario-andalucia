@@ -28,4 +28,4 @@ def update_product(id: int, product: ProductUpdate, product_service: SProductDep
 
 @route.delete("/{id}")
 def delete_product(id: int, product_service: SProductDependency):
-  return product_service.delete_product(id)
+  return product_service.delete(id)

@@ -1,37 +1,25 @@
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 # from pydantic import field_validator
 from sqlmodel import SQLModel, Field
 
+from models.enums.type_Supply import Type_Supply
 from models.entities.supply import Supply
 from datetime import datetime
 
-class TypeInput_Enum(str, Enum): 
-    SEMILLAS = "Semillas",
-    FERTILIZANTES = "Fertilizantes",
-    PESTICIDAS = "Pesticidas",
-    HERBICIDAS = "Herbicidas",
-    SUSTRATOS = "Sustratos"
-
 class SupplyBase(SQLModel):
-    type: str
-    
+    type_supply : Type_Supply = Field(default=Type_Supply.SEMILLAS)
     unit_measure: str
-    supplier: str
-
-    # @field_validator("expiration_date")
-    # def validate_expiration_date(cls, value):
-    #     if value < date.today():
-    #         raise ValueError("La fecha de expiración no puede ser anterior a la fecha actual.")
-    #     return value
+    expiry_date: date
     
 class SupplyRead(SupplyBase):
     id: int | None
-    expiration_date: datetime | None
+    type_supply: str
+    unit_measure: str
+    expiry_date: date
     
 class SupplyCreate(SupplyBase):
     id_product: int
-    expiration_date: str | None
     
     @staticmethod
     def supply_dump(self):

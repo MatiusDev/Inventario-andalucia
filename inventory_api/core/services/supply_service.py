@@ -3,6 +3,8 @@ from fastapi import Depends, HTTPException
 from config.db_adapter import DBSession
 from sqlmodel import select
 
+from models.enums.product import Type_Product
+from models.entities.product import Product
 from models.entities.supply import Supply
 from models.schemas.supply import SupplyCreate, SupplyRead, SupplyUpdate
 
@@ -13,25 +15,22 @@ class SupplyService:
     def create(self, supply_data: SupplyCreate):
         try:
             new_supply = SupplyCreate.supply_dump(supply_data)
-            
-            
             supply_db = Supply.model_validate(new_supply)
+            product_db = self.db.get(Product, supply_data.id_product)
+            if product_db is None:
+                raise HTTPException(status_code=404, detail="El producto no existe")
             
+            if product_db.type_product != Type_Product.INSUMO.value:
+                raise HTTPException(status_code=400, detail="No puedes agregar este tipo de producto en herramientas")
+
             self.db.add(supply_db)
             self.db.commit()
             self.db.refresh(supply_db)
-            
+            supply_read = SupplyRead.model_validate(supply_db)
             print("HEREEEEEEEEEEEEE", supply_db)
-            return SupplyRead.model_validate(supply_db)
+            return supply_read 
+        
         except Exception as err:
-            # if err.orig == None:
-            #     raise HTTPException(status_code=500, detail=str(err))
-            
-            # err_id, err_msg = err.orig.args
-            
-            # if (err_id == 1452):
-            #     raise HTTPException(status_code=500, detail="No se ha agregado el producto en la base de datos")
-            
             raise HTTPException(status_code=500, detail=str(err))
     
     def get_all(self):

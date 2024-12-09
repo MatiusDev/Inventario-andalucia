@@ -27,11 +27,11 @@ app.add_middleware(
   allow_headers=["*"]
 )
 
-app.add_middleware(
-  JWTAuthenticationMiddleware,
-  backend=config["auth"],
-  exclude_urls=["/api/auth/login", "/api/auth/sign-up"]
-)
+# app.add_middleware(
+#   JWTAuthenticationMiddleware,
+#   backend=config["auth"],
+#   exclude_urls=["/api/auth/login", "/api/auth/sign-up"]
+# )
 
 app.include_router(routes, prefix="/api")
 

@@ -46,10 +46,6 @@ class ProductService:
     product_read = ProductRead.model_validate(product_db)
     return product_read
 
-    # if product.type_product == "Plantas":
-    #   plant_data = PlantCreate()
-
-
   def update(self, id: int, product: ProductUpdate):
     product_db = self.db.get(Product, id)
 
@@ -77,7 +73,7 @@ class ProductService:
                         **product.model_dump(exclude_unset=True)
                        )
 
-  def delete_product(self, id: int):
+  def delete(self, id: int):
     product = self.db.get(Product, id)
     
     if product is None:

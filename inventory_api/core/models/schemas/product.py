@@ -1,21 +1,11 @@
 from datetime import date, datetime
 from enum import Enum
 from typing import Any
-from sqlmodel import SQLModel
+from sqlmodel import Field, SQLModel
 
+from models.enums.type_Product import Type_Product
 from models.entities.product import Product
 from models.entities.supply import Supply
-
-
-class typeProduct_Enum(str, Enum):
-  PLANT = "Plantas"
-  SUPPLY = "Insumos"
-  TOOL = "Herramientas"
-
-class state_Enum(str, Enum):
-  AVAILABLE = "Disponible"
-  PENDING = "Pendiente"
-  SPENT = "Agotado"
 
 class ProductBase(SQLModel):
   name: str
@@ -24,16 +14,9 @@ class ProductBase(SQLModel):
   stock: int
   stock_minimum: int
   location: str
-  date_entry: datetime
-  date_update: datetime
   state: str
-  # type_product: str
+  type_product: str
 
-# Esquemas de validación in/out de datos de producto
-# class ProductCreate(SQLModel):
-#   name: str
-#   price: float
-  
 class ProductCreate(ProductBase):
   pass
 
@@ -48,9 +31,8 @@ class ProductRead(SQLModel):
   stock: int
   stock_minimum: int
   location: str
-  date_entry: datetime
-  date_update: datetime
   state: str
+  type_product: str
   
   @staticmethod
   def supply_and_product(product: Product, supply: Supply):

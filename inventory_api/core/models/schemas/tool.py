@@ -1,19 +1,6 @@
 from enum import Enum
+from typing import Any
 from sqlmodel import SQLModel
-
-class CategoryEnum(str, Enum):
-    APERO = "Aperos"
-    MAQUINAS = "Máquinas"
-
-class MaterialEnum(str, Enum):
-    METAL = "Metal"
-    MADERA = "Madera"
-    PLASTICO = "Plástico"
-
-class TypeMaintenance_Enum(str, Enum):
-    CORRECTIVO = "Correctivo"
-    PREVENTIVO = "Preventivo"
-    PREDICTIVO = "Predictivo"
 
 # DTO
 class ToolBase(SQLModel):
@@ -23,8 +10,13 @@ class ToolBase(SQLModel):
     type_maintenance: str
     id_product: int
 
-class ToolRead(ToolBase):
-    id: int | None
+class ToolRead(SQLModel):
+    id: Any | None
+    category: str
+    material: str
+    brand: str
+    type_maintenance: str
+    id_product: int
 
 class ToolCreate(ToolBase):
     pass
