@@ -12,20 +12,6 @@ function App() {
   const [data, setData] = useState(null);
   // const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const URL = '/products/';
-        const data = await apiFetch(URL);
-        setData(data);
-      } catch (error) {
-        // setError(error.message);
-        console.log(error)
-      }
-    }
-    fetchData();
-  }, []);
-
   return (
     <>
       <div className="app-container">

@@ -3,7 +3,9 @@ import "./Sidebar.css";
 
 // formulario
 import Notification from "../Forms/Notification/Notification"
-import User from "../Forms/User/User";
+import BaseForm from "../Forms/ContentForm/ContentForm";
+
+import { useEffect, useState } from "react";
 
 // componentes
 import HeadIcon from "../HeadIcon/HeadIcon";
@@ -13,8 +15,19 @@ import Line from "../Line/Line";
 import DarkMode from "../DarkMode/DarkMode";
 import PanelUser from "../PanelUser/PanelUser";
 import LogOut from "../LogOut/LogOut";
+import Welcome from "../Welcome/Welcome";
 
 const Sidebar = () => {
+    const [OptNav, setOptNav] = useState("");
+
+    const handleClick = (route) => {
+        setOptNav(route);
+    };
+
+    const menuComponents = {
+        notifications: <Notification />,
+        // users: <User />,
+    }
     return (
         <div>
             <Menu />
@@ -31,7 +44,7 @@ const Sidebar = () => {
                 </div>
             </div>
             <main>
-                <User/>
+                {menuComponents[OptNav] || <BaseForm />}
             </main>
         </div>
     );
