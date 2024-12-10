@@ -13,33 +13,52 @@ class PlantService:
         self.db = db
 
     def newPlant(self, plant_data: PlantCreate):
-        plant_db = Plant.model_validate(plant_data.model_dump())
-        self.db.add(plant_db)
-        self.db.commit()
-        self.db.refresh(plant_db)
-        return plant_db
-    
-    def list_plant(self):
-        plants = self.db.exec(select(Plant)).all()
-        return plants
-    
-    def update_plant(self, id: int, plant_data: PlantUpdate):
-        plant_db = self.db.get(Plant, id)
-        if plant_db == None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Plant doesn't exist")
-        plant_data_dict = plant_data.model_dump(exclude_unset=True)
-        plant_db.sqlmodel_update(plant_data_dict)
-        self.db.add(plant_db)
-        self.db.commit()
-        self.db.refresh(plant_db)
-        return plant_db
-    
+        try:
+            plant_db = Plant.model_validate(plant_data.model_dump())
+            self.db.add(plant_db)
+            self.db.commit()
+            self.db.refresh(plant_db)
+            return { "data" : plant_db, "status": "success" }
+        except Exception as err:
+            return {  "status_code": 500, "detail": str(err), "status": "error" }
+        
+
+    async def list_plant(self):
+        try:
+            plants = self.db.exec(select(Plant)).all()
+            return { "data": plants, "status": "success"}
+        except Exception as err:
+            return {  "status_code": 500, "detail": str(err), "status": "error" }
+        
+
+    async def update_plant(self, id: int, plant_data: PlantUpdate):
+        try:
+            plant_db = self.db.get(Plant, id)
+
+            if plant_db == None:
+                return { "status_code": 404, "detail": "Plant not found", "status": "fail" }
+            
+            plant_data_dict = plant_data.model_dump(exclude_unset=True)
+            plant_db.sqlmodel_update(plant_data_dict)
+            self.db.add(plant_db)
+            self.db.commit()
+            self.db.refresh(plant_db)
+            return { "data": plant_db, "status": "success"}
+        
+        except Exception as err:
+            return {  "status_code": 500, "detail": str(err), "status": "error" }
+
+
     def delete_plant(self, id: int):
-        plant_db = self.db.get(Plant, id)
-        if plant_db == None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Plant doesn't exist")
-        self.db.delete(plant_db)
-        self.db.commit()
-        return {"message": "Plant deleted", "status": "success"}
-    
+        try:
+            plant_db = self.db.get(Plant, id)
+            if plant_db == None:
+                return { "status_code": 404, "detail": "Plant not found", "status": "fail" }
+            self.db.delete(plant_db)
+            self.db.commit()
+
+            return {"message": "Plant deleted", "status": "success"}
+        except Exception as err:
+            return {  "status_code": 500, "detail": str(err), "status": "error" }
+        
 SPlantDependency = Annotated[PlantService, Depends(PlantService)]
