@@ -19,17 +19,17 @@ const Auth = () => {
     setLoginIn(!IsLoginIn);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await apiPost(URL_PATH, user);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = await apiPost(URL_PATH, user);
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="container-form">

@@ -4,36 +4,17 @@ import { BrowserRouter } from 'react-router';
 import './App.css';
 
 import AppRoutes from '@routes/AppRoutes';
+import { AuthProvider } from '@auth/context/AuthProvider';
 
-import { apiFetch } from '@utils/api.js';
-
-function App() {
-  // const [count, setCount] = useState(0);
-  const [data, setData] = useState(null);
-  // const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const URL = '/products/';
-        const data = await apiFetch(URL);
-        setData(data);
-      } catch (error) {
-        // setError(error.message);
-        console.log(error)
-      }
-    }
-    fetchData();
-  }, []);
-
+const App = () => {
   return (
-    <>
-      <div className="app-container">
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </div>
-    </>
+    <div className="app-container">
+      <BrowserRouter>
+        {/* <AuthProvider> */}
+        <AppRoutes />
+        {/* </AuthProvider> */}
+      </BrowserRouter>
+    </div>
   )
 };
 

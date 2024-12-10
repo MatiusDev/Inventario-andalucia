@@ -1,10 +1,6 @@
 // css
 import "./Sidebar.css";
 
-// formulario
-import Notification from "../Forms/Notification/Notification"
-import User from "../Forms/User/User";
-
 // componentes
 import HeadIcon from "../HeadIcon/HeadIcon";
 import Nav from "../Nav/Nav";
@@ -13,6 +9,10 @@ import Line from "../Line/Line";
 import DarkMode from "../DarkMode/DarkMode";
 import PanelUser from "../PanelUser/PanelUser";
 import LogOut from "../LogOut/LogOut";
+
+// formulario
+import Notification from "../Forms/Notification/Notification"
+import UserContent from "../Forms/Content/UserContent";
 
 const Sidebar = () => {
     return (
@@ -31,7 +31,7 @@ const Sidebar = () => {
                 </div>
             </div>
             <main>
-                <User/>
+                <UserContent/>
             </main>
         </div>
     );
