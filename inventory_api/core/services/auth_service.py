@@ -39,7 +39,7 @@ class AuthService:
       logged_at = datetime.fromisoformat(user_session.last_session)
       elapsed_time = datetime.now() - logged_at
       
-      if elapsed_time <= timedelta(minutes=1):
+      if elapsed_time <= timedelta(seconds=20):
         return { "status_code": 400, "detail": "Ya estás logueado", "status": "fail" }
       user_session.is_logged_in = False
       
@@ -82,7 +82,7 @@ class AuthService:
       "key": "session",
       "value": token,
       "httponly": True,
-      "secure": False,
+      "secure": True,
       "samesite": "strict",
       "max_age": self.auth.config.expiration_seconds
     }
