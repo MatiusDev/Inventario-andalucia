@@ -3,6 +3,7 @@ from fastapi import Depends, Request
 from datetime import datetime, timedelta
 
 import bcrypt
+from fastapi.responses import JSONResponse
 # Modelos y Esquemas
 from models.schemas.user import UserCreate, UserAuth, UserToken, UserRead, UserUpdate
 # Dependencias
@@ -38,7 +39,7 @@ class AuthService:
       logged_at = datetime.fromisoformat(user_session.last_session)
       elapsed_time = datetime.now() - logged_at
       
-      if elapsed_time <= timedelta(minutes=1):
+      if elapsed_time <= timedelta(seconds=20):
         return { "status_code": 400, "detail": "Ya estás logueado", "status": "fail" }
       user_session.is_logged_in = False
       
@@ -86,7 +87,7 @@ class AuthService:
       "max_age": self.auth.config.expiration_seconds
     }
     
-    return { "message:": "Incio de sesión exitoso", "status": "success", "cookie": cookie }
+    return { "message": "Incio de sesión exitoso", "status": "success", "cookie": cookie }
   
   async def logout(self):   
     token = self.user.token
