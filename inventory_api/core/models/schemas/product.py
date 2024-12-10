@@ -63,12 +63,19 @@ class ProductRead(ProductBase):
   def supply_and_product(product: Product, supply: Supply):
     return {
       "id": product.id,
-      "Name": product.name,
-      "Type": supply.type,
-      "Price": product.price,
-      "Unit_meausure": supply.unit_measure,
-      "Supplier": supply.supplier,
-      "Expiration_date": supply.expiration_date,
+      "name": product.name,
+      "description": product.description,
+      "type": supply.type,
+      "price": product.price,
+      "stock": product.stock,
+      "stock_minimum": product.stock_minimum,
+      "unit_meausure": supply.unit_measure,
+      "unit_quantity": supply.unit_quantity,
+      "location": product.location,
+      "expiration_date": supply.expiry_date,
+      "active": product.active,
+      "created_at": product.created_at.isoformat(),
+      "updated_at": product.updated_at.isoformat(),
     }
   
 class ProductOrder(SQLModel):

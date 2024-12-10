@@ -8,34 +8,62 @@ from sqlmodel import select
 from models.schemas.plant import PlantCreate
 from models.entities.product import Product
 from models.entities.supply import Supply
+from models.enums.product import ProductType
 from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
 
 class ProductService:
   def __init__(self, db: DBSession) -> None:
     self.db = db
   
-  def get_all(self):
-    products_db = self.db.exec(select(Product)).all() or []
-    return products_db
+  async def get_all(self):
+    res_1 = await self.get_all_supplies()
+    # res_2 = await self.get_all_tools()
+    # res_3 = await self.get_all_plants()
+    
+    products_supplies = res_1.get("data", [])
+    # products_tools = res_2.get("data", [])
+    # products_plants = res_3.get("data", [])
+    
+    products = products_supplies # + products_tools + products_plants
+    if len(products) == 0:
+      products = self.db.exec(select(Product)).all()
+      if len(products) == 0:
+        return { "status_code": 404, "detail": "No se encontraron productos.", "status": "fail" }
+    
+    return { "data" : products, "status": "success" }
   
   async def get_all_supplies(self):
     products_db = self.db.exec(select(Product, Supply).join(Supply)).all()
     
-    # List Comprehesion
-    products = [ProductRead.supply_and_product(product, supply) for product, supply in products_db]
+    if len(products_db) == 0:
+      return { "status_code": 404, "detail": "No se encontraron productos de insumos.", "status": "fail" }
     
-    products_sup = []
-    for product, supply in products_db:
-      products_sup.append(ProductRead.supply_and_product(product, supply))
-    # products = [{"product": product, "supply": supply } for product, supply in products_db]
-    return products_sup
+    products = [ProductRead.supply_and_product(product, supply) for product, supply in products_db]
+    return { "data" : products, "status": "success" }
+  
+  async def get_all_tools(self):
+    pass
+  
+  async def get_all_plants(self):
+    pass
   
   def get_by_id(self, id: int):
-    product = self.db.get(Product, id)
+    product_db = self.db.get(Product, id)
     
-    if product is None:
-      raise HTTPException(status_code=404, detail="Product not found")
-    return ProductRead(**vars(product))
+    if product_db == None:
+      return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
+    
+    product = {}
+    if product_db.type == ProductType.SUPPLY.value and product_db.supply != None:
+      product = ProductRead.supply_and_product(product_db, product_db.supply)
+    # elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
+    #   pass
+    # elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
+    #   pass
+    else:
+      product = ProductRead.from_db(product_db)
+      
+    return { "data": product, "status": "success" }
 
   def create(self, product: ProductCreate):
     product_db = Product.model_validate(product.create_dump())

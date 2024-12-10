@@ -1,18 +1,19 @@
 from fastapi import APIRouter
 
-from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
+from models.schemas.product import ProductCreate, ProductUpdate
 
 from services.product_service import SProductDependency
+from utils.response_handler import response_handler
 
 route = APIRouter()
 
 @route.get("/", status_code=200)
-def get_all_products(product_service: SProductDependency):
-  return product_service.get_all()
+async def get_all_products(product_service: SProductDependency):
+  return await response_handler(product_service.get_all())
 
-@route.get("/supplies/", status_code=200)
+@route.get("/supplies", status_code=200)
 async def get_all_supplies(product_service: SProductDependency):
-    return await product_service.get_all_supplies()
+    return await response_handler(product_service.get_all_supplies())
 
 @route.get("/{id}", status_code=200)
 def get_product(id: int, product_service: SProductDependency):
