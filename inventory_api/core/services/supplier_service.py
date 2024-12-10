@@ -6,7 +6,7 @@ from config.db_adapter import DBSession
 from sqlmodel import select
 # Entidades y esquemas
 from models.entities.supplier import Supplier
-from models.schemas.supplier import SupplierBase, SupplierCreate, SupplierRead
+from models.schemas.supplier import SupplierBase, SupplierCreate, SupplierRead, SupplierUpdate
 
 class SupplierService:
   def __init__(self, db: DBSession) -> None:
@@ -36,10 +36,36 @@ class SupplierService:
     read_supplier = SupplierRead.from_db(supplier_db)
     return { "data": read_supplier, "status": "success" }
   
-  async def update(self, id: int, supplier: SupplierBase):
-    pass
+  async def update(self, id: int, supplier: SupplierUpdate):
+    try:
+      supplier_db = self.db.get(Supplier,id)
+      if supplier_db == None:
+        return { "status_code": 404, "detail": "Supplier not found", "status": "fail" }
+      
+      supplier_db_dict = supplier.model_dump(exclude_unset=True)
+
+      supplier_db.sqlmodel_update(supplier_db_dict)
+      self.db.add(supplier_db)
+      self.db.commit()
+      self.db.refresh(supplier_db)
+
+    except Exception as err:
+      return {  "status_code": 500, "detail": str(err), "status": "error" }
+    
+    print(supplier_db)
+
+    return { "data": "Proveedor actualizado con éxito", "status": "success" }
   
   async def delete(self, id: int):
-    pass
+    try:
+      supplier_db = self.db.get(Supplier,id)
+      if supplier_db == None:
+        return { "status_code": 404, "detail": "Supplier not found", "status": "fail" }
+      self.db.delete(supplier_db)
+      self.db.commit()
+      return {"message": "Proveedor eliminado", "status": "success"}
+    
+    except Exception as err:
+      return {  "status_code": 500, "detail": str(err), "status": "error" }
   
 SSupplierDependency = Annotated[SupplierService, Depends(SupplierService)]
