@@ -55,7 +55,7 @@ def db_config(env: str):
   db_adapter.create_initial_tables()
 
 def cors_origins_config(env: str):
-  origins = ["http://localhost:5173"]
+  origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
   if env == 'production':
     FRONTEND_URL = os.getenv("FRONTEND_URL")
