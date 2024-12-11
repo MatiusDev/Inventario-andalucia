@@ -23,13 +23,15 @@ class ProductService:
     products_supplies = res_1.get("data", [])
     # products_tools = res_2.get("data", [])
     # products_plants = res_3.get("data", [])
+    product_ids = [product.get("id") for product in products_supplies] #+
+      # [product.id for product in products_tools] +
+      # [product.id for product in products_plants]
     
-    products = products_supplies # + products_tools + products_plants
-    if len(products) == 0:
-      products = self.db.exec(select(Product)).all()
-      if len(products) == 0:
-        return { "status_code": 404, "detail": "No se encontraron productos.", "status": "fail" }
+    all_products = self.db.exec(select(Product)).all() or []
+    if len(product_ids) > 0:
+      all_products = [ProductRead.from_db(product) for product in all_products if product.id not in product_ids]
     
+    products = all_products + products_supplies # + products_tools + products_plants
     return { "data" : products, "status": "success" }
   
   async def get_all_supplies(self):

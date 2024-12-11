@@ -13,10 +13,21 @@ class SupplyService:
 	def __init__(self, db: DBSession) -> None:
 		self.db = db
 
+	async def get_all(self):
+		supplies = self.db.exec(select(Supply)).all() or []
+		return { "data" : supplies, "status": "success" }
+
+	async def get_by_id(self, id: int):
+		supply = self.db.get(Supply, id)
+
+		if supply is None:
+			return { "status_code": 404, "detail": "Insumo no encontrado", "status": "fail" }
+ 
+		read_supply = SupplyRead.from_db(supply)
+		return { "data": read_supply, "status": "success" }
+
 	async def create(self, product_id: int, supply: SupplyCreate):
 		try:
-			supply_db = Supply.model_validate(supply.create_dump())
-			supply_db.product_id = product_id
 			product_db = self.db.get(Product, product_id)
 			if product_db is None:
 				return {
@@ -28,41 +39,48 @@ class SupplyService:
 			if product_db.type != ProductType.SUPPLY.value:
 				return {
 					"status_code": 400,
-					"detail": "No puedes agregar este tipo de producto en insumos",
+					"detail": "No puedes agregar un insumo a este tipo de producto",
 					"status": "fail",
 				}
+			supply_db = Supply.model_validate(supply.create_dump())
+			supply_db.product_id = product_id
 
 			self.db.add(supply_db)
 			self.db.commit()
 			self.db.refresh(supply_db)
 			supply_read = SupplyRead.from_db(supply_db)
-			print("HEREEEEEEEEEEEEE", supply_db)
-			return {"data": supply_read, "status": "success"}
+			return { "data": supply_read, "status": "success" }
 		except Exception as err:
 			self.db.rollback()
 			return { "status_code": 500, "detail": str(err), "status": "error" }
 
-	def get_all(self):
-		supplies = self.db.exec(select(Supply)).all() or []
-		return { "data" : supplies, "status": "success" }
+	async def update(self, id: int, supply: SupplyUpdate):
+		try:
+			supply_db = self.db.get(Supply, id)
+			if supply_db == None:
+				return { "status_code": 404, "detail": "Insumo no encontrado", "status": "fail" }
+			supply_db.sqlmodel_update(supply.update_dump())
+			self.db.add(supply_db)
+			self.db.commit()
+			self.db.refresh(supply_db)
 
-	# def update_supply(self, id: int, supply_data: SupplyUpdate):
-	#     supply_db = self.db.get(Supply, id)
-	#     if supply_db == None:
-	#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Supply doesn't exist")
-	#     supply_data_dict = supply_data.model_dump(exclude_unset=True)
-	#     supply_db.sqlmodel_update(supply_data_dict)
-	#     self.db.add(supply_db)
-	#     self.db.commit()
-	#     self.db.refresh(supply_db)
-	#     return supply_db
+			read_supply = SupplyRead.from_db(supply_db)
+			return { "data": read_supply, "status": "success" }
+		except Exception as err:
+			self.db.rollback()
+			return { "status_code": 500, "detail": str(err), "status": "error" }
 
-	# def delete_supply(self, id: int):
-	#     supply_db = self.db.get(Supply, id)
-	#     if supply_db == None:
-	#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Supply doesn't exist")
-	#     self.db.delete(supply_db)
-	#     self.db.commit()
-	#     return {"message": "Supply deleted", "status": "success"}
+	async def delete(self, id: int):
+		try:
+			supply_db = self.db.get(Supply, id)
+			if supply_db == None:
+				return { "status_code": 404, "detail": "Insumo no encontrado", "status": "fail" }
+  
+			self.db.delete(supply_db)
+			self.db.commit()
+			return { "message": "Insumo eliminado correctamente", "status": "success" }
+		except Exception as err:
+			self.db.rollback()
+			return { "status_code": 500, "detail": str(err), "status": "error" }
 
 SSupplyDependency = Annotated[SupplyService, Depends(SupplyService)]

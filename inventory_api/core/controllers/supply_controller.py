@@ -11,14 +11,18 @@ route = APIRouter()
 async def list_supply(supply_service: SSupplyDependency):
     return await response_handler(supply_service.get_all())
 
+@route.get("/{id}", status_code=200)
+async def get_supply(id: int, supply_service: SSupplyDependency):
+    return await response_handler(supply_service.get_by_id(id))
+
 @route.post("/{product_id}", status_code=201)
 async def create_supply(product_id: int, supply: SupplyCreate, supply_service: SSupplyDependency):
     return await response_handler(supply_service.create(product_id, supply))
 
-# @route.put("/{supply_id}", response_model=Supply, status_code=status.HTTP_201_CREATED)
-# async def update_supply(supply_id: int, supply: SupplyUpdate, supply_service: SSupplyDependency):
-#     return supply_service.update_supply(supply_id, supply)
+@route.put("/{id}", status_code=201)
+async def update_supply(id: int, supply: SupplyUpdate, supply_service: SSupplyDependency):
+    return await response_handler(supply_service.update(id, supply))
 
-# @route.delete("/supply/{supply_id}")
-# async def delete_supplies(supply_id: int, supply_service: SSupplyDependency):
-#     return supply_service.delete_supply(supply_id)
+@route.delete("/supply/{id}", status_code=200)
+async def delete_supplies(id: int, supply_service: SSupplyDependency):
+    return await response_handler(supply_service.delete(id))
