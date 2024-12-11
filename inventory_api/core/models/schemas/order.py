@@ -2,8 +2,8 @@ from typing import List
 from sqlmodel import SQLModel
 
 from models.entities.order import Order
-from models.schemas.product import ProductBase
-from models.enums.order import ORDER_TYPE_BY_ID, ORDER_STATUS_BY_ID
+from models.schemas.product import ProductOrder
+from models.enums.order import ORDER_TYPE_BY_ID
 
 class OrderBase(SQLModel):
   description: str
@@ -11,7 +11,7 @@ class OrderBase(SQLModel):
 class OrderCreate(OrderBase):
   id_supplier: int = -1
   type_id: int
-  products: List[ProductBase]
+  products: List[ProductOrder]
   
   def create_dump(self):
     if self.id_supplier == -1:
