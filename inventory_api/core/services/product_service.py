@@ -5,51 +5,108 @@ from config.db_adapter import DBSession
 
 from sqlmodel import select
 
+from models.schemas.plant import PlantCreate
 from models.entities.product import Product
-from models.schemas.product import ProductCreate, ProductRead
+from models.entities.supply import Supply
+from models.enums.product import ProductType
+from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
 
 class ProductService:
   def __init__(self, db: DBSession) -> None:
     self.db = db
   
-  def get_all_products(self):
-    products = self.db.exec(select(Product)).all() or []
-    return products
+  async def get_all(self):
+    res_1 = await self.get_all_supplies()
+    # res_2 = await self.get_all_tools()
+    # res_3 = await self.get_all_plants()
+    
+    products_supplies = res_1.get("data", [])
+    # products_tools = res_2.get("data", [])
+    # products_plants = res_3.get("data", [])
+    product_ids = [product.get("id") for product in products_supplies] #+
+      # [product.id for product in products_tools] +
+      # [product.id for product in products_plants]
+    
+    all_products = self.db.exec(select(Product)).all() or []
+    if len(product_ids) > 0:
+      all_products = [ProductRead.from_db(product) for product in all_products if product.id not in product_ids]
+    
+    products = all_products + products_supplies # + products_tools + products_plants
+    return { "data" : products, "status": "success" }
   
-  def get_product_by_id(self, id: int):
-    product = self.db.get(Product, id)
+  async def get_all_supplies(self):
+    products_db = self.db.exec(select(Product, Supply).join(Supply)).all()
     
-    if product == None:
-      raise HTTPException(status_code=404, detail="Product not found")
-    return ProductRead(id=product.id, name=product.name, price=product.price)
-
-  def new_product(self, product: ProductCreate):
-    new_product = Product(name=product.name, price=product.price)
-    # Agrega un nuevo producto a la base de datos
-    self.db.add(new_product)
-    # Realiza los cambios en la base de datos
-    self.db.commit()
-    # Realiza los cambios en el objeto (Referencia al producto de la BD, así obtiene el nuevo ID)
-    self.db.refresh(new_product)
-    return ProductRead(id=new_product.id, name=new_product.name, price=new_product.price)
-
-  def update_product(self, id: int, product: ProductCreate):
+    if len(products_db) == 0:
+      return { "status_code": 404, "detail": "No se encontraron productos de insumos.", "status": "fail" }
+    
+    products = [ProductRead.supply_and_product(product, supply) for product, supply in products_db]
+    return { "data" : products, "status": "success" }
+  
+  async def get_all_tools(self):
+    pass
+  
+  async def get_all_plants(self):
+    pass
+  
+  def get_by_id(self, id: int):
     product_db = self.db.get(Product, id)
-
-    if product_db == None:
-      raise HTTPException(status_code=404, detail="Product not found")
     
-    product_db.name = product.name
-    product_db.price = product.price
+    if product_db == None:
+      return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
+    
+    product = {}
+    if product_db.type == ProductType.SUPPLY.value and product_db.supply != None:
+      product = ProductRead.supply_and_product(product_db, product_db.supply)
+    # elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
+    #   pass
+    # elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
+    #   pass
+    else:
+      product = ProductRead.from_db(product_db)
+      
+    return { "data": product, "status": "success" }
+
+  def create(self, product: ProductCreate):
+    product_db = Product.model_validate(product.create_dump())
     self.db.add(product_db)
     self.db.commit()
     self.db.refresh(product_db)
-    return ProductRead(id=product_db.id, name=product_db.name, price=product_db.price)
+    
+    product_read = ProductRead.from_db(product_db)
+    return product_read
 
-  def delete_product(self, id: int):
+  def update(self, id: int, product: ProductUpdate):
+    product_db = self.db.get(Product, id)
+
+    if product_db is None:
+      raise HTTPException(status_code=404, detail="Product not found")
+    
+    # product_db.name = product.name
+    # product_db.price = product.price
+    # product_db.description = product.description
+    # product_db.stock = product.stock
+    # product_db.stock_minimum = product.stock_minimum
+    # product_db.location = product.location
+    # product_db.date_entry = product.date_entry
+    # product_db.date_update = product.date_update
+    # product_db.state = product.state
+    
+    for attr, value in product.model_dump(exclude_unset=True).items():
+      setattr(product_db, attr, value)
+
+    self.db.add(product_db)
+    self.db.commit()
+    self.db.refresh(product_db)
+    return ProductRead(
+                        id=product_db.id,
+                        **product.model_dump(exclude_unset=True)
+                       )
+
+  def delete(self, id: int):
     product = self.db.get(Product, id)
     
-    if product == None:
+    if product is None:
       raise HTTPException(status_code=404, detail="Product not found")
     
     self.db.delete(product)
