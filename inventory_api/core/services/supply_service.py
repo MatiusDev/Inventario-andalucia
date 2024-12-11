@@ -39,7 +39,7 @@ class SupplyService:
 			if product_db.type != ProductType.SUPPLY.value:
 				return {
 					"status_code": 400,
-					"detail": "No puedes agregar un insumo a este tipo de producto",
+					"detail": f"Este producto no es un insumo, debes agregarlo en {product_db.type}",
 					"status": "fail",
 				}
 			supply_db = Supply.model_validate(supply.create_dump())
