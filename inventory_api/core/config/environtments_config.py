@@ -22,9 +22,8 @@ def environment_config():
     if env not in environments or env is None:
       raise Exception(f"El ambiente de trabajo {env} de la variable de entorno ENVIRONMENT no es soportado.")
     
-    db_config(env)
-    
     config["environment"] = env
+    config["db_adapter"] = db_config(env)
     config["origins"] = cors_origins_config(env)
     config["auth"] = AuthBackend()
     
@@ -47,18 +46,21 @@ def db_config(env: str):
     db_host = os.getenv("DB_HOST")
     db_port = os.getenv("DB_PORT")
     driver_connection = f"mysql+mysqldb://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    try:
+      print(driver_connection)
+      print("Conectando a la base de datos...")
+      db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
+      return db_adapter
+    except Exception as err:
+      raise Exception(f"Error al conectar a la base de datos: {err}")
+
   else:
     raise Exception(f"El motor de base de datos {db_driver} no es soportado.")
     
-  print("Conectando a la base de datos...")
-  DBAdapter(db_driver=driver_connection, echo=echo)
-  
-
-
 def cors_origins_config(env: str):
-  origins = ["*"]
+  origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
   if env == 'production':
-    FRONTEND_URL = os.getenv("FRONTEND_URL")
-    origins = [FRONTEND_URL]
+    HOST_FRONTEND_URL = os.getenv("HOST_FRONTEND_URL")
+    origins = [HOST_FRONTEND_URL]
   return origins

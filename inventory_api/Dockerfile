@@ -15,6 +15,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Expone el puerto en el que corre FastAPI
 EXPOSE 8000
 
-# Comando para iniciar la aplicación (ajusta "core.main:app" según tu configuración)
-CMD ["gunicorn", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "core.main:app" ]
-# CMD ["uvicorn", "core.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "core.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
