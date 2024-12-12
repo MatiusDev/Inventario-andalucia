@@ -57,13 +57,10 @@ def db_config(env: str):
   else:
     raise Exception(f"El motor de base de datos {db_driver} no es soportado.")
     
-  
-
-
 def cors_origins_config(env: str):
-  origins = ["*"]
+  origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
   if env == 'production':
-    FRONTEND_URL = os.getenv("FRONTEND_URL")
-    origins = [FRONTEND_URL]
+    HOST_FRONTEND_URL = os.getenv("HOST_FRONTEND_URL")
+    origins = [HOST_FRONTEND_URL]
   return origins
