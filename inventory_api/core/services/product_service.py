@@ -22,14 +22,13 @@ class ProductService:
   async def get_all(self):
     res_1 = await self.get_all_supplies()
     # res_2 = await self.get_all_tools()
-    # res_3 = await self.get_all_plants()
+    res_3 = await self.get_all_plants()
     
     products_supplies = res_1.get("data", [])
     # products_tools = res_2.get("data", [])
-    # products_plants = res_3.get("data", [])
-    product_ids = [product.get("id") for product in products_supplies] #+
+    products_plants = res_3.get("data", [])
+    product_ids = [product.get("id") for product in products_supplies] + [product.id for product in products_plants]
       # [product.id for product in products_tools] +
-      # [product.id for product in products_plants]
     
     all_products = self.db.exec(select(Product)).all() or []
     if len(product_ids) > 0:
@@ -52,12 +51,13 @@ class ProductService:
   
   async def get_all_plants(self):
     products_db = self.db.exec(select(Product, Plant).join(Plant)).all()
-    print(products_db)
-    # List Comprehesion
-    products = [PlantRead.ProductPlant(product, plant) for product, plant in products_db]
-      
-    print(products)
-    return products
+    
+    if len(products_db) == 0:
+      return { "status_code": 404, "detail": "No se encontraron productos de plantas.", "status": "fail" }
+    
+    products = [ProductRead.plant_and_product(product, plant) for product, plant in products_db]
+    return { "data" : products, "status": "success" }
+  
   
   def get_by_id(self, id: int):
     product_db = self.db.get(Product, id)
@@ -70,8 +70,8 @@ class ProductService:
       product = ProductRead.supply_and_product(product_db, product_db.supply)
     # elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
     #   pass
-    # elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
-    #   pass
+    elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
+      product = ProductRead.plant_and_product(product_db, product_db.plant)
     else:
       product = ProductRead.from_db(product_db)
       
@@ -99,7 +99,7 @@ class ProductService:
     product_db = self.db.get(Product, id)
 
     if product_db is None:
-      raise HTTPException(status_code=404, detail="Product not found")
+      return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
     
     # product_db.name = product.name
     # product_db.price = product.price
@@ -126,11 +126,13 @@ class ProductService:
     product = self.db.get(Product, id)
     
     if product is None:
-      raise HTTPException(status_code=404, detail="Product not found")
+      return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
     
     self.db.delete(product)
     self.db.commit()
-    return {"message": "Product deleted", "status": "success"}
+    return {"message": "Producto eliminado correctamente", "status": "success"}
+
+
 
   def get_products(self, products: list[ProductCreate]):
     product_ids = [product.id for product in products]

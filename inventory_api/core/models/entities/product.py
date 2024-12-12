@@ -27,6 +27,6 @@ class Product(SQLModel, table=True):
   
   supply: "Supply" = Relationship(back_populates="products") # type: ignore
   orders: list["OrderProduct"] = Relationship(back_populates="product") # type: ignore
-  
+  plant: "Plant" = Relationship(back_populates="products") # type: ignore
 
   

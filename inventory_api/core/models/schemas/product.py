@@ -1,5 +1,6 @@
 from sqlmodel import Field, SQLModel
 
+from models.entities.plant import Plant
 from models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
 from models.entities.product import Product
 from models.entities.supply import Supply
@@ -74,6 +75,29 @@ class ProductRead(ProductBase):
         "unit_meausure": supply.unit_measure,
         "unit_quantity": supply.unit_quantity,
         "expiration_date": supply.expiry_date,
+      },
+      "location": product.location,
+      "active": product.active,
+      "created_at": product.created_at.isoformat(),
+      "updated_at": product.updated_at.isoformat(),
+    }
+  
+  @staticmethod
+  def plant_and_product(product: Product, plant: Plant):
+    return {
+      "id": product.id,
+      "name": product.name,
+      "description": product.description,
+      "type": product.type,
+      "price": product.price,
+      "stock": product.stock,
+      "sub_type_info": {
+        "sub_type": plant.type,
+        "stock_minimum": product.stock_minimum,
+        "scientific_name": plant.scientific_name,
+        "required_irrigation": plant.required_irrigation,
+        "required_light": plant.required_light,
+        "ideal_temperature": plant.ideal_temperature,
       },
       "location": product.location,
       "active": product.active,

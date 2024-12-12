@@ -9,16 +9,16 @@ route = APIRouter()
 
 @route.post("/", status_code=201)
 async def create_plant(plant_data: PlantCreate, plant_service: SPlantDependency):
-    return await response_handler(plant_service.newPlant(plant_data))
+    return await response_handler(plant_service.create(plant_data))
 
 @route.put("/{plant_id}", status_code=200)
 async def update_plant(plant_id: int, plant: PlantUpdate, plant_service: SPlantDependency):
-    return await response_handler(plant_service.update_plant(plant_id, plant))
+    return await response_handler(plant_service.update(plant_id, plant))
 
 @route.get("/",status_code=200)
 async def list_plant(plant_service: SPlantDependency):
-    return await response_handler(plant_service.list_plant())
+    return await response_handler(plant_service.get_all())
 
 @route.delete("/plant/{plant_id}", status_code=200)
 async def delete_plant(plant_id: int, plant_service: SPlantDependency):
-    return await response_handler(plant_service.delete_plant(plant_id))
+    return await response_handler(plant_service.delete(plant_id))

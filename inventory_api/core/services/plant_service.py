@@ -1,64 +1,91 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException, status
-
+from fastapi import Depends
 from config.db_adapter import DBSession
-
 from sqlmodel import select
 
+from models.entities.product import Product
+from models.enums.product import ProductType
 from models.entities.plant import Plant
-from models.schemas.plant import PlantCreate, PlantUpdate
+from models.schemas.plant import PlantCreate, PlantUpdate, PlantRead
 
 class PlantService:
     def __init__(self, db: DBSession) -> None:
         self.db = db
 
-    def newPlant(self, plant_data: PlantCreate):
+    def create(self, product_id: int, plant_data: PlantCreate):
         try:
-            plant_db = Plant.model_validate(plant_data.model_dump())
+            product_db = self.db.get(Product, product_id)
+            if product_db is None:
+                return {
+					"status_code": 404,
+					"detail": "El producto no existe",
+					"status": "fail",
+				}
+            if product_db.type != ProductType.PLANT.value:
+                return {
+					"status_code": 400,
+					"detail": "No puedes agregar una planta a este tipo de producto",
+					"status": "fail",
+				}
+            plant_db = Plant.model_validate(plant_data.create_dump())
+            plant_db.product_id = product_id
+
             self.db.add(plant_db)
             self.db.commit()
             self.db.refresh(plant_db)
-            return { "data" : plant_db, "status": "success" }
+            plant_read = PlantRead.from_db(plant_db)
+            return { "data" : plant_read, "status": "success" }
         except Exception as err:
             return {  "status_code": 500, "detail": str(err), "status": "error" }
         
 
-    async def list_plant(self):
+    async def get_all(self):
         try:
-            plants = self.db.exec(select(Plant)).all()
+            plants = self.db.exec(select(Plant)).all() or []
             return { "data": plants, "status": "success"}
         except Exception as err:
             return {  "status_code": 500, "detail": str(err), "status": "error" }
+    
+    async def get_by_id(self, id: int): 
+        plant = self.db.get(Plant, id)
         
+        if plant is None:
+            return { "status_code": 404, "detail": "Planta no encontrada", "status": "fail" }
+        
+        read_plant = PlantRead.from_db(plant)
+        return { "data": read_plant, "status": "success" }
 
-    async def update_plant(self, id: int, plant_data: PlantUpdate):
+    async def update(self, id: int, plant_data: PlantUpdate):
         try:
             plant_db = self.db.get(Plant, id)
 
             if plant_db == None:
-                return { "status_code": 404, "detail": "Plant not found", "status": "fail" }
-            
-            plant_data_dict = plant_data.model_dump(exclude_unset=True)
-            plant_db.sqlmodel_update(plant_data_dict)
+                return { "status_code": 404, "detail": "Planta no encontrada", "status": "fail" }
+        
+            plant_db.sqlmodel_update(plant_data.update_dump())
             self.db.add(plant_db)
             self.db.commit()
             self.db.refresh(plant_db)
-            return { "data": plant_db, "status": "success"}
+
+            read_plant = PlantRead.from_db(plant_db)
+            return { "data": read_plant, "status": "success"}
         
         except Exception as err:
+            self.db.rollback()
             return {  "status_code": 500, "detail": str(err), "status": "error" }
 
 
-    def delete_plant(self, id: int):
+    def delete(self, id: int):
         try:
             plant_db = self.db.get(Plant, id)
             if plant_db == None:
-                return { "status_code": 404, "detail": "Plant not found", "status": "fail" }
+                return { "status_code": 404, "detail": "Planta no encontrada", "status": "fail" }
             self.db.delete(plant_db)
             self.db.commit()
 
-            return {"message": "Plant deleted", "status": "success"}
+            return {"message": "Planta eliminada", "status": "success"}
         except Exception as err:
+            self.db.rollback()
             return {  "status_code": 500, "detail": str(err), "status": "error" }
         
 SPlantDependency = Annotated[PlantService, Depends(PlantService)]

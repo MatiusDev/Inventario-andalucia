@@ -27,4 +27,4 @@ class NotifyService:
         return notifications
 
     
-NotifyDependency = Annotated[NotifyService, Depends(NotifyService)]
+SNotifyDependency = Annotated[NotifyService, Depends(NotifyService)]
