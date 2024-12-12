@@ -1,141 +1,122 @@
-import "./BaseContent.css";
+import { useState } from "react";
+
+import BaseButton from './BaseButton';
+import BaseButtonToggle from './BaseButtonToggle';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 
-import {
-  faEye,
-  faPenToSquare,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+const ContentTableData = ({ dataArray, titles, handleView, handleEdit, handleDelete, canDelete }) => {
+  const [searchTerm, setSearchTerm] = useState(''); 
 
-const ContentTableData = ({ title, dataArray }) => {
-  console.log(dataArray);
-
-  let titles = [];
-  if (dataArray.length > 0) {
-    const reference = dataArray[0];
-    titles = Object.keys(reference);
-    console.log(titles);
+  const getFieldData = (item) => {
+    if (!item.hasBadge && typeof item.value != 'boolean'
+      && item.value) {
+      return item.value;
+    } else if (item.hasBadge && typeof item.value != 'boolean') {
+      return (
+        <span 
+          className={`badge ${item.badgeStyle()}`}>
+          {item.value}
+        </span>
+      )
+    } else if (item.hasBadge && typeof item.value == 'boolean') {
+      return (
+        <span
+          className={`badge ${item.badgeStyle()}`}>
+          {item.strValue()}
+        </span>
+      )
+    } else {
+      return 'No hay datos';
+    }
   }
 
-  return (
-    <table id="example" className="table table-striped">
-          {/* <caption>{title}</caption> */}
-          <thead>
-            <tr>
-              { titles.length > 0 
-                  ? titles.map((title, id) => <th key={id}>{title}</th>)
-                  : "No hay datos"}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              dataArray.length > 0
-                ? dataArray.map(user => (
-                  <tr>
-                    <td key={user.ID}>{user.ID}</td>
-                    <td key={user.ID}>{user.NombreUsuario}</td>
-                    <td key={user.ID}>{user.NombreCompleto}</td>
-                    <td key={user.ID}>{user.CorreoElectronico}</td>
-                    <td key={user.ID}>{user.TipoDeUsuario}</td>
-                    <td key={user.ID}>{user.Estado}</td>
-                    <td key={user.ID}>{user.EstaLogueado}</td>
-                    <td key={user.ID}>{user.FechaCreacion}</td>
-                    <td key={user.ID}>{user.FechaActualizacion}</td>
-                    <td key={user.ID}>{user.UltimaSesion}</td>
-                  </tr>
-                ))
-                : "No hay datos"
-            }
-            
-            {/* <tr>
-              <td>Macetas S.A.</td>
-              <td>Maceta de cerámica 20cm</td>
-              <td>Accesorios</td>
-              <td>Medellín</td>
-              <td>150</td>
-              <td>2023-09-15</td>
-              <td>
-                <div className="botones-acciones">
-                  <a
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#"
-                  >
-                    <FontAwesomeIcon icon={faEye} />
-                    <i className="fa-solid fa-eye"></i>
-                  </a>
-                  <a
-                    className="btn btn-warning"
-                    data-bs-toggle="modal"
-                    data-bs-target="#"
-                  >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </a>
-                  <a
-                    className="btn btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </a>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Jardines Verde</td>
-              <td>Planta de Aloe Vera</td>
-              <td>Plantas</td>
-              <td>Cali</td>
-              <td>200</td>
-              <td>2023-08-05</td>
-              <td>
-                <div className="botones-acciones">
-                  <a
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#"
-                  >
-                    <FontAwesomeIcon icon={faEye} />
-                    <i className="fa-solid fa-eye"></i>
-                  </a>
-                  <a
-                    className="btn btn-warning"
-                    data-bs-toggle="modal"
-                    data-bs-target="#"
-                  >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </a>
-                  <a
-                    className="btn btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </a>
-                </div>
-              </td>
-            </tr> */}
-          </tbody>
-    </table>
-  )
-};
+  const filteredUsers = dataArray.filter(item =>
+    Object.values(item).some(sItem =>
+      sItem.value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
-const ContentTable = ({ title, dataArray, handleClick }) => {
   return (
     <>
-      <div className="contenido">
-        <ContentTableData title={title} dataArray={dataArray} />
-      </div>
-
-      <div className="acciones">
-        <button className="btn-agregar" onClick={handleClick}>
-          <i className="fas fa-plus"></i>
-          Crear
-        </button>
+      <div className="container-fluid">
+        <div className="card">
+          <div className="card-header bg-white">
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="input-group">
+                  {/* <FontAwesomeIcon icon={faMagnifyingGlass} className="input-group-text" /> */}
+                  <input
+                    type="search"
+                    className="form-control search-input"
+                    placeholder="Buscar un registro..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="card-body p-0" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            <div className="table-responsive">
+              <table className="table table-hover table-striped mb-0" style={{ minWidth: '800px' }}>
+                <thead className="table-light">
+                  <tr>
+                    { titles &&
+                      titles.map((title, idx) => (
+                        <th key={titles.length+idx} className="text-center">
+                          {title.title}
+                        </th>
+                      ))
+                    }
+                    <th className="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((item) => {
+                      return (
+                        <tr key={item.id.value} className="text-center bold">
+                          <th 
+                            scope="row" 
+                            className={item.id.className}
+                          >{item.id.value}</th>
+                          {Object.values(item).slice(1).map((sItem, idx) => {
+                            return (
+                              <td key={idx} className={sItem.className}>
+                                { getFieldData(sItem) }
+                              </td>
+                            )
+                          })}
+                          <th>
+                            {canDelete ?
+                              <BaseButton
+                                id={item.id.value}
+                                handleView={handleView}
+                                handleEdit={handleEdit}
+                                handleDelete={handleDelete}
+                              />
+                              :
+                              <BaseButtonToggle
+                                id={item.id.value}
+                                active={item.active.value}
+                                handleView={handleView}
+                                handleEdit={handleEdit}
+                                handleDelete={handleDelete}
+                              />
+                             }
+                          </th>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
 };
 
-export default ContentTable;
+export default ContentTableData;
