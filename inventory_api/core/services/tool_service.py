@@ -1,12 +1,13 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException, status
-from config.db_adapter import DBSession
+from fastapi import Depends, HTTPException
 from sqlmodel import select
 
-from models.entities.product import Product
-from models.entities.tool import Tool
-from models.schemas.tool import ToolCreate, ToolUpdate, ToolRead
-from models.enums.product import ProductType
+from core.config.db_adapter import DBSession
+
+from core.models.entities.product import Product
+from core.models.entities.tool import Tool
+from core.models.schemas.tool import ToolCreate, ToolUpdate, ToolRead
+from core.models.enums.product import ProductType
 
 class ToolService:
     def __init__(self, db: DBSession) -> None:

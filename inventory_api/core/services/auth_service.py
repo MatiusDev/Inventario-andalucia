@@ -3,12 +3,11 @@ from fastapi import Depends, Request
 from datetime import datetime, timedelta
 
 import bcrypt
-from fastapi.responses import JSONResponse
 # Modelos y Esquemas
-from models.schemas.user import UserCreate, UserAuth, UserToken, UserRead, UserUpdate
+from core.models.schemas.user import UserCreate, UserAuth, UserToken, UserRead, UserUpdate
 # Dependencias
-from config.auth_token import AuthDependency, UserDependency
-from services.user_service import SUserDependency
+from core.config.auth_token import AuthDependency, UserDependency
+from core.services.user_service import SUserDependency
 
 class AuthService:
   def __init__(self, auth: AuthDependency, user: UserDependency, user_service: SUserDependency, request: Request) -> None:

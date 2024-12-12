@@ -1,12 +1,11 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
-
-from config.db_adapter import DBSession
-
 from sqlmodel import select
 
-from models.entities.plant import Plant
-from models.schemas.plant import PlantCreate, PlantUpdate
+from core.config.db_adapter import DBSession
+
+from core.models.entities.plant import Plant
+from core.models.schemas.plant import PlantCreate, PlantUpdate
 
 class PlantService:
     def __init__(self, db: DBSession) -> None:

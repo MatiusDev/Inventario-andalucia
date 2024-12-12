@@ -1,8 +1,8 @@
 from sqlmodel import Field, SQLModel
 
-from models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
-from models.entities.product import Product
-from models.entities.supply import Supply
+from core.models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
+from core.models.entities.product import Product
+from core.models.entities.supply import Supply
 
 class ProductBase(SQLModel):
   name: str

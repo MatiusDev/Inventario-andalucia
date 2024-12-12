@@ -1,7 +1,7 @@
 import os
 
-from config.db_adapter import DBAdapter
-from config.auth_token import AuthBackend
+from core.config.db_adapter import DBAdapter
+from core.config.auth_token import AuthBackend
 
 config = {
   "environment": None,

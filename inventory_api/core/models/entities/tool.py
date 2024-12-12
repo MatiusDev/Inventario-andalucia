@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field, Relationship
 
-from models.entities.product import Product
+from core.models.entities.product import Product
 
 class Tool(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)

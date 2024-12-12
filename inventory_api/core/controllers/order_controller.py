@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from models.schemas.order import OrderCreate
+from core.models.schemas.order import OrderCreate
 
-from services.order_service import SOrderDependency
+from core.services.order_service import SOrderDependency
 
-from utils.response_handler import response_handler
+from core.utils.response_handler import response_handler
 
 route = APIRouter()
 

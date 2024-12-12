@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-from models.schemas.product import ProductCreate, ProductUpdate
+from core.models.schemas.product import ProductCreate, ProductUpdate
 
-from services.product_service import SProductDependency
-from utils.response_handler import response_handler
+from core.services.product_service import SProductDependency
+from core.utils.response_handler import response_handler
 
 route = APIRouter()
 

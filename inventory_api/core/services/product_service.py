@@ -1,15 +1,14 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException
-
-from config.db_adapter import DBSession
-
 from sqlmodel import select
 
-from models.schemas.plant import PlantCreate
-from models.entities.product import Product
-from models.entities.supply import Supply
-from models.enums.product import ProductType
-from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
+from core.config.db_adapter import DBSession
+
+from core.models.schemas.plant import PlantCreate
+from core.models.entities.product import Product
+from core.models.entities.supply import Supply
+from core.models.enums.product import ProductType
+from core.models.schemas.product import ProductCreate, ProductRead, ProductUpdate
 
 class ProductService:
   def __init__(self, db: DBSession) -> None:
