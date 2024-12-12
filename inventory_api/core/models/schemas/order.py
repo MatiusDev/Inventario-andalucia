@@ -2,8 +2,8 @@ from typing import List
 from sqlmodel import SQLModel
 
 from models.entities.order import Order
-from models.schemas.product import ProductBase
-from models.enums.order import ORDER_TYPE_BY_ID
+from models.schemas.product import ProductOrder
+from models.enums.order import ORDER_TYPE_BY_ID, ORDER_STATUS_BY_ID
 
 class OrderBase(SQLModel):
   description: str
@@ -11,7 +11,7 @@ class OrderBase(SQLModel):
 class OrderCreate(OrderBase):
   id_supplier: int = -1
   type_id: int
-  products: List[ProductBase]
+  products: List[ProductOrder]
   
   def create_dump(self):
     if self.id_supplier == -1:
@@ -46,7 +46,18 @@ class OrderRead(OrderBase):
 class OrderUpdate(OrderBase):
   id: int | None
   quantity: int | None
-  status: str | None
+  status_id: int | None
   updated_at: str | None
+
   type: str
+  
+  def update_dump(self):
+    self.id = None
+    order = self.model_dump(exclude_none=True)
+    if order.get("status") == None:
+      order["status"] = ORDER_STATUS_BY_ID.get(self.status_id)
+      order.pop("type_id")
+    if order.get("id_user") == None:
+      order["id_user"] = None
+    return order
   

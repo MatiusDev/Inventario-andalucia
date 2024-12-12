@@ -1,4 +1,5 @@
 import "../Login/LoginForm.css";
+import "./RegisterForm.css";
 
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -9,22 +10,26 @@ const RegisterForm = ({ handleClick }) => {
     const [newUser, setNewUser] = useState({ username: "", fullname: "", email: "", password: "" });
 
     const handleSubmit = async (evt) => {
-        evt.preventDefault();
-        try {
-            if (!newUser.username || !newUser.fullname || !newUser.email || !newUser.password) {
-                console.log("Error: Campos vacios");
-                return;
-            };
+      evt.preventDefault();
+      try {
+        if (!newUser.username || !newUser.fullname || !newUser.email || !newUser.password) {
+            console.log("Error: Campos vacios");
+            return;
+        };
 
-            const URL_PATH = "/auth/sign-up";
-            const response = await apiPost(URL_PATH, { username: newUser.username, full_name: newUser.fullname, email: newUser.email, password: newUser.password  });
-            console.log(response)
-
-            handleClick()
-
-        } catch (error) {
-            console.log(error)
+        const URL_PATH = "/auth/sign-up";
+        const user = { 
+          username: newUser.username, 
+          full_name: newUser.fullname, 
+          email: newUser.email, 
+          password: newUser.password
         }
+        const response = await apiPost(URL_PATH, user);
+        console.log(response)
+
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     return (
@@ -48,7 +53,7 @@ const RegisterForm = ({ handleClick }) => {
                         Registrarse
                     </button>
                 </div>
-                <div className="enlaces-autenticacion">
+                <div className="enlaces-autenticacion register">
                     <a className="button-login-register" onClick={handleClick}>Loguearse</a>
                 </div>
             </div>

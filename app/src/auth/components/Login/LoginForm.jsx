@@ -1,29 +1,53 @@
 import "./LoginForm.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
-import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useForm } from "@/common/hooks/useForm.jsx";
+import { useContext } from "react";
+
+// import { AuthContext } from "@auth/context/AuthProvider";
 
 import { apiPost } from "@utils/api";
 
 const LoginForm = ({ handleClick }) => {
-  const [user, setUser] = useState({ username: "", password: "", rememberMe: false });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  // const { user, setUser } = useContext(AuthContext);
+
+
+  const validate = (values) => {
+    const errors = {};
+    if (!values.username) errors.name = "El nombre de usuario es obligatorio";
+    if (!values.password) errors.password = "La contraseña es obligatoria";
+    return errors;
+  }
+
+  const { 
+    values, 
+    errors, 
+    handleChange, 
+    resetForm 
+  } = useForm({ username: "", password: "", rememberMe: false }, validate);
+
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     try {
-      if (!user.username || !user.password) {
+      if (errors.name || errors.password) {
         console.log("Error: Campos vacios");
         return;
       };
+      const data = { username: values.username, password: values.password }
+      resetForm();
 
       const URL_PATH = "/auth/login";
-      const response = await apiPost(URL_PATH, { username: user.username, password: user.password });
-      console.log(response)
-      navigate("/dashboard")
+      const response = await apiPost(URL_PATH, data);
+      if (response["status"] != "success") {
+        console.log(response["message"]);
+      } else {
+        navigate("/dashboard");
+        // Agregar el usuario al contexto
+      }
     } catch (error) {
       console.log(error)
     }
@@ -34,11 +58,11 @@ const LoginForm = ({ handleClick }) => {
       <div className="button-container">
         <div className="button">
           <FontAwesomeIcon className="icon" icon={faUser} />
-          <input type="text" placeholder="Usuario" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })}/>
+          <input type="text" placeholder="Usuario" name="username" value={values.username} onChange={handleChange}/>
         </div>
         <div className="button">
           <FontAwesomeIcon className="icon" icon={faLock} />
-          <input type="password" placeholder="Contraseña" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} />
+          <input type="password" placeholder="Contraseña" name="password" value={values.password} onChange={handleChange} />
         </div>
         <div className="form-check form-switch">
           <label className="form-check-label" htmlFor="remember-me">Recordarme</label>
@@ -47,8 +71,9 @@ const LoginForm = ({ handleClick }) => {
             className="form-check-input" 
             role="switch"
             id="remember-me"
-            checked={user.rememberMe}
-            onChange={e => setUser({ ...user, rememberMe: e.target.checked })}
+            name="rememberMe"
+            checked={values.rememberMe}
+            onChange={handleChange}
           />
         </div>
         <div>
@@ -58,7 +83,7 @@ const LoginForm = ({ handleClick }) => {
           </button>
         </div>
         <div className="enlaces-autenticacion">
-          <a className="button-forgot" href="">Recuperar contraseña</a>
+          <a className="button-forgot">Recuperar contraseña</a>
           <a className="button-login-register" onClick={handleClick}>Registrarse</a>
         </div>
       </div>
