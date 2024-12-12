@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import BaseContent from "../BaseContent/BaseContent";
+import UserCreate from "../../Modals/UserCreate";
 
 import { apiFetch, apiDelete } from "@utils/api.js";
 
@@ -7,8 +8,8 @@ const UserContent = () => {
     const [dataArray, setDataArray] = useState([]);
     const [titles, setTitles] = useState([]);
 
-    const handleClick = () => {
-      console.log("Sisas", dataArray);
+    const handleCreate = () => {
+      console.log("Sisas");
     };
 
     const handleView = (id) => {
@@ -94,16 +95,19 @@ const UserContent = () => {
     }, []); 
 
     return (
+      <>
         <BaseContent
           title={"Usuarios"}
           titles={titles}
           dataArray={dataArray} 
-          handleClick={handleClick}
+          handleCreate={handleCreate}
           handleView={handleView}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
           canDelete={false}
         />
+        <UserCreate />
+      </>
     );
 };
 
