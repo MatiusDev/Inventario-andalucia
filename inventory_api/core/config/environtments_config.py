@@ -47,7 +47,6 @@ def db_config(env: str):
     db_host = os.getenv("DB_HOST")
     db_port = os.getenv("DB_PORT")
     driver_connection = f"mysql+mysqldb://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-    print(driver_connection)
   else:
     raise Exception(f"El motor de base de datos {db_driver} no es soportado.")
     
