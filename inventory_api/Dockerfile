@@ -16,4 +16,4 @@ EXPOSE 8000
 
 # Comando para iniciar la aplicación (ajusta "main:app" según tu configuración)
 # CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "core.main:app"]
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
