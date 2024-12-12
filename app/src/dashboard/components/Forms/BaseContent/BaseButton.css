@@ -1,0 +1,7 @@
+.btn-actions{
+  list-style-type: none;
+    display: flex;
+    column-gap: 5px;
+    justify-content: center;
+    flex-direction: row;
+}

@@ -3,7 +3,7 @@ from sqlmodel import SQLModel
 
 from models.entities.order import Order
 from models.schemas.product import ProductOrder
-from models.enums.order import ORDER_TYPE_BY_ID
+from models.enums.order import ORDER_TYPE_BY_ID, ORDER_STATUS_BY_ID
 
 class OrderBase(SQLModel):
   description: str
