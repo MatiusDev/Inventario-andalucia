@@ -2,14 +2,14 @@
 FROM python:3.10
 
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /core
+WORKDIR /
 
 # Copia los archivos necesarios al contenedor
-COPY ./requirements.txt /core/requirements.txt
+COPY ./core /
 
 # Instala las dependencias
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r /core/requirements.txt
+    pip install --no-cache-dir -r /requirements.txt
 
 # Expone el puerto en el que corre FastAPI
 EXPOSE 8000
