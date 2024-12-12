@@ -97,7 +97,7 @@ class AuthService:
     self.user_service.update_session(user_update)
     
     await self.auth.invalidate_token(token)
-    return { "message": "Sesión cerrada", "status": "success" }
+    return { "message": "Sesión cerrada", "status": "success", "cookie": "close" }
   
   async def get_current_session(self):
     token = self.user.token

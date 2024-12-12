@@ -12,8 +12,9 @@ async def response_handler(data):
   if response["status"] != "success":
     raise HTTPException(status_code=response["status_code"], detail=f"Error: {response['detail']}")
   
-  if "cookie" in response:
-    cookie = response["cookie"]
+  cookie = response.get("cookie")
+  if (cookie != "close" 
+      and cookie != None):
     if os.getenv("ENVIRONMENT") == "development":
       json_response = JSONResponse(
         content={
@@ -39,5 +40,14 @@ async def response_handler(data):
       max_age=cookie.get("max_age"),
     )
     return json_response
-
-  return response
+  elif cookie == "close":
+    json_response = JSONResponse(
+      content={
+        "message": response["message"], 
+        "status": response["status"]
+      }
+    )
+    json_response.delete_cookie(key="session")
+    return json_response
+  else:
+    return response
