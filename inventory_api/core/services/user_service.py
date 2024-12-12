@@ -1,16 +1,16 @@
 from typing import Annotated
 from fastapi import Depends
-# Dependencias
-from config.db_adapter import DBSession
-from config.auth_token import UserDependency
-
-from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from datetime import datetime
+
+# Dependencias
+from core.config.db_adapter import DBSession
+from core.config.auth_token import UserDependency
+
 # Entidades y esquemas
-from models.entities.user import User
-from models.schemas.user import UserBase, UserRead, UserSession, UserCreate, UserUpdate
-from models.enums.role import RoleType, Permissions
+from core.models.entities.user import User
+from core.models.schemas.user import UserBase, UserRead, UserSession, UserCreate, UserUpdate
+from core.models.enums.role import RoleType, Permissions
 
 class UserService:
   def __init__(self, db: DBSession, user: UserDependency) -> None:

@@ -20,11 +20,12 @@ class DBAdapter:
   
    # Los classmethod, son clases del metodo tal cual como se traduce, me permite manejar los parametros declarados en la clase, accediendo desde cls (parecido a self), como es una única instancia para usar los parametros globales necesito a cls en los métodos
   @classmethod
-  def create_initial_tables(cls):
+  def create_initial_tables(cls, *args):
     if cls._engine is None:
       raise Exception("El motor de base de datos no está configurado")
     
     SQLModel.metadata.create_all(cls._engine)
+    yield
   
   @classmethod
   def get_session(cls):

@@ -1,12 +1,13 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException
-from config.db_adapter import DBSession
+from fastapi import Depends
 from sqlmodel import select
 
-from models.entities.product import Product
-from models.entities.supply import Supply
-from models.enums.product import ProductType
-from models.schemas.supply import SupplyCreate, SupplyRead, SupplyUpdate
+from core.config.db_adapter import DBSession
+
+from core.models.entities.product import Product
+from core.models.entities.supply import Supply
+from core.models.enums.product import ProductType
+from core.models.schemas.supply import SupplyCreate, SupplyRead, SupplyUpdate
 
 
 class SupplyService:

@@ -1,7 +1,7 @@
 import os
 
-from config.db_adapter import DBAdapter
-from config.auth_token import AuthBackend
+from core.config.db_adapter import DBAdapter
+from core.config.auth_token import AuthBackend
 
 config = {
   "environment": None,
@@ -47,15 +47,17 @@ def db_config(env: str):
     db_host = os.getenv("DB_HOST")
     db_port = os.getenv("DB_PORT")
     driver_connection = f"mysql+mysqldb://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    print(driver_connection)
   else:
     raise Exception(f"El motor de base de datos {db_driver} no es soportado.")
     
   print("Conectando a la base de datos...")
-  db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
-  db_adapter.create_initial_tables()
+  DBAdapter(db_driver=driver_connection, echo=echo)
+  
+
 
 def cors_origins_config(env: str):
-  origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+  origins = ["*"]
 
   if env == 'production':
     FRONTEND_URL = os.getenv("FRONTEND_URL")

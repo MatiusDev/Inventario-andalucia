@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from models.schemas.role import RoleCreate
+from core.models.schemas.role import RoleCreate
 
-from services.role_service import SRoleDependency
+from core.services.role_service import SRoleDependency
 
-from utils.response_handler import response_handler
+from core.utils.response_handler import response_handler
 
 route = APIRouter()
 

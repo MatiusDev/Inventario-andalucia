@@ -1,8 +1,8 @@
 from sqlmodel import SQLModel, Field, Relationship, text, TIMESTAMP, Column
 from datetime import datetime
 
-from models.enums.order import Status
-from models.entities.order_supplier import OrderSupplier
+from core.models.enums.order import Status
+from core.models.entities.order_supplier import OrderSupplier
 
 class Order(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
