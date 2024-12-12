@@ -16,8 +16,7 @@ class AuthBackend(JWTAuthBackend):
   @staticmethod    
   def get_user(request: Request) -> UserToken | None:
     if not hasattr(request, "state") or not hasattr(request.state, "user"):
-      return None
-    
+      return None    
     return request.state.user
   
     
