@@ -1,6 +1,48 @@
+:root {
+    --color-barra-lateral: rgb(255, 255, 255);
+
+    --color-texto: rgb(0, 0, 0);
+    --color-texto-menu: rgb(134, 136, 144);
+
+    --color-menu-hover: rgb(238, 238, 238);
+    --color-menu-hover-texto: rgb(0, 0, 0);
+
+    --color-boton: rgb(0, 0, 0);
+    --color--boton--texto: rgb(255, 255, 255);
+
+    --color-linea: rgb(180, 180, 180);
+
+    --color-switch-base: rgb(201, 201, 206);
+    --color-switch-circulo: rgb(241, 241, 241);
+
+    --color-scroll: rgb(192, 192, 192);
+    --color-scroll-hover: rgb(134, 134, 134)
+}
+
+.dark-mode-color {
+    --color-barra-lateral: rgb(44, 45, 49);
+
+    --color-texto: rgb(255, 255, 255);
+    --color-texto-menu: rgb(110, 110, 117);
+
+    --color-menu-hover: rgb(0, 0, 0);
+    --color-menu-hover-texto: rgb(238, 238, 238);
+
+    --color-boton: rgb(255, 255, 255);
+    --color--boton--texto: rgb(0, 0, 0);
+
+    --color-linea: rgb(90, 90, 90);
+
+    --color-switch-base: rgb(39, 205, 64);
+    --color-switch-circulo: rgb(241, 241, 241);
+
+    --color-scroll: rgb(68, 69, 74);
+    --color-scroll-hover: rgb(85.85, 85)
+}
+
 /*------------> Modo oscuro*/
 
-.sidebar .dark-mode{
+.dark-mode{
     width: 100%;
     margin-bottom: 80px;
     border-radius: 10px;
@@ -8,7 +50,7 @@
     justify-content: space-between;
 }
 
-.sidebar .dark-mode .info{
+.dark-mode .info{
     width: 150px;
     height: 45px;
     overflow: hidden;
@@ -17,9 +59,42 @@
     color: var(--color-texto-menu);
 }
 
-.sidebar .dark-mode .icon{
+.dark-mode .icon{
     display: flex;
     justify-content: center;
     width: 50px;
     font-size: 20px;
+}
+
+.dark-mode .switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-width: 50px;
+    height: 45px;
+}
+
+.dark-mode .base {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 35px;
+    height: 20px;
+    background-color: var(--color-switch-base);
+    border-radius: 10px;
+}
+
+.dark-mode .circle {
+    position: absolute;
+    width: 18px;
+    height: 90%;
+    background-color: var(--color-switch-circulo);
+    border-radius: 50%;
+    left: 2px;
+    transition: left 0.5s ease;
+}
+
+.dark-mode .circle.prendido {
+    left: 15px;
 }
