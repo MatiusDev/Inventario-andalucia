@@ -15,7 +15,8 @@ export async function apiFetch(endpoint, options = {}) {
     throw new Error(response.statusText);
   }
 
-  return await response.json();
+  const json_response = await response.json();
+  return json_response["data"];
 }
 
 // ${BASE_URL} => http://localhost:8000/api
@@ -33,11 +34,25 @@ export async function apiPost(endpoint, data) {
     // "{ "username": "matiusdev", "password": "12345" }"
   };
   const response = await fetch(URL, options); 
-  console.log(response);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
   const json_response = await response.json();
-  console.log(json_response);
   return json_response;
+}
+
+export async function apiDelete(endpoint) {
+  const URL = `${BASE_URL}${endpoint}`;
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  };
+  const response = await fetch(URL, options);
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+  return await response.json();
 }

@@ -41,7 +41,7 @@ class ProductService:
     products_db = self.db.exec(select(Product, Supply).join(Supply)).all()
     
     if len(products_db) == 0:
-      return { "status_code": 404, "detail": "No se encontraron productos de insumos.", "status": "fail" }
+      return { "status_code": 404, "detail": "No se encontraron productos de insumos", "status": "fail" }
     
     products = [ProductRead.supply_and_product(product, supply) for product, supply in products_db]
     return { "data" : products, "status": "success" }
