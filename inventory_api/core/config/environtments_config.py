@@ -47,12 +47,14 @@ def db_config(env: str):
     db_host = os.getenv("DB_HOST")
     db_port = os.getenv("DB_PORT")
     driver_connection = f"mysql+mysqldb://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    print(driver_connection)
   else:
     raise Exception(f"El motor de base de datos {db_driver} no es soportado.")
     
   print("Conectando a la base de datos...")
-  db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
-  db_adapter.create_initial_tables()
+  DBAdapter(db_driver=driver_connection, echo=echo)
+  
+
 
 def cors_origins_config(env: str):
   origins = ["*"]
