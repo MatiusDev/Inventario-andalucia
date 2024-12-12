@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from models.schemas.user import UserCreate, UserBase
+from core.models.schemas.user import UserCreate, UserBase
 
-from services.user_service import SUserDependency
+from core.services.user_service import SUserDependency
 
-from utils.response_handler import response_handler
+from core.utils.response_handler import response_handler
 
 route = APIRouter()
 

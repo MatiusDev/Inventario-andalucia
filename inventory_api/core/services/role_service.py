@@ -1,14 +1,13 @@
 from typing import Annotated
 from fastapi import Depends
-
-from config.db_adapter import DBSession
-from config.auth_token import UserDependency
-
 from sqlmodel import select
 
-from models.entities.role import Role
-from models.schemas.role import RoleCreate, RoleRead
-from models.enums.role import RoleType, Permissions
+from core.config.db_adapter import DBSession
+from core.config.auth_token import UserDependency
+
+from core.models.entities.role import Role
+from core.models.schemas.role import RoleCreate, RoleRead
+from core.models.enums.role import RoleType, Permissions
 
 class RoleService:
   def __init__(self, db: DBSession, user: UserDependency) -> None:

@@ -1,19 +1,18 @@
 from typing import Annotated, List
 from fastapi import Depends
-# Dependencias
-from config.db_adapter import DBSession
-from config.auth_token import UserDependency
-from services.product_service import SProductDependency
-
 from sqlmodel import select
+# Dependencias
+from core.config.db_adapter import DBSession
+from core.config.auth_token import UserDependency
+from core.services.product_service import SProductDependency
 # Entidades y esquemas
-from models.entities.order import Order
-from models.entities.order_product import OrderProduct
-from models.entities.product import Product
-from models.entities.user import User
-from models.entities.supplier import Supplier
+from core.models.entities.order import Order
+from core.models.entities.order_product import OrderProduct
+from core.models.entities.product import Product
+from core.models.entities.user import User
+from core.models.entities.supplier import Supplier
 
-from models.schemas.order import OrderBase, OrderCreate, OrderRead
+from core.models.schemas.order import OrderBase, OrderCreate, OrderRead
 
 class OrderService:
   def __init__(self, db: DBSession, user: UserDependency, product: SProductDependency) -> None:

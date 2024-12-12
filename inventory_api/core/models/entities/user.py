@@ -1,8 +1,8 @@
 from sqlmodel import SQLModel, Field, TIMESTAMP, Column, text, UniqueConstraint, Relationship
 from datetime import datetime
 
-from models.entities.order_user import OrderUser
-from models.enums.role import RoleID, RoleType
+from core.models.entities.order_user import OrderUser
+from core.models.enums.role import RoleID, RoleType
 
 class User(SQLModel, table=True):
   __table_args__ = (

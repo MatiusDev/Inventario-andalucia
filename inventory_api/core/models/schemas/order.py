@@ -1,9 +1,9 @@
 from typing import List
 from sqlmodel import SQLModel
 
-from models.entities.order import Order
-from models.schemas.product import ProductOrder
-from models.enums.order import ORDER_TYPE_BY_ID, ORDER_STATUS_BY_ID
+from core.models.entities.order import Order
+from core.models.schemas.product import ProductOrder
+from core.models.enums.order import ORDER_TYPE_BY_ID, ORDER_STATUS_BY_ID
 
 class OrderBase(SQLModel):
   description: str

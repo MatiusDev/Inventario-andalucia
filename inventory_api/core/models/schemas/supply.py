@@ -1,10 +1,8 @@
 from sqlmodel import SQLModel
 from datetime import datetime
 
-from models.entities.supply import Supply
-from models.enums.supply import TypeSupply, TYPE_SUPPLY_BY_ID
-from datetime import datetime
-
+from core.models.entities.supply import Supply
+from core.models.enums.supply import TypeSupply, TYPE_SUPPLY_BY_ID
 
 class SupplyBase(SQLModel):
 	unit_measure: str
