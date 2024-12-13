@@ -1,18 +1,17 @@
-/*------------> Usuario*/
-
-.sidebar .user {
+/* Usuario */
+.user {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.sidebar .user img{
+.user img{
     width: 50px;
     min-width: 50px;
     border-radius: 10px;
 }
 
-.sidebar .user .info-user{
+.user .info-user{
     width: 100%;
     display: flex;
     align-items: center;
@@ -21,7 +20,7 @@
     overflow: hidden;
 }
 
-.sidebar .user .name-rol{
+.user .name-rol{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -29,17 +28,17 @@
     padding: 5px;
 }
 
-.sidebar .user .name{
+.user .name{
     font-size: 15px;
     font-weight: 600;
 }
 
-.sidebar .user .rol{
+.user .rol{
     font-size: 12px;
 
 }
 
-.sidebar .menu-user .icon{
+.menu-user .icon{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,16 +48,43 @@
     transition: 0.2s ease;
 }
 
-.sidebar .menu-user:hover{
+.menu-user:hover{
     border-radius: 3px 1px;
     background: var(--color-menu-hover);
     border-radius: 10px;
 }
 
-.sidebar .user .icon{
+.user .icon{
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 20px;
+}
+
+/* Fomulario modal usuario */
+.perfilUsuario {
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: auto;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.perfilUsuario input {
+    text-align: center;
+}
+
+.modal-content {
+    max-width: 300px;
+}
+
+.modal {
+    backdrop-filter: blur(5px);
 }

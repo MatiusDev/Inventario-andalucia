@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel
 
-from models.entities.supplier import Supplier
+from core.models.entities.supplier import Supplier
 
 class SupplierBase(SQLModel):
   name: str

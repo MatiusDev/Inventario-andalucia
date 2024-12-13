@@ -4,20 +4,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 # Configuraciones
-from config.environtments_config import environment_config
-from config.openapi_config import custom_openapi
+from core.config.environtments_config import environment_config
+from core.config.openapi_config import custom_openapi
 
 # Middlewares
-from fastapi_auth_jwt import JWTAuthenticationMiddleware
+from core.middlewares.cookie_session_middleware import CookieSessionMiddleware
 
 # Rutas de API
-from router.routes import routes
+from core.router.routes import routes
 
 load_dotenv()
 
 config = environment_config()
 
-app = FastAPI()
+app = FastAPI(lifespan=config["db_adapter"].create_initial_tables)
 
 app.add_middleware(
   CORSMiddleware,
@@ -28,7 +28,7 @@ app.add_middleware(
 )
 
 app.add_middleware(
-  JWTAuthenticationMiddleware,
+  CookieSessionMiddleware,
   backend=config["auth"],
   exclude_urls=["/api/auth/login", "/api/auth/sign-up"]
 )

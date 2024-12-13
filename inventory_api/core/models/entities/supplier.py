@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field, Relationship
 
-from models.entities.order_supplier import OrderSupplier
+from core.models.entities.order_supplier import OrderSupplier
 
 class Supplier(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)

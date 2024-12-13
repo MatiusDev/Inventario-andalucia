@@ -1,8 +1,8 @@
 from sqlmodel import Field, SQLModel
 
-from models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
-from models.entities.product import Product
-from models.entities.supply import Supply
+from core.models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
+from core.models.entities.product import Product
+from core.models.entities.supply import Supply
 
 class ProductBase(SQLModel):
   name: str
@@ -63,12 +63,22 @@ class ProductRead(ProductBase):
   def supply_and_product(product: Product, supply: Supply):
     return {
       "id": product.id,
-      "Name": product.name,
-      "Type": supply.type,
-      "Price": product.price,
-      "Unit_meausure": supply.unit_measure,
-      "Supplier": supply.supplier,
-      "Expiration_date": supply.expiration_date,
+      "name": product.name,
+      "description": product.description,
+      "type": product.type,
+      "price": product.price,
+      "stock": product.stock,
+      "sub_type_info": {
+        "sub_type": supply.type,
+        "stock_minimum": product.stock_minimum,
+        "unit_meausure": supply.unit_measure,
+        "unit_quantity": supply.unit_quantity,
+        "expiration_date": supply.expiry_date,
+      },
+      "location": product.location,
+      "active": product.active,
+      "created_at": product.created_at.isoformat(),
+      "updated_at": product.updated_at.isoformat(),
     }
   
 class ProductOrder(SQLModel):

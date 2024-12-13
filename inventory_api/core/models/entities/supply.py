@@ -1,12 +1,12 @@
-from datetime import date, datetime
-from sqlalchemy import TIMESTAMP, Column, text
+from datetime import datetime
 from sqlmodel import SQLModel, Field, Relationship
 
 class Supply(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    type_supply: str
+    type: str
     unit_measure: str
-    expiry_date: datetime
+    unit_quantity: int
+    expiry_date: datetime | None = Field(default=None, nullable=True)
+    product_id: int | None = Field(default=None, unique=True, foreign_key="product.id")
     
-    id_product: int = Field(foreign_key="product.id")
     products: list["Product"] = Relationship(back_populates="supply") # type: ignore

@@ -3,8 +3,8 @@ from fastapi import Depends, Request
 
 from fastapi_auth_jwt import JWTAuthBackend
 
-from models.schemas.auth import AuthenticationSettings
-from models.schemas.user import UserToken
+from core.models.schemas.auth import AuthenticationSettings
+from core.models.schemas.user import UserToken
 
 class AuthBackend(JWTAuthBackend): 
   def __init__(self):
@@ -16,8 +16,7 @@ class AuthBackend(JWTAuthBackend):
   @staticmethod    
   def get_user(request: Request) -> UserToken | None:
     if not hasattr(request, "state") or not hasattr(request.state, "user"):
-      return None
-    
+      return None    
     return request.state.user
   
     
