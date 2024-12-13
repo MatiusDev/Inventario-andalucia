@@ -3,7 +3,7 @@ import BaseContent from "../BaseContent/BaseContent";
 
 import { apiFetch, apiDelete } from "@utils/api.js";
 
-const PlantContent = () => {
+const InputContent = () => {
     const [dataArray, setDataArray] = useState([]);
     const [titles, setTitles] = useState([]);
 
@@ -20,7 +20,7 @@ const PlantContent = () => {
     };
 
     const handleDelete = async (id) => {
-      const URL = `/plants/${id}/`;
+      const URL = `/inputs/${id}/`;
       const response = await apiDelete(URL);
       if (response.status === "success") {
         const dataMapped = dataArray.map(({item}) => {
@@ -32,32 +32,32 @@ const PlantContent = () => {
         });
         setDataArray(dataMapped);
       } else {
-        console.log("Error al eliminar las plantas");
+        console.log("Error al eliminar los insumos");
       }
     }
 
     useEffect(() => {
         const getData = async () => {
-            const URL = "/plants/";
+            const URL = "/inputs/";
             const data = await apiFetch(URL);
             const titles = [
               { id: `item-1`, title: "ID"},
-              { id: `item-2`, title: "Nombre cientifico"},
-              { id: `item-3`, title: "Temperatura ideal"},
-              { id: `item-4`, title: "Tipo Id"},
-              { id: `item-5`, title: "identificación de riego requerida"},
-              { id: `item-6`, title: "identificación de luz requerida"},
+              { id: `item-2`, title: "Nombre"},
+              { id: `item-3`, title: "cantidad"},
+              { id: `item-4`, title: "Unidad"},
+              { id: `item-5`, title: "Precio"},
+              { id: `item-6`, title: "Ubicación"},
             ];
-            const plants = data.map(plant => (
+            const inputs = data.map(input => (
               {
-                id: { value: plant.id, className: "item-id" },
-                scientific_name: { value: plant.scientific_name, className: "item-field-md" },
-                ideal_temperature: { value: plant.ideal_temperature, className: "item-field-md" },
-                type_id: { value: plant.type_id, className: "item-field-md" },
-                required_irrigation_id: { value: plant.required_irrigation_id, className: "item-field-md" },
-                required_light_id: { value: plant.required_light_id, className: "item-field-md" },
+                id: { value: input.id, className: "item-id" },
+                name: { value: input.scientific_name, className: "item-field-md" },
+                quantity: { value: input.ideal_temperature, className: "item-field-md" },
+                unit: { value: input.type_id, className: "item-field-md" },
+                price: { value: input.required_irrigation_id, className: "item-field-md" },
+                location: { value: input.required_light_id, className: "item-field-md" },
                 type: { 
-                  value: plant.type,
+                  value: input.type,
                   className: "item-field-md",
                   hasBadge: true,
                   badgeStyle: function () {
@@ -65,7 +65,7 @@ const PlantContent = () => {
                   },
                 },
                 active: {
-                  value: plant.active,
+                  value: input.active,
                   strValue: function () {
                     return this.value ? "Activo" : "Inactivo";
                   },
@@ -76,7 +76,7 @@ const PlantContent = () => {
                   },
                 },
                 isLogged: { 
-                  value: plant.is_logged_in,
+                  value: input.is_logged_in,
                   strValue: function () {
                     return this.value ? "Conectado" : "Desconectado";
                   },
@@ -89,14 +89,14 @@ const PlantContent = () => {
               }
             ));
             setTitles(titles);
-            setDataArray(plants);
+            setDataArray(inputs);
         }
         getData();
     }, []); 
 
     return (
         <BaseContent
-          title={"Plantas"}
+          title={"Insumos"}
           titles={titles}
           dataArray={dataArray} 
           handleClick={handleCreate}
@@ -108,4 +108,4 @@ const PlantContent = () => {
     );
 };
 
-export default PlantContent;
+export default InputContent;
