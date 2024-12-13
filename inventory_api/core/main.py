@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 # Configuraciones
 from core.config.environtments_config import environment_config
 from core.config.openapi_config import custom_openapi
-from core.config.db_adapter import DBAdapter
 
 # Middlewares
 from core.middlewares.cookie_session_middleware import CookieSessionMiddleware
@@ -17,7 +16,8 @@ from core.router.routes import routes
 load_dotenv()
 
 config = environment_config()
-app = FastAPI(lifespan=DBAdapter.create_initial_tables)
+
+app = FastAPI(lifespan=config["db_adapter"].create_initial_tables)
 
 app.add_middleware(
   CORSMiddleware,

@@ -29,7 +29,7 @@ services:
     networks:
       - dev_network
     volumes:
-      - ./core:/core
+      - ./core:/app/core
 
 volumes:
   db_data:
