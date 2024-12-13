@@ -16,7 +16,7 @@ const PanelUser = () => {
                     <span className="rol">admin</span>
                 </div>
                 <button className="menu-user" type="button" data-bs-toggle="modal" data-bs-target="#perfilUsuarios">
-                    <FontAwesomeIcon className="icon" icon={faEllipsisVertical} />
+                    <FontAwesomeIcon className="iconEllipsis" icon={faEllipsisVertical} />
                 </button>
             </div>
         </div>

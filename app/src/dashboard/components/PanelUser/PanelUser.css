@@ -38,14 +38,17 @@
 
 }
 
-.menu-user .icon{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    cursor: pointer;
+.menu-user {
     background: none;
-    transition: 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 25px;
+}
+
+.menu-user .iconEllipsis {    
+    padding: 5px;
 }
 
 .menu-user:hover{
