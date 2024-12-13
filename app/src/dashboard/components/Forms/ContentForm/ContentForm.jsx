@@ -4,10 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faEye,faPenToSquare,faTrash} from "@fortawesome/free-solid-svg-icons";
 
-// import DataTable from 'datatables.net-react';
-
-// import DT from 'datatables.net-dt';
-
 const BaseForm = ({title}) => {
     return (
         <div class="body-form">
