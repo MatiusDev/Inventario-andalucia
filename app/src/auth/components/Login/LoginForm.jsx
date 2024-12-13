@@ -15,7 +15,6 @@ const LoginForm = ({ handleClick }) => {
   const navigate = useNavigate();
   // const { user, setUser } = useContext(AuthContext);
 
-
   const validate = (values) => {
     const errors = {};
     if (!values.username) errors.name = "El nombre de usuario es obligatorio";
@@ -38,15 +37,13 @@ const LoginForm = ({ handleClick }) => {
         return;
       };
       const data = { username: values.username, password: values.password }
-      resetForm();
-
+      
       const URL_PATH = "/auth/login";
       const response = await apiPost(URL_PATH, data);
-      if (response["status"] != "success") {
-        console.log(response["message"]);
-      } else {
+      console.log(response);
+      if (response) {
+        resetForm();
         navigate("/dashboard");
-        // Agregar el usuario al contexto
       }
     } catch (error) {
       console.log(error)
@@ -58,11 +55,23 @@ const LoginForm = ({ handleClick }) => {
       <div className="button-container">
         <div className="button">
           <FontAwesomeIcon className="icon" icon={faUser} />
-          <input type="text" placeholder="Usuario" name="username" value={values.username} onChange={handleChange}/>
+          <input
+            type="text"
+            placeholder="Usuario"
+            name="username"
+            value={values.username}
+            onChange={handleChange}
+          />
         </div>
         <div className="button">
           <FontAwesomeIcon className="icon" icon={faLock} />
-          <input type="password" placeholder="Contraseña" name="password" value={values.password} onChange={handleChange} />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            name="password"
+            value={values.password}
+            onChange={handleChange}
+          />
         </div>
         <div className="form-check form-switch">
           <label className="form-check-label" htmlFor="remember-me">Recordarme</label>
