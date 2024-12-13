@@ -1,10 +1,12 @@
-.contenedor {
+/*------------> Formulario general*/
+
+.body-form {
     border-radius: 30px;
     width: 100%;  
     height: auto; 
 }
 
-.cabecera{
+.head{
     padding: 1.25rem;
     border-radius: 30px 30px 0px 0px;
     background-color: var(--color-barra-lateral);
@@ -13,11 +15,11 @@
     justify-content: space-between;
 }
 
-.cabecera h2{
+.head h2{
     color: var(--color-texto);
 }
 
-.contenido {
+.content {
     padding: 20px;
     background-color: #eff6ff;
     box-sizing: border-box;
@@ -28,7 +30,7 @@
 }
 
 
-.acciones{
+.actions{
     padding: 1.25rem;
     border-radius: 0px 0px 30px 30px;
     background-color: var(--color-barra-lateral);
@@ -37,35 +39,18 @@
     justify-content: space-between;
 }
 
-.btn-agregar{
+.btn-add{
     border-radius: 30px ;
 }
 
-.botones-acciones{
+.btn-actions{
     display: flex;
     flex-direction: row;
 }
 
-.botones-acciones a{
+.btn-actions a{
     display: flex;
     align-items: center;
     margin-left: 5px;
     margin-left: 8px;
-}
-
-.item-id {
-    min-width: 35px;
-}
-
-.item-field-sm {
-    min-width: 90px;
-}
-
-.item-field-md {
-    min-width: 180px;
-}
-
-.search-input {
-    border-color: none;
-    box-shadow: none;
 }

@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import Depends
-# Dependencias
-from config.db_adapter import DBSession
-
 from sqlmodel import select
+# Dependencias
+from core.config.db_adapter import DBSession
+
 # Entidades y esquemas
 from models.entities.supplier import Supplier
 from models.schemas.supplier import SupplierBase, SupplierCreate, SupplierRead, SupplierUpdate

@@ -1,8 +1,5 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException
-
-from config.db_adapter import DBSession
-
 from sqlmodel import select
 
 from models.entities.plant import Plant

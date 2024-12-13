@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 
-from models.schemas.tool import ToolCreate, ToolUpdate
-from services.tool_service import SToolDependency
+from core.models.schemas.tool import ToolCreate, ToolUpdate
+from core.services.tool_service import SToolDependency
 
 route = APIRouter()
 

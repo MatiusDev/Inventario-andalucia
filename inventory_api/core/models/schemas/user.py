@@ -1,6 +1,6 @@
 from sqlmodel import Field, SQLModel
 
-from models.entities.user import User
+from core.models.entities.user import User
 
 # Esquemas de validación in/out de datos de usuario
 class UserBase(SQLModel):

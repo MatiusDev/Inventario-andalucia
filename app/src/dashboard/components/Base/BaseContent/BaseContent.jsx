@@ -2,7 +2,7 @@ import "./BaseContent.css"
 
 import ContentTable from "./ContentTable";
 
-const BaseContent = ({ titles, title, dataArray, handleClick, handleView, handleEdit, handleDelete, canDelete }) => {
+const BaseContent = ({ titles, title, dataArray, handleCreate, handleView, handleEdit, handleDelete, canDelete }) => {
     return (
         <div className="contenedor">
             <div className="cabecera">
@@ -22,7 +22,7 @@ const BaseContent = ({ titles, title, dataArray, handleClick, handleView, handle
             <div className="acciones">
                 <button 
                     className="btn-agregar"
-                    onClick={handleClick}
+                    onClick={handleCreate}
                 >
                 <i className="fas fa-plus"></i>
                 Crear

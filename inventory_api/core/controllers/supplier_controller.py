@@ -2,9 +2,9 @@ from fastapi import APIRouter
 
 from models.schemas.supplier import SupplierCreate, SupplierUpdate
 
-from services.supplier_service import SSupplierDependency
+from core.services.supplier_service import SSupplierDependency
 
-from utils.response_handler import response_handler
+from core.utils.response_handler import response_handler
 
 route = APIRouter()
 
