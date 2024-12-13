@@ -7,6 +7,10 @@ from core.utils.response_handler import response_handler
 
 route = APIRouter()
 
+@route.get("/profile", status_code=200)
+async def profile(auth_service: SAuthDependency):
+  return await response_handler(auth_service.profile())
+
 @route.post("/sign-up", status_code=201)
 async def sign_up(user: UserCreate, auth_service: SAuthDependency):
   return await response_handler(auth_service.sign_up(user))
@@ -15,7 +19,6 @@ async def sign_up(user: UserCreate, auth_service: SAuthDependency):
 async def login(user: UserAuth, auth_service: SAuthDependency):
   return await response_handler(auth_service.login(user))
 
-# Pendiente por modificar
 @route.post("/logout", status_code=200)
 async def logout(auth_service: SAuthDependency):
   return await response_handler(auth_service.logout())
