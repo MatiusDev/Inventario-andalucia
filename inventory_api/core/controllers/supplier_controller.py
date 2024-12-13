@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from core.models.schemas.supplier import SupplierCreate
+from core.models.schemas.supplier import SupplierCreate, SupplierUpdate
 
 from core.services.supplier_service import SSupplierDependency
 
@@ -21,7 +21,7 @@ async def create_supplier(supplier: SupplierCreate, supplier_service: SSupplierD
   return await response_handler(supplier_service.create(supplier))
 
 @route.put("/{id}", status_code=200)
-async def update_supplier(id: int, supplier: SupplierCreate, supplier_service: SSupplierDependency):
+async def update_supplier(id: int, supplier: SupplierUpdate, supplier_service: SSupplierDependency):
   return await response_handler(supplier_service.update(id, supplier))
 
 @route.delete("/{id}", status_code=200)
