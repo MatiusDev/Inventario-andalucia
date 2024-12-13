@@ -4,9 +4,19 @@ import UserCreate from "../../Modals/UserCreate";
 
 import { apiFetch, apiDelete } from "@utils/api.js";
 
+// Titulos, el arreglo debe tener el mismo tamaño que el objeto que se recibe en la petición GET
+const TITLES = [
+  "ID",
+  "Nombre completo",
+  "Nombre de usuario",
+  "Correo electrónico",
+  "Tipo de usuario",
+  "Estado",
+  "Sesión"
+];
+
 const UserContent = () => {
     const [dataArray, setDataArray] = useState([]);
-    const [titles, setTitles] = useState([]);
 
     const handleCreate = () => {
       console.log("Sisas");
@@ -25,8 +35,9 @@ const UserContent = () => {
       const response = await apiDelete(URL);
       if (response.status === "success") {
         const dataMapped = dataArray.map(item => {
-          if (item.id.value === id) {
-            item.active.value = false;
+          const { id, active } = item;
+          if (id.value === id) {
+            active.value = false;
             return item;
           }
           return item;
@@ -41,15 +52,6 @@ const UserContent = () => {
         const getData = async () => {
             const URL = "/users/";
             const data = await apiFetch(URL);
-            const titles = [
-              { id: `item-1`, title: "ID"},
-              { id: `item-2`, title: "Nombre completo"},
-              { id: `item-3`, title: "Nombre de usuario"},
-              { id: `item-4`, title: "Correo electrónico"},
-              { id: `item-5`, title: "Tipo de usuario"},
-              { id: `item-6`, title: "Estado"},
-              { id: `item-7`, title: "Sesión"},
-            ];
             const users = data.map(user => (
               {
                 id: { value: user.id, className: "item-id" },
@@ -88,7 +90,6 @@ const UserContent = () => {
                 },
               }
             ));
-            setTitles(titles);
             setDataArray(users);
         }
         getData();
@@ -98,7 +99,7 @@ const UserContent = () => {
       <>
         <BaseContent
           title={"Usuarios"}
-          titles={titles}
+          titles={TITLES}
           dataArray={dataArray} 
           handleCreate={handleCreate}
           handleView={handleView}

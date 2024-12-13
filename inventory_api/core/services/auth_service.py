@@ -16,6 +16,10 @@ class AuthService:
     self.user_service = user_service
     self.request = request
   
+  async def profile(self):
+    user = UserRead.from_token(self.user)
+    return { "data": user, "status": "success" }
+
   async def sign_up(self, user: UserCreate):
     hashed_password = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
     user.password = hashed_password.decode("utf-8")
@@ -82,7 +86,7 @@ class AuthService:
       "value": token,
       "httponly": True,
       "secure": True,
-      "samesite": "None",
+      "samesite": "strict",
       "max_age": self.auth.config.expiration_seconds
     }
     

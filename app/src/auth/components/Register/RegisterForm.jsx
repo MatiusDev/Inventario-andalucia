@@ -1,32 +1,46 @@
 import "../Login/LoginForm.css";
 import "./RegisterForm.css";
 
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useForm } from "@/common/hooks/useForm.jsx";
 
 import { apiPost } from "@utils/api";
 
+const defaultUser = { username: "", fullname: "", email: "", password: "" };
+
 const RegisterForm = ({ handleClick }) => {
-    const [newUser, setNewUser] = useState({ username: "", fullname: "", email: "", password: "" });
+    const validate = (values) => {
+        const errors = {};
+        if (!values.username) errors.name = "El nombre de usuario es obligatorio";
+        if (!values.fullname) errors.fullname = "El nombre completo es obligatorio";
+        if (!values.email) errors.email = "El correo electrónico es obligatorio";
+        if (!values.password) errors.password = "La contraseña es obligatoria";
+        return errors;
+    };
+
+    const { values, errors, handleChange, resetForm } = useForm(defaultUser, validate);
 
     const handleSubmit = async (evt) => {
       evt.preventDefault();
       try {
-        if (!newUser.username || !newUser.fullname || !newUser.email || !newUser.password) {
-            console.log("Error: Campos vacios");
-            return;
+        if (Object.keys(errors).length > 0) {
+          console.log("Error: Campos vacios");
+          return;
         };
+        const user = { 
+          username: values.username, 
+          full_name: values.fullname, 
+          email: values.email, 
+          password: values.password
+        }
 
         const URL_PATH = "/auth/sign-up";
-        const user = { 
-          username: newUser.username, 
-          full_name: newUser.fullname, 
-          email: newUser.email, 
-          password: newUser.password
-        }
         const response = await apiPost(URL_PATH, user);
-        console.log(response)
-
+        console.log(response);
+        if (response) {
+          resetForm();
+          handleClick();
+          alert(response);
+        }
       } catch (error) {
         console.log(error)
       }
@@ -36,16 +50,40 @@ const RegisterForm = ({ handleClick }) => {
         <form id="login-form" onSubmit={handleSubmit}>
             <div className="button-container">
                 <div className="button">
-                    <input type="text" placeholder="Usuario" value={newUser.username} onChange={e => setNewUser({ ...newUser, username: e.target.value })} />
+                    <input
+                        type="text"
+                        placeholder="Usuario"
+                        name="username"
+                        value={values.username}
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className="button">
-                    <input type="text" placeholder="Nombre completo" value={newUser.fullname} onChange={e => setNewUser({ ...newUser, fullname: e.target.value })}/>
+                    <input
+                        type="text"
+                        placeholder="Nombre completo"
+                        value={values.fullname}
+                        name="fullname"
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className="button">
-                    <input type="email" placeholder="Correo electrónico" value={newUser.email} onChange={e => setNewUser({ ...newUser, email: e.target.value })}/>
+                    <input 
+                        type="email"
+                        placeholder="Correo electrónico"
+                        value={values.email}
+                        name="email"
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className="button">
-                    <input type="password" placeholder="Contraseña" value={newUser.password} onChange={e => setNewUser({ ...newUser, password: e.target.value })}/>
+                    <input
+                        type="password"
+                        placeholder="Contraseña"
+                        value={values.password}
+                        name="password"
+                        onChange={handleChange}
+                    />
                 </div>
                 <div>
                     <span className="icon"></span>

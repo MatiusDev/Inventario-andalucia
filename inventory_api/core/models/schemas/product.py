@@ -1,8 +1,10 @@
 from sqlmodel import Field, SQLModel
 
+from core.models.entities.plant import Plant
 from core.models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
 from core.models.entities.product import Product
 from core.models.entities.supply import Supply
+from core.models.entities.tool import Tool
 
 class ProductBase(SQLModel):
   name: str
@@ -81,7 +83,62 @@ class ProductRead(ProductBase):
       "updated_at": product.updated_at.isoformat(),
     }
   
+  @staticmethod
+  def plant_and_product(product: Product, plant: Plant):
+    return {
+      "id": product.id,
+      "name": product.name,
+      "description": product.description,
+      "type": product.type,
+      "price": product.price,
+      "stock": product.stock,
+      "sub_type_info": {
+        "sub_type": plant.type,
+        "stock_minimum": product.stock_minimum,
+        "scientific_name": plant.scientific_name,
+        "required_irrigation": plant.required_irrigation,
+        "required_light": plant.required_light,
+        "ideal_temperature": plant.ideal_temperature,
+      },
+      "location": product.location,
+      "active": product.active,
+      "created_at": product.created_at.isoformat(),
+      "updated_at": product.updated_at.isoformat(),
+    }
+  
+  @staticmethod
+  def tool_and_product(product: Product, tool: Tool):
+    return {
+      "id": product.id,
+      "name": product.name,
+      "description": product.description,
+      "type": product.type,
+      "price": product.price,
+      "stock": product.stock,
+      "sub_type_info": {
+        "brand": tool.brand,
+        "category": tool.category,
+        "type_maintenance": tool.type_maintenance
+      },
+      "location": product.location,
+      "active": product.active,
+      "created_at": product.created_at.isoformat(),
+      "updated_at": product.updated_at.isoformat(),
+    }
+  
 class ProductOrder(SQLModel):
   id: int
   quantity: int
+  
+  @staticmethod
+  def supply_and_product(product: Product, supply: Supply):
+    return {
+      "id": product.id,
+      "Name": product.name,
+      "Type": supply.type,
+      "Price": product.price,
+      "Unit_meausure": supply.unit_measure,
+      "Supplier": supply.supplier,
+      "Expiration_date": supply.expiration_date,
+    }
   

@@ -1,14 +1,13 @@
 from sqlmodel import SQLModel, Field, Relationship
 
-from core.models.entities.product import Product
 
 class Plant(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    id_product: int = Field(foreign_key="product.id")
-    name_scientific: str = Field(default=None)
-    type_plant: str = Field(default="exterior")
-    required_watering: str = Field(default="diario")
-    required_light: str = Field(default="sombra")
-    ideal_temperature: int = Field(default=None)
-    life_time: str = Field(default="Si")
-    product_data: Product = Relationship(back_populates="plants")
+    scientific_name: str
+    type: str
+    required_irrigation: str
+    required_light: str
+    ideal_temperature: int
+    product_id: int | None = Field(default=None, unique=True, foreign_key="product.id")
+         
+    products: list["Product"] = Relationship(back_populates="plant") # type: ignore

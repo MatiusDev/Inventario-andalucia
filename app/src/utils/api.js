@@ -37,8 +37,17 @@ export async function apiPost(endpoint, data) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
+  
   const json_response = await response.json();
-  return json_response;
+  if (json_response["status"] != "success") {
+    throw new Error(json_response["detail"]);
+  }
+
+  if (json_response["message"]) {
+    return json_response["message"];
+  }
+
+  return json_response["data"];
 }
 
 export async function apiDelete(endpoint) {
