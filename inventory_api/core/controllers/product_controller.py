@@ -17,7 +17,7 @@ async def get_all_plants(product_service: SProductDependency):
     return await response_handler(product_service.get_all_plants())
 
 @route.get("/tools", status_code=200)
-async def get_all_plants(product_service: SProductDependency):
+async def get_all_tools(product_service: SProductDependency):
     return await response_handler(product_service.get_all_tools())
 
 
