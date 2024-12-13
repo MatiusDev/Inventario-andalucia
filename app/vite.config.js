@@ -13,6 +13,8 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
       '@utils': resolve(__dirname, './src/utils'),
       '@routes': resolve(__dirname, './src/routes'),
+      '@common': resolve(__dirname, './src/common'),
+      '@auth': resolve(__dirname, './src/auth')
     },
   }
 });
