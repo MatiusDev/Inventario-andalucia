@@ -9,7 +9,7 @@ from core.utils.response_handler import response_handler
 route = APIRouter()
 
 @route.get("/", status_code=200)
-async def get_all_orders(supplier_service: SSupplierDependency):
+async def get_all_suppliers(supplier_service: SSupplierDependency):
   return await response_handler(supplier_service.get_all())
 
 @route.get("/{id}", status_code=200)

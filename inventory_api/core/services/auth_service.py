@@ -86,7 +86,7 @@ class AuthService:
       "value": token,
       "httponly": True,
       "secure": True,
-      "samesite": "None",
+      "samesite": "strict",
       "max_age": self.auth.config.expiration_seconds
     }
     
