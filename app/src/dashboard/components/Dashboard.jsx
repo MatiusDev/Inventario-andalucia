@@ -43,10 +43,8 @@ const Dashboard = () => {
       const URL = '/auth/logout';
       const response = await apiPost(URL);
       
-      if (response["status"] == "success") {
+      if (response) {
         navigate('/', { replace: true });
-      } else {
-        console.log("Error al cerrar sesión")
       }
     }
 

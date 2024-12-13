@@ -23,8 +23,9 @@ def environment_config():
     if env not in environments or env is None:
       raise Exception(f"El ambiente de trabajo {env} de la variable de entorno ENVIRONMENT no es soportado.")
     
+    db_config(env)
+    
     config["environment"] = env
-    config["db_adapter"] = db_config(env)
     config["origins"] = cors_origins_config(env)
     config["auth"] = AuthBackend()
     
