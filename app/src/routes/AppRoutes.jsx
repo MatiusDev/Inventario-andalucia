@@ -5,27 +5,21 @@ import AuthRoute from "./AuthRoutes.jsx";
 import DefaultRoute from "./DefaultRoute.jsx";
 
 import Auth from '@/auth/components/Auth/Auth.jsx';
-// import { AuthContext } from "./AuthProvider.jsx";
+import { useAuth } from "../auth/context/AuthProvider.jsx";
 import Dashboard from '@/dashboard/components/Dashboard.jsx';
 
 const AppRoutes = () => {
-  // const { user } = useContext(AuthContext);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  // if (user) {
-  //   setIsAuthenticated(true);
-  // }
-
+  const { authState } = useAuth();  
   return (
     <Routes>
+      
       <Route index element={<Auth />} />
 
-      <Route path="dashboard" element={<AuthRoute isAuthenticated={isAuthenticated} />}>
+      <Route path="dashboard" element={<AuthRoute isAuthenticated={authState.authenticated} />}>
         <Route index element={<Dashboard />} />
-        
       </Route>
 
-      <Route path="*" element={<DefaultRoute isAuthenticated={isAuthenticated} />} />
+      <Route path="*" element={<DefaultRoute isAuthenticated={authState.authenticated} />} />
     </Routes>
   );
 };

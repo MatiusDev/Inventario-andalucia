@@ -6,6 +6,7 @@ import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useForm } from "@/common/hooks/useForm.jsx";
 import { useContext } from "react";
+import { useAuth } from "../../context/AuthProvider";
 
 // import { AuthContext } from "@auth/context/AuthProvider";
 
@@ -13,8 +14,8 @@ import { apiPost } from "@utils/api";
 
 const LoginForm = ({ handleClick }) => {
   const navigate = useNavigate();
+  const { changeAuthState } = useAuth();
   // const { user, setUser } = useContext(AuthContext);
-
 
   const validate = (values) => {
     const errors = {};
@@ -45,6 +46,12 @@ const LoginForm = ({ handleClick }) => {
       if (response["status"] != "success") {
         console.log(response["message"]);
       } else {
+        const mockUser = {
+          name: 'Juan',
+          email: 'juan@gmail.com',
+          authenticated: true,
+        }
+        changeAuthState(mockUser);
         navigate("/dashboard");
         // Agregar el usuario al contexto
       }
