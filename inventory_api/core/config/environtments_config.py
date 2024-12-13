@@ -2,6 +2,7 @@ import os
 
 from core.config.db_adapter import DBAdapter
 from core.config.auth_token import AuthBackend
+from tenacity import retry, wait_fixed, stop_after_attempt
 
 config = {
   "environment": None,
@@ -33,12 +34,11 @@ def environment_config():
     return config
           
 def db_config(env: str):
-  echo = False
+  echo = True
   if env == 'development':
     echo = True
   
   db_driver = os.getenv("DB_DRIVER", "mysql")
-  
   if db_driver == "mysql":
     db_name = os.getenv("DB_NAME")
     db_user = os.getenv("DB_USER")
@@ -46,17 +46,22 @@ def db_config(env: str):
     db_host = os.getenv("DB_HOST")
     db_port = os.getenv("DB_PORT")
     driver_connection = f"mysql+mysqldb://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-    try:
-      print(driver_connection)
-      print("Conectando a la base de datos...")
-      db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
-      return db_adapter
-    except Exception as err:
-      raise Exception(f"Error al conectar a la base de datos: {err}")
-
+    return connect_db(driver_connection, echo)
   else:
     raise Exception(f"El motor de base de datos {db_driver} no es soportado.")
-    
+
+@retry(wait=wait_fixed(5), stop=stop_after_attempt(3))
+def connect_db(driver_connection: str, echo: bool = False):
+  try:
+    print(driver_connection)
+    print("Conectando a la base de datos...")
+    db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
+    if db_adapter.get_session() is None:
+      raise Exception("Error al conectar a la base de datos")
+    return db_adapter
+  except Exception as err:
+    raise Exception(f"Error al conectar a la base de datos: {err}")
+
 def cors_origins_config(env: str):
   origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
