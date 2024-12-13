@@ -44,30 +44,22 @@
 .log-out{
     margin-top: 20px;
     list-style: none;
-    /* display: flex;
-    align-items: center;
-    text-align: center; */
-    /* background: var(--color-boton);
-    color: var(--color--boton--texto); */
-    /* border-radius: 10px; */
 }
 
 .log-out button {
     width: 100%;
     min-height: 45px;
-    /* display: flex;
-    align-items: center;
-    text-align: center; */
     text-decoration: none;
     border-radius: 10px;
     border: none;
-    background: #53c04a;
-    color: #000;
+    background: var(--color-boton);
+    color: var(--color--boton--texto);
+    transition: color 0.4s ease;
 }
 
 .log-out button:hover {
-    background: #69c562;
-    color: #3d3d3d;
+    background: var(--color-menu-hover);
+    color: var(--color-menu-hover-texto);
 }
 
 .log-out .icon {
