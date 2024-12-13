@@ -3,34 +3,36 @@ from fastapi import Depends, HTTPException
 from sqlmodel import select
 
 from core.config.db_adapter import DBSession
-
-from core.models.schemas.plant import PlantCreate
+from core.models.entities.plant import Plant
+from core.models.schemas.plant import PlantCreate, PlantRead
 from core.models.entities.product import Product
 from core.models.entities.supply import Supply
 from core.models.enums.product import ProductType
 from core.models.schemas.product import ProductCreate, ProductRead, ProductUpdate
+from core.services.notify_service import SNotifyDependency
+from core.models.entities.tool import Tool
 
 class ProductService:
   def __init__(self, db: DBSession) -> None:
     self.db = db
+    
   
+ 
   async def get_all(self):
     res_1 = await self.get_all_supplies()
-    # res_2 = await self.get_all_tools()
-    # res_3 = await self.get_all_plants()
+    res_2 = await self.get_all_tools()
+    res_3 = await self.get_all_plants()
     
     products_supplies = res_1.get("data", [])
-    # products_tools = res_2.get("data", [])
-    # products_plants = res_3.get("data", [])
-    product_ids = [product.get("id") for product in products_supplies] #+
-      # [product.id for product in products_tools] +
-      # [product.id for product in products_plants]
+    products_tools = res_2.get("data", [])
+    products_plants = res_3.get("data", [])
+    product_ids = [product.get("id") for product in products_supplies] + [product.get("id") for product in products_plants] + [product.get("id") for product in products_tools]
     
     all_products = self.db.exec(select(Product)).all() or []
     if len(product_ids) > 0:
       all_products = [ProductRead.from_db(product) for product in all_products if product.id not in product_ids]
     
-    products = all_products + products_supplies # + products_tools + products_plants
+    products = all_products + products_supplies + products_plants + products_tools 
     return { "data" : products, "status": "success" }
   
   async def get_all_supplies(self):
@@ -43,10 +45,21 @@ class ProductService:
     return { "data" : products, "status": "success" }
   
   async def get_all_tools(self):
-    pass
+    products_db = self.db.exec(select(Product, Tool).join(Tool)).all()
+    if len(products_db) == 0:
+      return { "status_code": 404, "detail": "No se encontraron productos de herramientas.", "status": "fail" }
+    products = [ProductRead.tool_and_product(product, tool) for product, tool in products_db]
+    return { "data" : products, "status": "success" }
   
   async def get_all_plants(self):
-    pass
+    products_db = self.db.exec(select(Product, Plant).join(Plant)).all()
+    
+    if len(products_db) == 0:
+      return { "status_code": 404, "detail": "No se encontraron productos de plantas.", "status": "fail" }
+    
+    products = [ProductRead.plant_and_product(product, plant) for product, plant in products_db]
+    return { "data" : products, "status": "success" }
+  
   
   def get_by_id(self, id: int):
     product_db = self.db.get(Product, id)
@@ -57,10 +70,10 @@ class ProductService:
     product = {}
     if product_db.type == ProductType.SUPPLY.value and product_db.supply != None:
       product = ProductRead.supply_and_product(product_db, product_db.supply)
-    # elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
-    #   pass
-    # elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
-    #   pass
+    elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
+      product = ProductRead.tool_and_product(product_db, product_db.tool)
+    elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
+      product = ProductRead.plant_and_product(product_db, product_db.plant)
     else:
       product = ProductRead.from_db(product_db)
       
@@ -72,14 +85,24 @@ class ProductService:
     self.db.commit()
     self.db.refresh(product_db)
     
+     # '''En esta sección integro el servicio para agregar la notificación del producto personalizada en la base de datos
+    # Si es el caso, se hacen las validaciones de cambio de la variable de interes para ver si cambió con respecto al estado anterior
+    # '''
+    # id_product = product_read.id    
+    # '''Uso el metodo noticar cambio que me almacena en base de datos la información necesaria'''
+    # self.notification.notifyChange(
+    #   id_product,
+    #   f"El producto con id {id_product} ha sido creado con precio {product_read.price}"
+    #   )
     product_read = ProductRead.from_db(product_db)
     return product_read
 
   def update(self, id: int, product: ProductUpdate):
     product_db = self.db.get(Product, id)
 
+
     if product_db is None:
-      raise HTTPException(status_code=404, detail="Product not found")
+      return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
     
     # product_db.name = product.name
     # product_db.price = product.price
@@ -106,11 +129,13 @@ class ProductService:
     product = self.db.get(Product, id)
     
     if product is None:
-      raise HTTPException(status_code=404, detail="Product not found")
+      return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
     
     self.db.delete(product)
     self.db.commit()
-    return {"message": "Product deleted", "status": "success"}
+    return {"message": "Producto eliminado correctamente", "status": "success"}
+
+
 
   def get_products(self, products: list[ProductCreate]):
     product_ids = [product.id for product in products]

@@ -13,64 +13,88 @@ class ToolService:
     def __init__(self, db: DBSession) -> None:
         self.db = db
 
-    def create(self, tool_data: ToolCreate):
-        tool_db = Tool.model_validate(tool_data)
-        product_db = self.db.get(Product, tool_data.id_product)
-        if product_db is None:
-            raise HTTPException(status_code=404, detail="El producto no existe")
-    
-        if product_db.type_product != ProductType.TOOL.value:
-            raise HTTPException(status_code=400, detail="No puedes agregar este tipo de producto en herramientas")
+    def create(self, product_id: int, tool_data: ToolCreate):
+        try:
+            product_db = self.db.get(Product, product_id)
+        
+            if product_db is None:
+                return {
+					"status_code": 404,
+					"detail": "El producto no existe",
+					"status": "fail",
+				}
+            
+            if product_db.type != ProductType.TOOL.value:
+                return {
+					"status_code": 400,
+					"detail": f"Este producto no es una herramienta, debes agregarlo en {product_db.type}",
+					"status": "fail",
+				}
+            
+            tool_db = Tool.model_validate(tool_data.create_dump())
+            tool_db.product_id = product_id
 
-        self.db.add(tool_db)
-        self.db.commit()
-        self.db.refresh(tool_db)
-        tool_read = ToolRead.model_validate(tool_db)
-        return tool_read
+            self.db.add(tool_db)
+            self.db.commit()
+            self.db.refresh(tool_db)
+
+            tool_read = ToolRead.from_db(tool_db)
+            return  { "data": tool_read, "status": "success" }
+        
+        except Exception as err:
+            self.db.rollback()
+            return { "status_code": 500, "detail": str(err), "status": "error" }
+    
     
     def get_all(self):
         tools_db = self.db.exec(select(Tool)).all() or []
-        return tools_db
+        return { "data" : tools_db, "status": "success" }
     
     def get_by_id(self, id:int):
         tool = self.db.get(Tool, id)
 
         if tool is None:
-            raise HTTPException(status_code=404, detail="Tool not found")
+            return { "status_code": 404, "detail": "Herramienta no encontrada", "status": "fail" }
         
-        return ToolRead(**vars(tool))
+        read_tool = ToolRead.from_db(tool)        
+        return { "data": read_tool, "status": "success" }
     
     def update(self, id: int, tool: ToolUpdate):
-        tool_db = self.db.get(Tool, id)
-        product_db = self.db.get(Product, tool.id_product)
-        if product_db is None:
-            raise HTTPException(status_code=404, detail="Product doesn't exist")
-        
-        if product_db.type != Type_Product.TOOL:
-            raise HTTPException(status_code=400, detail="No puedes agregar este tipo de producto en herramientas")
+        try:
+            tool_db = self.db.get(Tool, id)
+            
+            if tool_db is None:
+                return { "status_code": 404, "detail": "Herramienta no encontrada", "status": "fail" }
+            
+            tool_db.sqlmodel_update(tool.update_dump())
 
-        if tool_db is None:
-            raise HTTPException(status_code=404, detail="Tool doesn't exist")
-        
-        for attr, value in tool.model_dump(exclude_unset=True).items():
-            setattr(tool_db, attr, value)
+            self.db.add(tool_db)
+            self.db.commit()
+            self.db.refresh(tool_db)
 
-        self.db.add(tool_db)
-        self.db.commit()
-        self.db.refresh(tool_db)
-        return ToolRead(
-            id=tool_db.id,
-            **tool.model_dump(exclude_unset=True)
-        )
-    
+            tool_read = ToolRead.from_db(tool_db)
+            return { "data": tool_read, "status": "success" }
+        
+
+        except Exception as err:
+            self.db.rollback()
+            return { "status_code": 500, "detail": str(err), "status": "error" }
+        
+
     def delete(self, id: int):
-        tool = self.db.get(Tool, id)
+        try:
+            tool_db = self.db.get(Tool, id)
+            
+            if tool_db is None:
+                return { "status_code": 404, "detail": "Herramienta no encontrada", "status": "fail" }
+            
+            self.db.delete(tool_db)
+            self.db.commit()
+            
+            return {"message": "Tool deleted", "status": "success"}
+        except Exception as err:
+            self.db.rollback()
+            return { "status_code": 500, "detail": str(err), "status": "error" }
         
-        if tool is None:
-            raise HTTPException(status_code=404, detail="Tool doesn't exist")
-        
-        self.db.delete(tool)
-        self.db.commit()
-        return {"message": "Tool deleted", "status": "success"}
-    
+
 SToolDependency = Annotated[ToolService, Depends(ToolService)]
