@@ -23,8 +23,9 @@ def environment_config():
     if env not in environments or env is None:
       raise Exception(f"El ambiente de trabajo {env} de la variable de entorno ENVIRONMENT no es soportado.")
     
+    db_config(env)
+    
     config["environment"] = env
-    config["db_adapter"] = db_config(env)
     config["origins"] = cors_origins_config(env)
     config["auth"] = AuthBackend()
     
@@ -58,7 +59,9 @@ def connect_db(driver_connection: str, echo: bool = False):
     db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
     if db_adapter.get_session() is None:
       raise Exception("Error al conectar a la base de datos")
-    return db_adapter
+    db_adapter.create_initial_tables()
+    print("Conexión exitosa a la base de datos")
+    return
   except Exception as err:
     raise Exception(f"Error al conectar a la base de datos: {err}")
 
