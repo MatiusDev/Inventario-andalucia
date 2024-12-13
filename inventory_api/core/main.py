@@ -17,7 +17,7 @@ load_dotenv()
 
 config = environment_config()
 
-app = FastAPI(lifespan=config["db_adapter"].create_initial_tables)
+app = FastAPI()
 
 app.add_middleware(
   CORSMiddleware,

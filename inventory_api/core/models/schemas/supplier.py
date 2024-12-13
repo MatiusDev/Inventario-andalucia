@@ -31,6 +31,5 @@ class SupplierRead(SupplierBase):
 
 # Recordar usar el dump, para no tener que hacer traducciones
 class SupplierUpdate(SupplierBase):
-  id: int | None
   phone: str | None
   active: bool | None
