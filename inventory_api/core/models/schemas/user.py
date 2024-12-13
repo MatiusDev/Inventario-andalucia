@@ -12,6 +12,18 @@ class UserBase(SQLModel):
 class UserCreate(UserBase):
   password: str
 
+# Usuario con Token para guardar la sesión
+class UserToken(UserBase):
+  id: int
+  type: str
+  permissions: tuple
+  active: bool
+  is_logged_in: bool
+  created_at: str
+  updated_at: str
+  last_session: str
+  token: str | None = Field(None)
+
 # Un usuario DTO ya existente en BD
 class UserRead(UserBase):
   id: int
@@ -22,6 +34,12 @@ class UserRead(UserBase):
   created_at: str
   updated_at: str
   last_session: str
+  
+  @staticmethod
+  def from_token(user_token: UserToken):
+    user_token.token = None
+    user = user_token.model_dump(exclude_none=True)
+    return UserRead(**user)
   
   @staticmethod
   def from_db_user(user: User):
@@ -41,10 +59,6 @@ class UserRead(UserBase):
       updated_at = user.updated_at.isoformat(),
       last_session = user.last_session.isoformat()
     )
-
-# Usuario con Token para guardar la sesión
-class UserToken(UserRead):
-  token: str | None = Field(None)
 
 class UserSession(UserRead):
   password: str | None
