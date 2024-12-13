@@ -1,9 +1,9 @@
 from fastapi import APIRouter, status
 
-from utils.response_handler import response_handler
-from models.entities.plant import Plant
-from models.schemas.plant import PlantCreate, PlantUpdate, PlantRead
-from services.plant_service import SPlantDependency
+from core.utils.response_handler import response_handler
+from core.models.entities.plant import Plant
+from core.models.schemas.plant import PlantCreate, PlantUpdate, PlantRead
+from core.services.plant_service import SPlantDependency
 
 route = APIRouter()
 

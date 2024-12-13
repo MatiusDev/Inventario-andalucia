@@ -5,8 +5,8 @@ from sqlmodel import select
 from core.config.db_adapter import DBSession
 
 # Entidades y esquemas
-from models.entities.supplier import Supplier
-from models.schemas.supplier import SupplierBase, SupplierCreate, SupplierRead, SupplierUpdate
+from core.models.entities.supplier import Supplier
+from core.models.schemas.supplier import SupplierBase, SupplierCreate, SupplierRead, SupplierUpdate
 
 class SupplierService:
   def __init__(self, db: DBSession) -> None:

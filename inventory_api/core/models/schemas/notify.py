@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field
 
-from models.entities.notify import Notify
+from core.models.entities.notify import Notify
 
 
 class NotifyBase(SQLModel):

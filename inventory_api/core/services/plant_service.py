@@ -1,12 +1,12 @@
 from typing import Annotated
 from fastapi import Depends
-from config.db_adapter import DBSession
+from core.config.db_adapter import DBSession
 from sqlmodel import select
 
-from models.entities.product import Product
-from models.enums.product import ProductType
-from models.entities.plant import Plant
-from models.schemas.plant import PlantCreate, PlantUpdate, PlantRead
+from core.models.entities.product import Product
+from core.models.enums.product import ProductType
+from core.models.entities.plant import Plant
+from core.models.schemas.plant import PlantCreate, PlantUpdate, PlantRead
 
 class PlantService:
     def __init__(self, db: DBSession) -> None:

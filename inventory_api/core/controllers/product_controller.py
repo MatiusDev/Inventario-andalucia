@@ -12,13 +12,14 @@ async def get_all_products(product_service: SProductDependency):
   return await response_handler(product_service.get_all())
 
 
-@route.get("/plants/", status_code=200)
+@route.get("/plants", status_code=200)
 async def get_all_plants(product_service: SProductDependency):
     return await response_handler(product_service.get_all_plants())
 
+@route.get("/tools", status_code=200)
+async def get_all_plants(product_service: SProductDependency):
+    return await response_handler(product_service.get_all_tools())
 
-async def get_all_products(product_service: SProductDependency):
-  return await response_handler(product_service.get_all())
 
 @route.get("/supplies", status_code=200)
 async def get_all_supplies(product_service: SProductDependency):

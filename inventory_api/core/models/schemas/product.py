@@ -1,9 +1,10 @@
 from sqlmodel import Field, SQLModel
 
-from models.entities.plant import Plant
-from models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
-from models.entities.product import Product
-from models.entities.supply import Supply
+from core.models.entities.plant import Plant
+from core.models.enums.product import ProductType, PRODUCT_TYPE_BY_ID
+from core.models.entities.product import Product
+from core.models.entities.supply import Supply
+from core.models.entities.tool import Tool
 
 class ProductBase(SQLModel):
   name: str
@@ -98,6 +99,26 @@ class ProductRead(ProductBase):
         "required_irrigation": plant.required_irrigation,
         "required_light": plant.required_light,
         "ideal_temperature": plant.ideal_temperature,
+      },
+      "location": product.location,
+      "active": product.active,
+      "created_at": product.created_at.isoformat(),
+      "updated_at": product.updated_at.isoformat(),
+    }
+  
+  @staticmethod
+  def tool_and_product(product: Product, tool: Tool):
+    return {
+      "id": product.id,
+      "name": product.name,
+      "description": product.description,
+      "type": product.type,
+      "price": product.price,
+      "stock": product.stock,
+      "sub_type_info": {
+        "brand": tool.brand,
+        "category": tool.category,
+        "type_maintenance": tool.type_maintenance
       },
       "location": product.location,
       "active": product.active,

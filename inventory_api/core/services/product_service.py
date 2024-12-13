@@ -2,13 +2,15 @@ from typing import Annotated
 from fastapi import Depends, HTTPException
 from sqlmodel import select
 
-from models.entities.plant import Plant
-from models.schemas.plant import PlantCreate, PlantRead
-from models.entities.product import Product
-from models.entities.supply import Supply
-from models.enums.product import ProductType
-from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
-from services.notify_service import SNotifyDependency
+from core.config.db_adapter import DBSession
+from core.models.entities.plant import Plant
+from core.models.schemas.plant import PlantCreate, PlantRead
+from core.models.entities.product import Product
+from core.models.entities.supply import Supply
+from core.models.enums.product import ProductType
+from core.models.schemas.product import ProductCreate, ProductRead, ProductUpdate
+from core.services.notify_service import SNotifyDependency
+from core.models.entities.tool import Tool
 
 class ProductService:
   def __init__(self, db: DBSession) -> None:
@@ -18,20 +20,19 @@ class ProductService:
  
   async def get_all(self):
     res_1 = await self.get_all_supplies()
-    # res_2 = await self.get_all_tools()
+    res_2 = await self.get_all_tools()
     res_3 = await self.get_all_plants()
     
     products_supplies = res_1.get("data", [])
-    # products_tools = res_2.get("data", [])
+    products_tools = res_2.get("data", [])
     products_plants = res_3.get("data", [])
-    product_ids = [product.get("id") for product in products_supplies] + [product.get("id") for product in products_plants]
-      # [product.id for product in products_tools] +
+    product_ids = [product.get("id") for product in products_supplies] + [product.get("id") for product in products_plants] + [product.get("id") for product in products_tools]
     
     all_products = self.db.exec(select(Product)).all() or []
     if len(product_ids) > 0:
       all_products = [ProductRead.from_db(product) for product in all_products if product.id not in product_ids]
     
-    products = all_products + products_supplies + products_plants # + products_tools 
+    products = all_products + products_supplies + products_plants + products_tools 
     return { "data" : products, "status": "success" }
   
   async def get_all_supplies(self):
@@ -44,7 +45,11 @@ class ProductService:
     return { "data" : products, "status": "success" }
   
   async def get_all_tools(self):
-    pass
+    products_db = self.db.exec(select(Product, Tool).join(Tool)).all()
+    if len(products_db) == 0:
+      return { "status_code": 404, "detail": "No se encontraron productos de herramientas.", "status": "fail" }
+    products = [ProductRead.tool_and_product(product, tool) for product, tool in products_db]
+    return { "data" : products, "status": "success" }
   
   async def get_all_plants(self):
     products_db = self.db.exec(select(Product, Plant).join(Plant)).all()
@@ -65,8 +70,8 @@ class ProductService:
     product = {}
     if product_db.type == ProductType.SUPPLY.value and product_db.supply != None:
       product = ProductRead.supply_and_product(product_db, product_db.supply)
-    # elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
-    #   pass
+    elif product_db.type == ProductType.TOOL.value and product_db.tool != None:
+      product = ProductRead.tool_and_product(product_db, product_db.tool)
     elif product_db.type == ProductType.PLANT.value and product_db.plant != None:
       product = ProductRead.plant_and_product(product_db, product_db.plant)
     else:
@@ -95,7 +100,6 @@ class ProductService:
   def update(self, id: int, product: ProductUpdate):
     product_db = self.db.get(Product, id)
 
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-------",product_db)
 
     if product_db is None:
       return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
@@ -113,7 +117,6 @@ class ProductService:
     for attr, value in product.model_dump(exclude_unset=True).items():
       setattr(product_db, attr, value)
 
-    print("EEEEEEEEEEEEEEEEEEEEE-------------------", product_db)
     self.db.add(product_db)
     self.db.commit()
     self.db.refresh(product_db)

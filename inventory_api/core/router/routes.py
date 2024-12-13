@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends
 
 # Importando las vistas y los routers
-from controllers.auth_controller import route as auth_route
-from controllers.user_controller import route as user_route
-from controllers.role_controller import route as role_route
-from controllers.supplier_controller import route as supplier_route
-from controllers.order_controller import route as order_route
-from controllers.product_controller import route as product_route
-from controllers.tool_controller import route as tool_route
-from controllers.plant_controller import route as plant_route
-from controllers.supply_controller import route as supply_route
-from controllers.notify_controller import route as notify_route
-from controllers.supply_controller import route as supply_route
+from core.controllers.auth_controller import route as auth_route
+from core.controllers.user_controller import route as user_route
+from core.controllers.role_controller import route as role_route
+from core.controllers.supplier_controller import route as supplier_route
+from core.controllers.order_controller import route as order_route
+from core.controllers.product_controller import route as product_route
+from core.controllers.tool_controller import route as tool_route
+from core.controllers.plant_controller import route as plant_route
+from core.controllers.supply_controller import route as supply_route
+from core.controllers.notify_controller import route as notify_route
+from core.controllers.supply_controller import route as supply_route
 
 routes = APIRouter()
 

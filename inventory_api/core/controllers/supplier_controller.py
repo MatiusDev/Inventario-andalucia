@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from models.schemas.supplier import SupplierCreate, SupplierUpdate
+from core.models.schemas.supplier import SupplierCreate, SupplierUpdate
 
 from core.services.supplier_service import SSupplierDependency
 

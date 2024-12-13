@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 
-from utils import response_handler
-from services.notify_service import SNotifyDependency
+from core.utils import response_handler
+from core.services.notify_service import SNotifyDependency
 
 route = APIRouter()
 

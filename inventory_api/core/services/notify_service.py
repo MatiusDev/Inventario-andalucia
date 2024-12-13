@@ -2,9 +2,9 @@ from typing import Annotated
 from fastapi import Depends
 from sqlmodel import select
 
-from config.db_adapter import DBSession
+from core.config.db_adapter import DBSession
 
-from models.entities.notify import Notify
+from core.models.entities.notify import Notify
 
 
 class NotifyService:

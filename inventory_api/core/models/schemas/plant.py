@@ -1,8 +1,8 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel
 
-from models.entities.plant import Plant
-from models.entities.product import Product
-from models.enums.plant import Irrigation_Enum, Light_Enum, Plant_type_Enum, PLANT_TYPE_BY_ID, LIGHT_BY_ID, IRRIGATION_BY_ID
+from core.models.entities.plant import Plant
+from core.models.entities.product import Product
+from core.models.enums.plant import Irrigation_Enum, Light_Enum, Plant_type_Enum, PLANT_TYPE_BY_ID, LIGHT_BY_ID, IRRIGATION_BY_ID
 
 
 class PlantBase(SQLModel):
