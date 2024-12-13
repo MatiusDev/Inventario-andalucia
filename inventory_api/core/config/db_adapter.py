@@ -27,7 +27,6 @@ class DBAdapter:
       raise Exception("El motor de base de datos no está configurado")
     
     SQLModel.metadata.create_all(cls._engine)
-    yield
   
   @classmethod
   def get_session(cls):

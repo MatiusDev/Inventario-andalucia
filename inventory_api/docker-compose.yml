@@ -15,7 +15,7 @@ services:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
-      - dev_network
+      - dev_network    
 
   app_server:
     build:
@@ -30,6 +30,7 @@ services:
       - dev_network
     volumes:
       - ./core:/app/core
+    entrypoint: ["sh", "-c", "sleep 14 && uvicorn core.main:app --host 0.0.0.0 --port 8000 --reload"]
 
 volumes:
   db_data:
