@@ -14,9 +14,9 @@ from models.schemas.product import ProductCreate, ProductRead, ProductUpdate
 from services.notify_service import SNotifyDependency
 
 class ProductService:
-  def __init__(self, db: DBSession, NotifyService: SNotifyDependency) -> None:
+  def __init__(self, db: DBSession) -> None:
     self.db = db
-    self.notification = NotifyService
+    
   
  
   async def get_all(self):
@@ -27,14 +27,14 @@ class ProductService:
     products_supplies = res_1.get("data", [])
     # products_tools = res_2.get("data", [])
     products_plants = res_3.get("data", [])
-    product_ids = [product.get("id") for product in products_supplies] + [product.id for product in products_plants]
+    product_ids = [product.get("id") for product in products_supplies] + [product.get("id") for product in products_plants]
       # [product.id for product in products_tools] +
     
     all_products = self.db.exec(select(Product)).all() or []
     if len(product_ids) > 0:
       all_products = [ProductRead.from_db(product) for product in all_products if product.id not in product_ids]
     
-    products = all_products + products_supplies # + products_tools + products_plants
+    products = all_products + products_supplies + products_plants # + products_tools 
     return { "data" : products, "status": "success" }
   
   async def get_all_supplies(self):
@@ -98,6 +98,8 @@ class ProductService:
   def update(self, id: int, product: ProductUpdate):
     product_db = self.db.get(Product, id)
 
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-------",product_db)
+
     if product_db is None:
       return { "status_code": 404, "detail": "No se ha encontrado el producto", "status": "fail" }
     
@@ -114,6 +116,7 @@ class ProductService:
     for attr, value in product.model_dump(exclude_unset=True).items():
       setattr(product_db, attr, value)
 
+    print("EEEEEEEEEEEEEEEEEEEEE-------------------", product_db)
     self.db.add(product_db)
     self.db.commit()
     self.db.refresh(product_db)

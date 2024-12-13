@@ -8,8 +8,8 @@ from utils.response_handler import response_handler
 route = APIRouter()
 
 @route.get("/", status_code=200)
-def get_all_products(product_service: SProductDependency):
-  return product_service.get_all()
+async def get_all_products(product_service: SProductDependency):
+  return await response_handler(product_service.get_all())
 
 
 @route.get("/plants/", status_code=200)
@@ -33,8 +33,8 @@ def create_product(product: ProductCreate, product_service: SProductDependency):
   return product_service.create(product)
 
 @route.put("/{id}")
-def update_product(id: int, product: ProductUpdate, product_service: SProductDependency):
-  return product_service.update(id, product)
+async def update_product(id: int, product: ProductUpdate, product_service: SProductDependency):
+  return await response_handler(product_service.update(id, product))
 
 @route.delete("/{id}")
 def delete_product(id: int, product_service: SProductDependency):

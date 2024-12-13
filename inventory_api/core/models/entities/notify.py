@@ -14,4 +14,4 @@ class Notify(SQLModel, table=True):
   
   id_product: int = Field(foreign_key="product.id")
 
-  products: list["Product"] = Relationship(back_populates="notify")
+  #products: list["Product"] = Relationship(back_populates="notify")

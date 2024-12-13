@@ -7,9 +7,9 @@ from services.plant_service import SPlantDependency
 
 route = APIRouter()
 
-@route.post("/", status_code=201)
-async def create_plant(plant_data: PlantCreate, plant_service: SPlantDependency):
-    return await response_handler(plant_service.create(plant_data))
+@route.post("/{product_id}", status_code=201)
+async def create_plant(product_id:int,  plant_data: PlantCreate, plant_service: SPlantDependency):
+    return await response_handler(plant_service.create(product_id,plant_data))
 
 @route.put("/{plant_id}", status_code=200)
 async def update_plant(plant_id: int, plant: PlantUpdate, plant_service: SPlantDependency):

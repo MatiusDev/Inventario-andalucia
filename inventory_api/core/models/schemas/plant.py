@@ -52,7 +52,7 @@ class PlantRead(PlantBase):
 class PlantUpdate(PlantBase):
     scientific_name: str | None
     ideal_temperature: int | None
-    type_id = int | None
+    type_id : int | None
     required_irrigation_id: int | None
     required_light_id: int | None
 
