@@ -18,7 +18,7 @@ const Nav = ({ handleMenuClick }) => {
                 <SidebarButton handleMenuClick={handleMenuClick} path={"/orders"} icon={faDolly} nameSpan={"Ordenes"} />
                 <SidebarButton handleMenuClick={handleMenuClick} path={"/tools"} icon={faTrowel} nameSpan={"Herramientas"} />
                 <SidebarButton handleMenuClick={handleMenuClick} path={"/plants"} icon={faFan} nameSpan={"Plantas"} />
-                <SidebarButton handleMenuClick={handleMenuClick} path={"/supplies"} icon={faBoxesPacking} nameSpan={"Insumos"} />
+                <SidebarButton handleMenuClick={handleMenuClick} path={"/inputs"} icon={faBoxesPacking} nameSpan={"Insumos"} />
                 {/* <SidebarButton handleMenuClick={handleMenuClick} path={"/customers"} icon={faUsers} nameSpan={"Clientes"} /> */}
                 {/* <SidebarButton handleMenuClick={handleMenuClick} path={"/notifications"} icon={faArrowRotateLeft} nameSpan={"Devoluciones"} /> */}
                 {/* <SidebarButton handleMenuClick={handleMenuClick} path={"/notifications"} icon={faAudible} nameSpan={"Auditoria"} /> */}

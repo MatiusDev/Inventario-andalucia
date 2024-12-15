@@ -14,6 +14,9 @@ import UserContent from "./Base/Content/UserContent";
 import SupplierContent from "./Base/Content/SupplierContent";
 import ProductContent from "./Base/Content/ProductContent";
 import OrderContent from "./Base/Content/OrderContent";
+import ToolContent from "./Base/Content/ToolContent";
+import PlantContent from "./Base/Content/PlantContent";
+import InputContent from "./Base/Content/InputContent";
 
 import { useNavigate } from "react-router";
 
@@ -24,10 +27,9 @@ const menuNavOptions = {
   "/suppliers": <SupplierContent />,
   "/products": <ProductContent />,
   "/orders": <OrderContent />,
-  // "/tools": <ProductContent />,
-  // "/plants": <ProductContent />,
-  // "/supplies": <ProductContent />,
-  // "/customers:
+  "/tools": <ToolContent />,
+  "/plants": <PlantContent />,
+  "/inputs": <InputContent/>
   // "/notifications": <Notification />,
 }
 
