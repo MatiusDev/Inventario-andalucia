@@ -24,16 +24,11 @@ services:
     container_name: app_server
     ports:
       - "8000:8000"
-    depends_on:
-      - mysql_server
     networks:
       - dev_network
     volumes:
       - ./core:/app/core
     entrypoint: ["sh", "-c", "sleep 14 && uvicorn core.main:app --host 0.0.0.0 --port 8000 --reload"]
-
-volumes:
-  db_data:
 
 networks:
   dev_network:
