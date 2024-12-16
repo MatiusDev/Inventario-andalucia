@@ -65,8 +65,8 @@ const ContentTableData = ({ dataArray, titles, handleView, handleEdit, handleDel
                   <tr>
                     { titles &&
                       titles.map((title, idx) => (
-                        <th key={titles.length+idx} className="text-center">
-                          {title.title}
+                        <th key={idx} className="text-center">
+                          {title}
                         </th>
                       ))
                     }

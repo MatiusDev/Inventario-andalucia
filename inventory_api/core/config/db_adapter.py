@@ -1,6 +1,8 @@
 from sqlmodel import SQLModel, create_engine, Session
 from typing import Annotated
 from fastapi import Depends
+from typing import Annotated
+from fastapi import Depends
 
 class DBAdapter:
   _instance = None
@@ -25,7 +27,6 @@ class DBAdapter:
       raise Exception("El motor de base de datos no está configurado")
     
     SQLModel.metadata.create_all(cls._engine)
-    yield
   
   @classmethod
   def get_session(cls):

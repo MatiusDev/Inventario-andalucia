@@ -5,7 +5,6 @@ import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 import { useNavigate } from "react-router";
 import { useForm } from "@/common/hooks/useForm.jsx";
-import { useContext } from "react";
 import { useAuth } from "../../context/AuthProvider";
 
 // import { AuthContext } from "@auth/context/AuthProvider";
@@ -38,32 +37,31 @@ const LoginForm = ({ handleClick }) => {
         return;
       }
       const data = { username: values.username, password: values.password };
-      resetForm();
 
       const URL_PATH = "/auth/login";
       const response = await apiPost(URL_PATH, data);
-      if (response["status"] != "success") {
-        console.log(response["message"]);
-      } else {
-        const URL_PATH = "/auth/profile";
-        const response = await apiFetch(URL_PATH);
+      if (!response) {
         console.log(response);
-        if (response) {
-          const data = response;
-          const user = {
-            id: data.id,
-            type: data.type,
-            username: data.username,
-            fullName: data.full_name,
-            email: data.email,
-            permissions: data.permissions,
-            active: data.active,
-            authenticated: data.is_logged_in,
-          };
-          
-          changeAuthState(user);
-          navigate("/dashboard", { replace: true });
-        } // Agregar el usuario al contexto
+        return;
+      }
+      const URL_PATH_PROFILE = "/auth/profile";
+      const response_profile = await apiFetch(URL_PATH_PROFILE);
+      if (response_profile) {
+        const data = response_profile;
+        const user = {
+          id: data.id,
+          type: data.type,
+          username: data.username,
+          fullName: data.full_name,
+          email: data.email,
+          permissions: data.permissions,
+          active: data.active,
+          authenticated: data.is_logged_in,
+        };
+
+        changeAuthState(user);
+        navigate("/dashboard", { replace: true });
+        resetForm();
       }
     } catch (error) {
       console.log(error);
