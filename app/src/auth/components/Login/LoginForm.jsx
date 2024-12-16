@@ -12,7 +12,7 @@ import { apiPost, apiFetch } from "@utils/api";
 const LoginForm = ({ handleClick }) => {
   const navigate = useNavigate();
   const { changeAuthState } = useAuth();
-  
+
   const validate = (values) => {
     const errors = {};
     if (!values.username) errors.name = "El nombre de usuario es obligatorio";
@@ -56,8 +56,8 @@ const LoginForm = ({ handleClick }) => {
         };
 
         changeAuthState(user);
-        navigate("/dashboard", { replace: true });
         resetForm();
+        navigate("/dashboard", { replace: true });
       }
     } catch (error) {
       console.log(error);
