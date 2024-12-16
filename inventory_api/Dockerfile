@@ -1,9 +1,5 @@
 # Usa una imagen base de Python
-FROM python:3.12
-
-# Invalida caché manualmente
-ARG CACHE_BUST=1
-RUN echo "Cache bust: $CACHE_BUST"
+FROM python:3.10
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
