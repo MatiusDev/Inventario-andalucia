@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from "react-router";
 
-import './App.css';
+import "./App.css";
 
-import AppRoutes from '@routes/AppRoutes';
-import { AuthProvider } from '@auth/context/AuthProvider';
+import AppRoutes from "@routes/AppRoutes";
+import { AuthProvider } from "@auth/context/AuthProvider.jsx";
+import { ThemeProvider } from "../../context/ThemeContext.jsx";
 
 const App = () => {
   return (
     <div className="app-container">
       <BrowserRouter>
-        {/* <AuthProvider> */}
-        <AppRoutes />
-        {/* </AuthProvider> */}
+        <AuthProvider>
+          <ThemeProvider>
+            <AppRoutes />
+          </ThemeProvider>
+        </AuthProvider>
       </BrowserRouter>
     </div>
-  )
+  );
 };
 
 export default App;
