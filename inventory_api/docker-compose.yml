@@ -5,6 +5,6 @@ services:
       dockerfile: Dockerfile
     container_name: app_server
     ports:
-      - "${PORT}:${PORT}"
+      - "8000:8000"
     volumes:
       - ./core:/app/core
