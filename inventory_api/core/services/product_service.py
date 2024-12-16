@@ -58,7 +58,6 @@ class ProductService:
     products = [ProductRead.plant_and_product(product, plant) for product, plant in products_db]
     return { "data" : products, "status": "success" }
   
-  
   async def get_by_id(self, id: int):
     product_db = self.db.get(Product, id)
     
@@ -77,7 +76,7 @@ class ProductService:
       
     return { "data": product, "status": "success" }
 
-  async  def create(self, product: ProductCreate):
+  async def create(self, product: ProductCreate):
     product_db = Product.model_validate(product.create_dump())
     self.db.add(product_db)
     self.db.commit()
