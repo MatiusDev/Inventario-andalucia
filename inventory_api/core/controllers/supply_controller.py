@@ -5,8 +5,6 @@ from core.services.supply_service import SSupplyDependency
 
 from core.utils.response_handler import response_handler
 
-from core.utils.response_handler import response_handler
-
 route = APIRouter()
 
 @route.get("/", status_code=200)

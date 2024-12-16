@@ -6,15 +6,9 @@ import "bootstrap/dist/js/bootstrap.min.js";
 
 import "./styles/global.css";
 import App from "./app/components/App.jsx";
-import { AuthProvider } from "./auth/context/AuthProvider.jsx";
-import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </AuthProvider>
+    <App />
   </StrictMode>
 );

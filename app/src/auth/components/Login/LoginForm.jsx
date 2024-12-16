@@ -7,16 +7,12 @@ import { useNavigate } from "react-router";
 import { useForm } from "@/common/hooks/useForm.jsx";
 import { useAuth } from "../../context/AuthProvider";
 
-// import { AuthContext } from "@auth/context/AuthProvider";
-
-import { apiPost } from "@utils/api";
-import { apiFetch } from "../../../utils/api";
+import { apiPost, apiFetch } from "@utils/api";
 
 const LoginForm = ({ handleClick }) => {
   const navigate = useNavigate();
   const { changeAuthState } = useAuth();
-  // const { user, setUser } = useContext(AuthContext);
-
+  
   const validate = (values) => {
     const errors = {};
     if (!values.username) errors.name = "El nombre de usuario es obligatorio";
