@@ -6,14 +6,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {faEllipsisVertical}from "@fortawesome/free-solid-svg-icons";
 
+import { useAuth } from '@auth/context/AuthProvider';
+
+
 const PanelUser = () => {
+    const { authState } = useAuth();
+    const { username, type } = authState;
     return (
         <div className="user">
             <img src={image} />
             <div className="info-user">
                 <div className="name-rol">
-                    <span className="name">juan daniel</span>
-                    <span className="rol">admin</span>
+                    <span className="name">{username}</span>
+                    <span className="rol">{type}</span>
                 </div>
                 <button className="menu-user" type="button" data-bs-toggle="modal" data-bs-target="#perfilUsuarios">
                     <FontAwesomeIcon className="iconEllipsis" icon={faEllipsisVertical} />

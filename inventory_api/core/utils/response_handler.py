@@ -32,11 +32,12 @@ async def response_handler(data):
       )
     # Configura la cookie en la respuesta JSON
     json_response.set_cookie(
-      key=cookie["key"],
-      value=cookie["value"],
+      key=cookie.get("key"),
+      value=cookie.get("value"),
       httponly=cookie.get("httponly", True),
       secure=cookie.get("secure", True),
-      samesite=cookie.get("samesite", "lax"),
+      samesite=cookie.get("samesite", "None"),
+      path=cookie.get("path", "/"),
       max_age=cookie.get("max_age"),
     )
     return json_response
@@ -47,7 +48,14 @@ async def response_handler(data):
         "status": response["status"]
       }
     )
-    json_response.delete_cookie(key="session")
+    json_response.delete_cookie(
+        key="session",
+        path="/",
+        domain=None,
+        samesite="None",
+        secure=True,
+        httponly=True,
+    )
     return json_response
   else:
     return response
