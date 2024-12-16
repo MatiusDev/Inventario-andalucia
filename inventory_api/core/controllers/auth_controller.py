@@ -7,6 +7,13 @@ from core.utils.response_handler import response_handler
 
 route = APIRouter()
 
+@route.get("/health", status_code=200)
+async def health():
+  return await response_handler({
+    "message": "OK",
+    "status": "success",
+  })
+
 @route.get("/profile", status_code=200)
 async def profile(auth_service: SAuthDependency):
   return await response_handler(auth_service.profile())

@@ -43,7 +43,7 @@ class AuthService:
       logged_at = datetime.fromisoformat(user_session.last_session)
       elapsed_time = datetime.now() - logged_at
       
-      if elapsed_time <= timedelta(seconds=self.auth.config.expiration_seconds):
+      if elapsed_time <= timedelta(seconds=20):
         return { "status_code": 400, "detail": "Ya estás logueado", "status": "fail" }
       user_session.is_logged_in = False
       
@@ -51,7 +51,7 @@ class AuthService:
       blocked_at = datetime.fromisoformat(user_session.blocked_at)
       elapsed_time = datetime.now() - blocked_at
     
-      if elapsed_time <= timedelta(minutes=15):
+      if elapsed_time <= timedelta(minutes=1):
         return { "status_code": 401, "detail": "Usuario bloqueado. Intenta de nuevo en 15 minutos", "status": "fail" }
       user_session.blocked_at = None
       user_session.login_attempts = 0
