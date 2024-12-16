@@ -12,4 +12,5 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /app/requirements.txt
 
+# CMD ["gunicorn", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "core.main:app" ]
 CMD ["fastapi", "run", "core/main.py"]
