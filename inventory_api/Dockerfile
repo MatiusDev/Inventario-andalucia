@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Expone el puerto en el que corre FastAPI
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "core.main:app" ]
+CMD ["sh", "-c", "gunicorn -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:${PORT:-8000} core.main:app"]
