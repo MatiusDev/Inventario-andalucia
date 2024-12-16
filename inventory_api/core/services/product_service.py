@@ -16,8 +16,6 @@ class ProductService:
   def __init__(self, db: DBSession) -> None:
     self.db = db
     
-  
- 
   async def get_all(self):
     res_1 = await self.get_all_supplies()
     res_2 = await self.get_all_tools()
@@ -60,8 +58,7 @@ class ProductService:
     products = [ProductRead.plant_and_product(product, plant) for product, plant in products_db]
     return { "data" : products, "status": "success" }
   
-  
-  def get_by_id(self, id: int):
+  async def get_by_id(self, id: int):
     product_db = self.db.get(Product, id)
     
     if product_db == None:
@@ -79,7 +76,7 @@ class ProductService:
       
     return { "data": product, "status": "success" }
 
-  def create(self, product: ProductCreate):
+  async def create(self, product: ProductCreate):
     product_db = Product.model_validate(product.create_dump())
     self.db.add(product_db)
     self.db.commit()
@@ -97,7 +94,7 @@ class ProductService:
     product_read = ProductRead.from_db(product_db)
     return product_read
 
-  def update(self, id: int, product: ProductUpdate):
+  async def update(self, id: int, product: ProductUpdate):
     product_db = self.db.get(Product, id)
 
 
@@ -125,7 +122,7 @@ class ProductService:
                         **product.model_dump(exclude_unset=True)
                        )
 
-  def delete(self, id: int):
+  async def delete(self, id: int):
     product = self.db.get(Product, id)
     
     if product is None:
