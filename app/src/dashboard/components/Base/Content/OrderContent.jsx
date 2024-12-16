@@ -3,9 +3,18 @@ import BaseContent from "../BaseContent/BaseContent";
 
 import { apiFetch, apiDelete } from "@utils/api.js";
 
+const TITLES = [
+  "ID",
+  "Nombre completo",
+  "Nombre de usuario",
+  "Correo electrónico",
+  "Tipo de usuario",
+  "Estado",
+  "Sesión",
+];
+
 const OrderContent = () => {
     const [dataArray, setDataArray] = useState([]);
-    const [titles, setTitles] = useState([]);
 
     const handleClick = () => {
       console.log("Sisas", dataArray);
@@ -40,15 +49,6 @@ const OrderContent = () => {
         const getData = async () => {
             const URL = "/users/";
             const data = await apiFetch(URL);
-            const titles = [
-              { id: `item-1`, title: "ID"},
-              { id: `item-2`, title: "Nombre completo"},
-              { id: `item-3`, title: "Nombre de usuario"},
-              { id: `item-4`, title: "Correo electrónico"},
-              { id: `item-5`, title: "Tipo de usuario"},
-              { id: `item-6`, title: "Estado"},
-              { id: `item-7`, title: "Sesión"},
-            ];
             const users = data.map(user => (
               {
                 id: { value: user.id, className: "item-id" },
@@ -87,7 +87,6 @@ const OrderContent = () => {
                 },
               }
             ));
-            setTitles(titles);
             setDataArray(users);
         }
         getData();
@@ -96,7 +95,7 @@ const OrderContent = () => {
     return (
         <BaseContent
           title={"Ordenes"}
-          titles={titles}
+          titles={TITLES}
           dataArray={dataArray} 
           handleClick={handleClick}
           handleView={handleView}

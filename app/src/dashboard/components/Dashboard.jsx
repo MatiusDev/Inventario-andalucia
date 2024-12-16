@@ -10,6 +10,7 @@ import Sidebar from "./Sidebar/Sidebar";
 
 // Opciones de menu
 // import Notification from "../Base/Notification/Notification"
+import Welcome from "./Welcome/Welcome";
 import UserContent from "./Base/Content/UserContent";
 import SupplierContent from "./Base/Content/SupplierContent";
 import ProductContent from "./Base/Content/ProductContent";
@@ -20,6 +21,7 @@ import { useNavigate } from "react-router";
 import { apiPost } from "@utils/api";
 
 const menuNavOptions = {
+  "/welcome": <Welcome />,
   "/users": <UserContent />,
   "/suppliers": <SupplierContent />,
   "/products": <ProductContent />,
@@ -32,7 +34,7 @@ const menuNavOptions = {
 }
 
 const Dashboard = () => {
-    const [navOption, setNavOption] = useState("/users");
+    const [navOption, setNavOption] = useState("/welcome");
     const navigate = useNavigate();
 
     const handleMenuClick = (option) => {

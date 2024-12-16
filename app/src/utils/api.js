@@ -19,9 +19,6 @@ export async function apiFetch(endpoint, options = {}) {
   return json_response["data"];
 }
 
-// ${BASE_URL} => http://localhost:8000/api
-// ${endpoint} => /auth/login/
-// const URL => http://localhost:8000/api/auth/login/
 export async function apiPost(endpoint, data) {
   const URL = `${BASE_URL}${endpoint}`;
   const options = {
@@ -30,8 +27,7 @@ export async function apiPost(endpoint, data) {
       'Content-Type': 'application/json'
     },
     credentials: 'include',
-    body: JSON.stringify(data), //Data = { username: "matiusdev", password: "12345" }
-    // "{ "username": "matiusdev", "password": "12345" }"
+    body: JSON.stringify(data),
   };
   const response = await fetch(URL, options); 
   if (!response.ok) {

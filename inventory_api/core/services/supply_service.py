@@ -10,6 +10,7 @@ from core.models.enums.product import ProductType
 from core.models.schemas.supply import SupplyCreate, SupplyRead, SupplyUpdate
 
 
+
 class SupplyService:
 	def __init__(self, db: DBSession) -> None:
 		self.db = db

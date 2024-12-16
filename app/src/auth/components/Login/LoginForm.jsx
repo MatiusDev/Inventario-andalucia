@@ -5,29 +5,25 @@ import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 import { useNavigate } from "react-router";
 import { useForm } from "@/common/hooks/useForm.jsx";
-import { useContext } from "react";
+import { useAuth } from "@auth/context/AuthProvider";
 
-// import { AuthContext } from "@auth/context/AuthProvider";
-
-import { apiPost } from "@utils/api";
+import { apiPost, apiFetch } from "@utils/api";
 
 const LoginForm = ({ handleClick }) => {
   const navigate = useNavigate();
-  // const { user, setUser } = useContext(AuthContext);
+  const { changeAuthState } = useAuth();
 
   const validate = (values) => {
     const errors = {};
     if (!values.username) errors.name = "El nombre de usuario es obligatorio";
     if (!values.password) errors.password = "La contraseña es obligatoria";
     return errors;
-  }
+  };
 
-  const { 
-    values, 
-    errors, 
-    handleChange, 
-    resetForm 
-  } = useForm({ username: "", password: "", rememberMe: false }, validate);
+  const { values, errors, handleChange, resetForm } = useForm(
+    { username: "", password: "", rememberMe: false },
+    validate
+  );
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -35,20 +31,38 @@ const LoginForm = ({ handleClick }) => {
       if (errors.name || errors.password) {
         console.log("Error: Campos vacios");
         return;
-      };
-      const data = { username: values.username, password: values.password }
-      
+      }
+      const data = { username: values.username, password: values.password };
+
       const URL_PATH = "/auth/login";
       const response = await apiPost(URL_PATH, data);
-      console.log(response);
-      if (response) {
+      if (!response) {
+        console.log(response);
+        return;
+      }
+      const URL_PATH_PROFILE = "/auth/profile";
+      const response_profile = await apiFetch(URL_PATH_PROFILE);
+      if (response_profile) {
+        const data = response_profile;
+        const user = {
+          id: data.id,
+          type: data.type,
+          username: data.username,
+          fullName: data.full_name,
+          email: data.email,
+          permissions: data.permissions,
+          active: data.active,
+          authenticated: data.is_logged_in,
+        };
+
+        changeAuthState(user);
         resetForm();
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <form id="login-form" onSubmit={handleSubmit}>
@@ -74,10 +88,12 @@ const LoginForm = ({ handleClick }) => {
           />
         </div>
         <div className="form-check form-switch">
-          <label className="form-check-label" htmlFor="remember-me">Recordarme</label>
-          <input 
+          <label className="form-check-label" htmlFor="remember-me">
+            Recordarme
+          </label>
+          <input
             type="checkbox"
-            className="form-check-input" 
+            className="form-check-input"
             role="switch"
             id="remember-me"
             name="rememberMe"
@@ -93,11 +109,13 @@ const LoginForm = ({ handleClick }) => {
         </div>
         <div className="enlaces-autenticacion">
           <a className="button-forgot">Recuperar contraseña</a>
-          <a className="button-login-register" onClick={handleClick}>Registrarse</a>
+          <a className="button-login-register" onClick={handleClick}>
+            Registrarse
+          </a>
         </div>
       </div>
     </form>
   );
-}
+};
 
 export default LoginForm;
