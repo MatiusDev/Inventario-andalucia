@@ -12,7 +12,4 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /app/requirements.txt
 
-# Expone el puerto en el que corre FastAPI
-EXPOSE 8000
-
-CMD ["sh", "-c", "gunicorn -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:${PORT:-8000} core.main:app"]
+CMD ["fastapi", "run", "core/main.py"]
