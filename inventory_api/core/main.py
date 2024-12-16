@@ -30,7 +30,7 @@ app.add_middleware(
 app.add_middleware(
   CookieSessionMiddleware,
   backend=config["auth"],
-  exclude_urls=["/api/auth/login", "/api/auth/sign-up"]
+  exclude_urls=["api/auth/health", "/api/auth/login", "/api/auth/sign-up"]
 )
 
 app.include_router(routes, prefix="/api")
