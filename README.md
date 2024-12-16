@@ -26,7 +26,7 @@
     
 ## Production
 ### Despliegue
-Este proyecto fue desplegado en Back4app para el backend (FastAPI) y Vercel para el frontend (React).
+Este proyecto fue desplegado en Render para el backend (FastAPI) y Vercel para el frontend (React).
 
 #### App: [Vercel](https://inventario-andalucia.vercel.app/)
-#### Inventory_api: [Back4App](https://inventoryapi-58qfwaym.b4a.run/)
+#### Inventory_api: [Render](https://inventario-andalucia.onrender.com)
