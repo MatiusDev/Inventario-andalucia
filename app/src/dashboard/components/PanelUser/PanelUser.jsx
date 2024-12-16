@@ -11,13 +11,13 @@ import { useAuth } from '@auth/context/AuthProvider';
 
 const PanelUser = () => {
     const { authState } = useAuth();
-    const { fullName, type } = authState;
+    const { username, type } = authState;
     return (
         <div className="user">
             <img src={image} />
             <div className="info-user">
                 <div className="name-rol">
-                    <span className="name">{fullName}</span>
+                    <span className="name">{username}</span>
                     <span className="rol">{type}</span>
                 </div>
                 <button className="menu-user" type="button" data-bs-toggle="modal" data-bs-target="#perfilUsuarios">

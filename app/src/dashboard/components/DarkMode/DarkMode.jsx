@@ -2,7 +2,7 @@ import "./DarkMode.css"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faMoon} from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "../../../context/ThemeContext";
+import { useTheme } from "@/dashboard/context/ThemeContext";
 
 const DarkMode = () => {
 

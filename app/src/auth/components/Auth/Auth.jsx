@@ -5,12 +5,7 @@ import image from "@/assets/fondo4.png";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 
-import { useEffect, useState } from "react";
-
-import { apiFetch, apiPost } from "@utils/api";
-
-const URL_PATH = "/auth/login";
-const user = { username: "matiusdev", password: "12345" }
+import { useState } from "react";
 
 const Auth = () => {
   const [IsLoginIn, setLoginIn] = useState(true);
@@ -18,18 +13,6 @@ const Auth = () => {
   const handleClick = () => {
     setLoginIn(!IsLoginIn);
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await apiPost(URL_PATH, user);
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
 
   return (
     <div className="container-form">

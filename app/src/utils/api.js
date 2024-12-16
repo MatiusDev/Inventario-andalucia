@@ -30,8 +30,7 @@ export async function apiPost(endpoint, data) {
       'Content-Type': 'application/json'
     },
     credentials: 'include',
-    body: JSON.stringify(data), //Data = { username: "matiusdev", password: "12345" }
-    // "{ "username": "matiusdev", "password": "12345" }"
+    body: JSON.stringify(data),
   };
   const response = await fetch(URL, options); 
   if (!response.ok) {

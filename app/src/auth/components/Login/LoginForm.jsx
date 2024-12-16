@@ -5,7 +5,7 @@ import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 import { useNavigate } from "react-router";
 import { useForm } from "@/common/hooks/useForm.jsx";
-import { useAuth } from "../../context/AuthProvider";
+import { useAuth } from "@auth/context/AuthProvider";
 
 import { apiPost, apiFetch } from "@utils/api";
 
