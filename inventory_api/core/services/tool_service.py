@@ -13,7 +13,7 @@ class ToolService:
     def __init__(self, db: DBSession) -> None:
         self.db = db
 
-    def create(self, product_id: int, tool_data: ToolCreate):
+    async def create(self, product_id: int, tool_data: ToolCreate):
         try:
             product_db = self.db.get(Product, product_id)
         
@@ -46,11 +46,11 @@ class ToolService:
             return { "status_code": 500, "detail": str(err), "status": "error" }
     
     
-    def get_all(self):
+    async def get_all(self):
         tools_db = self.db.exec(select(Tool)).all() or []
         return { "data" : tools_db, "status": "success" }
     
-    def get_by_id(self, id:int):
+    async def get_by_id(self, id:int):
         tool = self.db.get(Tool, id)
 
         if tool is None:
@@ -59,7 +59,7 @@ class ToolService:
         read_tool = ToolRead.from_db(tool)        
         return { "data": read_tool, "status": "success" }
     
-    def update(self, id: int, tool: ToolUpdate):
+    async def update(self, id: int, tool: ToolUpdate):
         try:
             tool_db = self.db.get(Tool, id)
             
@@ -81,7 +81,7 @@ class ToolService:
             return { "status_code": 500, "detail": str(err), "status": "error" }
         
 
-    def delete(self, id: int):
+    async def delete(self, id: int):
         try:
             tool_db = self.db.get(Tool, id)
             

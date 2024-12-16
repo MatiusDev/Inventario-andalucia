@@ -136,7 +136,7 @@ class OrderService:
   #(2 Peticiones diferentes) Agregar o retirar productos de un orden pendiente
   #(2 Peticiones diferentes) Completar o cancelar una orden
   
-  async def process_order(self, id: int):
+  async def process(self, id: int):
     pass
   
   async def update(self, id: int, order: OrderBase):

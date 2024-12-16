@@ -27,11 +27,11 @@ async def get_all_supplies(product_service: SProductDependency):
 
 @route.get("/{id}", status_code=200)
 def get_product(id: int, product_service: SProductDependency):
-  return product_service.get_by_id(id)
+  return await response_handler(product_service.get_by_id(id))
   
 @route.post("/", status_code=201)
 def create_product(product: ProductCreate, product_service: SProductDependency):
-  return product_service.create(product)
+  return await response_handler(product_service.create(product))
 
 @route.put("/{id}")
 async def update_product(id: int, product: ProductUpdate, product_service: SProductDependency):
@@ -39,4 +39,4 @@ async def update_product(id: int, product: ProductUpdate, product_service: SProd
 
 @route.delete("/{id}")
 def delete_product(id: int, product_service: SProductDependency):
-  return product_service.delete(id)
+  return await response_handler(product_service.delete(id))
