@@ -4,7 +4,7 @@ import "./App.css";
 
 import AppRoutes from "@routes/AppRoutes";
 import { AuthProvider } from "@auth/context/AuthProvider.jsx";
-import { ThemeProvider } from "../../context/ThemeContext.jsx";
+import { ThemeProvider } from "@/dashboard/context/ThemeContext.jsx";
 
 const App = () => {
   return (
