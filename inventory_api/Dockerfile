@@ -1,9 +1,5 @@
 # Usa una imagen base de Python
-FROM python:3.12
-
-# Invalida caché manualmente
-ARG CACHE_BUST=1
-RUN echo "Cache bust: $CACHE_BUST"
+FROM python:3.10
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
@@ -18,5 +14,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "core.main:app" ]
-# CMD ["fastapi", "run", "core/main.py"]
+CMD ["fastapi", "dev", "core/main.py"]

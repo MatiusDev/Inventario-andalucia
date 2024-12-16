@@ -1,4 +1,22 @@
 services:
+  mysql_server:
+    image: mysql:8.0
+    container_name: mysql_server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - dev_network    
+
   app_server:
     build:
       context: .
@@ -6,5 +24,17 @@ services:
     container_name: app_server
     ports:
       - "8000:8000"
+    depends_on:
+      - mysql_server
+    networks:
+      - dev_network
     volumes:
       - ./core:/app/core
+    entrypoint: ["sh", "-c", "sleep 14 && fastapi dev core/main.py"]
+
+volumes:
+  db_data:
+
+networks:
+  dev_network:
+    driver: bridge
