@@ -27,8 +27,12 @@ const ContentTableData = ({ dataArray, titles, handleView, handleEdit, handleDel
           {item.strValue()}
         </span>
       )
-    } else {
+    } else if (typeof item.value == 'number') {
+      return item.value;
+    } else if (!item.value) {
       return 'No hay datos';
+    } else {
+      return item.value;
     }
   }
 
