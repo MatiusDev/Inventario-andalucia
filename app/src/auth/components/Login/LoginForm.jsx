@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { useForm } from "@/common/hooks/useForm.jsx";
 import { useAuth } from "@auth/context/AuthProvider";
 
-import { apiPost, apiFetch } from "@utils/api";
+import { login, getProfile } from "@auth/services/auth.service";
 
 const LoginForm = ({ handleClick }) => {
   const navigate = useNavigate();
@@ -26,39 +26,31 @@ const LoginForm = ({ handleClick }) => {
   );
 
   const handleSubmit = async (evt) => {
+  
     evt.preventDefault();
     try {
       if (errors.name || errors.password) {
         console.log("Error: Campos vacios");
         return;
       }
-      const data = { username: values.username, password: values.password };
+      const userData = { username: values.username, password: values.password };
 
-      const URL_PATH = "/auth/login";
-      const response = await apiPost(URL_PATH, data);
-      if (!response) {
-        console.log(response);
-        return;
-      }
-      const URL_PATH_PROFILE = "/auth/profile";
-      const response_profile = await apiFetch(URL_PATH_PROFILE);
-      if (response_profile) {
-        const data = response_profile;
-        const user = {
-          id: data.id,
-          type: data.type,
-          username: data.username,
-          fullName: data.full_name,
-          email: data.email,
-          permissions: data.permissions,
-          active: data.active,
-          authenticated: data.is_logged_in,
-        };
+      await login(userData);
+      const data = await getProfile();
+      const user = {
+        id: data.id,
+        type: data.type,
+        username: data.username,
+        fullName: data.full_name,
+        email: data.email,
+        permissions: data.permissions,
+        active: data.active,
+        authenticated: data.is_logged_in,
+      };
 
-        changeAuthState(user);
-        resetForm();
-        navigate("/dashboard", { replace: true });
-      }
+      changeAuthState(user);
+      resetForm();
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.log(error);
     }
