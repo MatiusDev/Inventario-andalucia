@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_BASE_URL; //http://localhost:8000/api
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export async function apiFetch(endpoint, options = {}) {
   const URL = `${BASE_URL}${endpoint}`;
@@ -14,9 +14,7 @@ export async function apiFetch(endpoint, options = {}) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  const json_response = await response.json();
-  return json_response["data"];
+  return await response.json();
 }
 
 export async function apiPost(endpoint, data) {
@@ -33,17 +31,7 @@ export async function apiPost(endpoint, data) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-  
-  const json_response = await response.json();
-  if (json_response["status"] != "success") {
-    throw new Error(json_response["detail"]);
-  }
-
-  if (json_response["message"]) {
-    return json_response["message"];
-  }
-
-  return json_response["data"];
+  return await response.json();
 }
 
 export async function apiDelete(endpoint) {

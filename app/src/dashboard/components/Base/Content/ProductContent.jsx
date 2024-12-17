@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import BaseContent from "../BaseContent/BaseContent";
 
-import { apiFetch, apiDelete } from "@utils/api.js";
+import { getProducts } from "@/product/services/product.service.js";
 
 const TITLES = [
   "ID",
-  "Nombre completo",
-  "Nombre de usuario",
-  "Correo electrónico",
-  "Tipo de usuario",
+  "Nombre",
+  "Tipo de producto",
+  "Descripción",
+  "Stock",
+  "Stock minimo",
+  "Precio",
+  "Ubicación",
   "Estado",
-  "Sesión",
 ];
 
 const ProductContent = () => {
@@ -29,42 +31,33 @@ const ProductContent = () => {
     };
 
     const handleDelete = async (id) => {
-      const URL = `/users/${id}/`;
-      const response = await apiDelete(URL);
-      if (response.status === "success") {
-        const dataMapped = dataArray.map(item => {
-          if (item.id.value === id) {
-            item.active.value = false;
-            return item;
-          }
-          return item;
-        });
-        setDataArray(dataMapped);
-      } else {
-        console.log("Error al eliminar el usuario");
-      }
+      console.log("Eliminar");
     }
 
     useEffect(() => {
         const getData = async () => {
-            const URL = "/users/";
-            const data = await apiFetch(URL);
-            const users = data.map(user => (
+            const data = await getProducts();
+            const products = data.map(product => (
               {
-                id: { value: user.id, className: "item-id" },
-                fullName: { value: user.full_name, className: "item-field-md" },
-                username: { value: user.username, className: "item-field-md" },
-                email: { value: user.email, className: "item-field-md" },
+                id: { value: product.id, className: "item-id" },
+                name: { value: product.name, className: "item-field-md" },
                 type: { 
-                  value: user.type,
+                  value: product.type,
                   className: "item-field-md",
                   hasBadge: true,
                   badgeStyle: function () {
-                    return this.value ? "bg-primary" : "bg-secondary";
+                    return this.value === "Planta" 
+                      ? "bg-success" : this.value === "Insumo" 
+                      ? "bg-warning" : "bg-info";
                   },
                 },
+                description: { value: product.description, className: "item-field-md" },
+                stock: { value: product.stock, className: "item-field-sm" },
+                stockMinium: { value: product.stock_minimum, className: "item-field-sm" },
+                price: { value: product.price, className: "item-field-sm" },
+                location: { value: product.location, className: "item-field-md" },
                 active: {
-                  value: user.active,
+                  value: product.active,
                   strValue: function () {
                     return this.value ? "Activo" : "Inactivo";
                   },
@@ -74,20 +67,9 @@ const ProductContent = () => {
                     return this.value ? "bg-success" : "bg-danger";
                   },
                 },
-                isLogged: { 
-                  value: user.is_logged_in,
-                  strValue: function () {
-                    return this.value ? "Conectado" : "Desconectado";
-                  },
-                  className: "item-field-sm", 
-                  hasBadge: true,
-                  badgeStyle: function () {
-                    return this.value ? "bg-success" : "bg-danger";
-                  },
-                },
               }
             ));
-            setDataArray(users);
+            setDataArray(products);
         }
         getData();
     }, []); 
