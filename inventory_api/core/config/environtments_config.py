@@ -54,7 +54,6 @@ def db_config(env: str):
 @retry(wait=wait_fixed(5), stop=stop_after_attempt(3))
 def connect_db(driver_connection: str, echo: bool = False):
   try:
-    print(driver_connection)
     print("Conectando a la base de datos...")
     db_adapter = DBAdapter(db_driver=driver_connection, echo=echo)
     if db_adapter.get_session() is None:
