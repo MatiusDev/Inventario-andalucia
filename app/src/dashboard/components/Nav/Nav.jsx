@@ -18,9 +18,7 @@ const Nav = ({ handleMenuClick }) => {
             </>
         )
     };
-
-    console.log(authState);
-
+    
     return (
         
         <nav className="nav">

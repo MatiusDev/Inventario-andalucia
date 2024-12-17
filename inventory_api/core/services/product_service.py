@@ -77,22 +77,27 @@ class ProductService:
     return { "data": product, "status": "success" }
 
   async def create(self, product: ProductCreate):
-    product_db = Product.model_validate(product.create_dump())
-    self.db.add(product_db)
-    self.db.commit()
-    self.db.refresh(product_db)
-    
-     # '''En esta sección integro el servicio para agregar la notificación del producto personalizada en la base de datos
-    # Si es el caso, se hacen las validaciones de cambio de la variable de interes para ver si cambió con respecto al estado anterior
-    # '''
-    # id_product = product_read.id    
-    # '''Uso el metodo noticar cambio que me almacena en base de datos la información necesaria'''
-    # self.notification.notifyChange(
-    #   id_product,
-    #   f"El producto con id {id_product} ha sido creado con precio {product_read.price}"
-    #   )
-    product_read = ProductRead.from_db(product_db)
-    return product_read
+    try:
+      product_db = Product.model_validate(product.create_dump())
+      self.db.add(product_db)
+      self.db.commit()
+      self.db.refresh(product_db)
+      
+      # '''En esta sección integro el servicio para agregar la notificación del producto personalizada en la base de datos
+      # Si es el caso, se hacen las validaciones de cambio de la variable de interes para ver si cambió con respecto al estado anterior
+      # '''
+      # id_product = product_read.id    
+      # '''Uso el metodo noticar cambio que me almacena en base de datos la información necesaria'''
+      # self.notification.notifyChange(
+      #   id_product,
+      #   f"El producto con id {id_product} ha sido creado con precio {product_read.price}"
+      #   )
+      product_read = ProductRead.from_db(product_db)
+      return { "data": product_read, "status": "success" }
+    except Exception as err:
+      self.db.rollback()
+      return { "status_code": 500, "detail": str(err), "status": "error" }
+
 
   async def update(self, id: int, product: ProductUpdate):
     product_db = self.db.get(Product, id)

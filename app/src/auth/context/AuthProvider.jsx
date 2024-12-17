@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { apiFetch } from "@utils/api";
+import { getProfile } from "@auth/services/auth.service";
 
 export const AuthContext = createContext();
 
@@ -19,31 +19,28 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    if (authState.authenticated) return;
+    if (authState && authState.authenticated) return;
 
     const fetchUser = async () => {
       try {
-        const URL_PATH = "/auth/profile";
-        const response = await apiFetch(URL_PATH);
-        if (response) {
-          const data = response;
-          const user = {
-            id: data.id,
-            type: data.type,
-            username: data.username,
-            fullName: data.full_name,
-            email: data.email,
-            permissions: data.permissions,
-            active: data.active,
-            authenticated: data.is_logged_in,
-          };
-          if (JSON.stringify(user) !== JSON.stringify(authState)) {
-            setAuthState(user);
-            navigate("/dashboard", { replace: true });
-          }
+        const data = await getProfile();
+        const user = {
+          id: data.id,
+          type: data.type,
+          username: data.username,
+          fullName: data.full_name,
+          email: data.email,
+          permissions: data.permissions,
+          active: data.active,
+          authenticated: data.is_logged_in,
+        };
+        if (JSON.stringify(user) !== JSON.stringify(authState)) {
+          setAuthState(user);
+          navigate("/dashboard", { replace: true });
         }
       } catch (error) {
-        console.log(error);
+        // console.log("here in error", error);
+        return;
       }
     };
     fetchUser();
